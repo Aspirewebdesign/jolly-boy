@@ -1,0 +1,1231 @@
+etlify · HTML
+Copy
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Jolly Boys Golf">
+<meta name="theme-color" content="#1a3d1a">
+<title>The 'Jolly Boys' Golf League</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Open+Sans:wght@400;600;700&display=swap');
+:root{
+  --bg:#0e2010;--bg2:#122614;--bg3:#163018;
+  --card:#1a3d1a;--card2:#1e4420;--card3:#224824;
+  --gold:#c9a84c;--gold2:#e8c96d;--gold3:#f5e08a;
+  --green:#2d7a4f;--green2:#3a9660;
+  --white:#f0f0e0;--gray:#8aaa8a;--gray2:#6a8a6a;
+  --red:#d44;--blue:#4a8dd4;
+  --border:rgba(201,168,76,0.25);--border2:rgba(201,168,76,0.5);
+  --shadow:0 4px 20px rgba(0,0,0,0.5);
+  --text-shadow:1px 1px 3px rgba(0,0,0,0.8);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--white);font-family:'Open Sans',sans-serif;min-height:100vh;overflow-x:hidden;background-image:radial-gradient(ellipse at top,#1a4020 0%,#0a1a0a 100%)}
+.header{background:linear-gradient(180deg,#0a1e0a 0%,#1a4020 40%,#1e4a24 100%);padding:0 0 8px;border-bottom:2px solid var(--gold);position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(0,0,0,0.6);}
+.header-banner{background:linear-gradient(135deg,#0a1a0a,#1a3a1a,#0a1a0a);border-bottom:1px solid var(--border);padding:10px 16px 8px;text-align:center;position:relative;overflow:hidden;}
+.header-banner::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");}
+.header-title-main{font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold2);text-shadow:2px 2px 8px rgba(0,0,0,0.9),0 0 20px rgba(201,168,76,0.3);letter-spacing:1px;line-height:1.1}
+.header-title-main em{font-style:normal;color:var(--gold3)}
+.header-title-sub{font-family:'Cinzel',serif;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:4px;text-transform:uppercase;margin-top:2px;text-shadow:1px 1px 4px rgba(0,0,0,0.8)}
+.header-nav-row{display:flex;align-items:center;justify-content:space-between;padding:6px 12px 0;gap:8px}
+.header-season-badge{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px;font-family:'Cinzel',serif;letter-spacing:0.5px}
+.header-format-badge{background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--gold);font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.sync-dot{width:8px;height:8px;border-radius:50%;background:#4cd48a;display:inline-block;margin-right:4px;animation:pulse 2s infinite;}
+.sync-dot.off{background:var(--red);animation:none;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(0deg,#071207,#0e1e0e);border-top:2px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px 6px;cursor:pointer;border:none;background:none;color:var(--gray2);font-size:9px;gap:3px;transition:all 0.2s;font-family:'Open Sans',sans-serif}
+.nav-btn.active{color:var(--gold)}
+.nav-btn svg{width:20px;height:20px}
+.content{padding:10px 10px 80px;max-width:600px;margin:0 auto}
+.jb-board{background:linear-gradient(180deg,#1a3d1a,#163018);border:2px solid var(--gold);border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.6),inset 0 1px 0 rgba(201,168,76,0.2)}
+.jb-board-header{background:linear-gradient(135deg,#0e2010,#1a3a1a);padding:14px 16px 12px;text-align:center;border-bottom:1px solid var(--border)}
+.jb-board-title{font-family:'Cinzel',serif;font-size:18px;font-weight:900;color:var(--gold2);text-shadow:var(--text-shadow)}
+.jb-board-sub{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--gold);margin-top:2px;text-shadow:var(--text-shadow)}
+.jb-table{width:100%;border-collapse:collapse}
+.jb-thead th{background:linear-gradient(180deg,#122614,#1a3a1a);color:var(--gold);font-size:10px;font-weight:700;padding:8px 4px;text-align:center;border-bottom:2px solid var(--border2);font-family:'Cinzel',serif;letter-spacing:0.5px;white-space:nowrap}
+.jb-thead th:first-child{text-align:center;width:36px}
+.jb-thead th:nth-child(2){text-align:left;padding-left:10px}
+.jb-row{transition:background 0.15s}
+.jb-row:nth-child(odd){background:rgba(255,255,255,0.02)}
+.jb-row:nth-child(even){background:rgba(0,0,0,0.15)}
+.jb-row.pos1{background:linear-gradient(90deg,rgba(255,215,0,0.12),rgba(255,215,0,0.04))}
+.jb-row.pos2{background:linear-gradient(90deg,rgba(192,192,192,0.08),rgba(192,192,192,0.02))}
+.jb-row.pos3{background:linear-gradient(90deg,rgba(205,127,50,0.08),rgba(205,127,50,0.02))}
+.jb-td{padding:9px 4px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle}
+.jb-td:nth-child(2){text-align:left;padding-left:8px}
+.jb-pos{width:28px;height:28px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;font-family:'Cinzel',serif}
+.pos-1{background:linear-gradient(135deg,#ffd700,#ffb300);color:#1a1a00;box-shadow:0 2px 8px rgba(255,215,0,0.4)}
+.pos-2{background:linear-gradient(135deg,#c0c0c0,#909090);color:#1a1a1a;box-shadow:0 2px 8px rgba(192,192,192,0.3)}
+.pos-3{background:linear-gradient(135deg,#cd7f32,#a05a1a);color:white;box-shadow:0 2px 8px rgba(205,127,50,0.3)}
+.pos-n{background:rgba(255,255,255,0.08);color:var(--gray)}
+.jb-name{font-size:14px;font-weight:700;color:var(--white);text-shadow:var(--text-shadow)}
+.jb-hcp{font-size:10px;color:var(--gray);margin-top:1px}
+.score-cell-val{display:inline-block;min-width:26px;padding:2px 4px;border-radius:4px;font-size:12px;font-weight:600}
+.score-zero{color:var(--gray2);opacity:0.6}
+.score-best{background:rgba(201,168,76,0.2);color:var(--gold2);font-weight:700;border:1px solid rgba(201,168,76,0.3);border-radius:4px;padding:1px 5px}
+.total-cell{font-size:14px;font-weight:900;color:var(--gold2);font-family:'Cinzel',serif;text-shadow:var(--text-shadow)}
+.format-row{display:flex;align-items:center;gap:8px;padding:8px 12px;background:rgba(0,0,0,0.2);border-top:1px solid var(--border)}
+.format-sel{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;padding:5px 8px;color:var(--white);font-size:11px;outline:none;font-family:'Open Sans',sans-serif}
+.format-sel option{background:#1a3d1a}
+.card{background:linear-gradient(135deg,var(--card),var(--card2));border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--border);box-shadow:var(--shadow)}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-family:'Cinzel',serif}
+.podium-card{border-radius:12px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow)}
+.podium-1{background:linear-gradient(135deg,rgba(255,215,0,0.15),rgba(255,215,0,0.05));border:1px solid rgba(255,215,0,0.3)}
+.podium-2{background:linear-gradient(135deg,rgba(192,192,192,0.1),rgba(192,192,192,0.03));border:1px solid rgba(192,192,192,0.2)}
+.podium-3{background:linear-gradient(135deg,rgba(205,127,50,0.1),rgba(205,127,50,0.03));border:1px solid rgba(205,127,50,0.2)}
+.podium-icon{font-size:28px;flex-shrink:0}
+.podium-info{flex:1}
+.podium-name{font-size:16px;font-weight:700;color:var(--white);font-family:'Cinzel',serif;text-shadow:var(--text-shadow)}
+.podium-detail{font-size:11px;color:var(--gray);margin-top:2px}
+.podium-pts{text-align:right}
+.podium-pts-val{font-size:24px;font-weight:900;color:var(--gold2);font-family:'Cinzel',serif;text-shadow:var(--text-shadow);line-height:1}
+.podium-pts-label{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Open Sans',sans-serif}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);box-shadow:0 2px 12px rgba(201,168,76,0.3)}
+.btn-gold:active{transform:scale(0.97)}
+.btn-outline{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+.btn-red{background:linear-gradient(135deg,#c44,#a33);color:white}
+.btn-sm{padding:5px 10px;font-size:11px;border-radius:6px}
+.btn-green{background:linear-gradient(135deg,var(--green),var(--green2));color:white}
+.btn-blue{background:linear-gradient(135deg,#4a8dd4,#3a7dc4);color:white}
+.btn-full{width:100%;justify-content:center;margin-top:8px}
+.btn-gray{background:rgba(255,255,255,0.08);color:var(--gray)}
+.event-card{background:linear-gradient(135deg,var(--card),var(--card2));border-radius:10px;padding:12px;margin-bottom:8px;border:1px solid var(--border)}
+.event-name{font-size:14px;font-weight:700;color:var(--white);font-family:'Cinzel',serif}
+.event-date{font-size:11px;color:var(--gray)}
+.event-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
+.badge-upcoming{background:rgba(74,141,212,0.2);color:var(--blue);border:1px solid rgba(74,141,212,0.3)}
+.badge-complete{background:rgba(45,122,79,0.2);color:#4cd48a;border:1px solid rgba(45,122,79,0.3)}
+.player-card{display:flex;align-items:center;gap:10px;padding:10px;background:rgba(255,255,255,0.04);border-radius:10px;margin-bottom:8px;border:1px solid var(--border)}
+.player-avatar{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,var(--card2),var(--card3));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--gold);flex-shrink:0;border:2px solid var(--border);font-family:'Cinzel',serif}
+.player-info{flex:1}
+.player-name{font-size:14px;font-weight:700;font-family:'Cinzel',serif;color:var(--white)}
+.player-hcp{font-size:11px;color:var(--gray)}
+.player-actions{display:flex;gap:5px}
+.form-group{margin-bottom:12px}
+.form-label{font-size:10px;color:var(--gray);margin-bottom:4px;display:block;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+.form-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-size:14px;outline:none;font-family:'Open Sans',sans-serif}
+.form-input:focus{border-color:var(--gold);background:rgba(201,168,76,0.05)}
+select.form-input option{background:#1a3d1a}
+.format-toggle{display:flex;background:rgba(0,0,0,0.3);border-radius:8px;padding:3px;gap:3px}
+.format-btn{flex:1;padding:7px;text-align:center;font-size:11px;font-weight:700;border-radius:6px;cursor:pointer;border:none;background:none;color:var(--gray);transition:all 0.2s;font-family:'Open Sans',sans-serif}
+.format-btn.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal{background:linear-gradient(180deg,var(--card2),var(--card));border-radius:20px 20px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px 16px 36px;border-top:2px solid var(--gold)}
+.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.modal-title{font-size:16px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif}
+.close-btn{background:rgba(255,255,255,0.1);border:none;color:var(--white);width:32px;height:32px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.stat-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.stat-label{color:var(--gray)}.stat-val{font-weight:700;color:var(--gold)}
+.chip{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:700}
+.chip-gold{background:rgba(201,168,76,0.2);color:var(--gold);border:1px solid rgba(201,168,76,0.3)}
+.chip-green{background:rgba(45,122,79,0.2);color:#4cd48a}
+.chip-blue{background:rgba(74,141,212,0.2);color:var(--blue)}
+.divider{height:1px;background:rgba(255,255,255,0.06);margin:12px 0}
+.page{display:none}.page.active{display:block}
+.empty-state{text-align:center;padding:32px 16px;color:var(--gray)}
+.empty-state .icon{font-size:40px;margin-bottom:8px}
+.score-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.score-summary-cell{background:rgba(255,255,255,0.05);border-radius:8px;padding:10px;text-align:center;border:1px solid var(--border)}
+.score-summary-val{font-size:20px;font-weight:900;color:var(--gold2);font-family:'Cinzel',serif}
+.score-summary-label{font-size:10px;color:var(--gray);margin-top:2px;text-transform:uppercase;letter-spacing:0.5px}
+.course-card{background:rgba(255,255,255,0.04);border-radius:10px;padding:12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;border:1px solid var(--border)}
+.course-name{font-size:13px;font-weight:700;color:var(--white)}
+.course-detail{font-size:11px;color:var(--gray)}
+.course-region{font-size:10px;background:rgba(201,168,76,0.15);color:var(--gold);padding:2px 6px;border-radius:8px;font-weight:700}
+.custom-badge{font-size:10px;background:rgba(74,141,212,0.2);color:var(--blue);padding:2px 6px;border-radius:8px;font-weight:700}
+.search-box{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--white);font-size:14px;width:100%;outline:none;margin-bottom:10px;font-family:'Open Sans',sans-serif}
+.search-box:focus{border-color:var(--gold)}
+/* Firebase setup banner */
+.firebase-banner{background:linear-gradient(135deg,#1a2a3d,#0e1a2a);border:2px solid var(--blue);border-radius:14px;padding:20px;margin-bottom:16px;text-align:center}
+.firebase-banner h2{font-family:'Cinzel',serif;color:var(--gold2);font-size:18px;margin-bottom:8px}
+.firebase-banner p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:12px}
+.firebase-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-size:12px;outline:none;font-family:monospace;margin-bottom:8px;min-height:120px;resize:vertical}
+.firebase-input:focus{border-color:var(--blue)}
+/* Scorecard builder */
+.scb-overlay{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;overflow:hidden}
+.scb-overlay.open{display:flex}
+.scb-header{background:linear-gradient(135deg,#0a1e0a,#1a3a1a);padding:12px 16px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.scb-back{background:rgba(201,168,76,0.2);border:none;color:var(--gold);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.scb-title{flex:1}.scb-title-main{font-size:15px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif}.scb-title-sub{font-size:11px;color:var(--gray)}
+.scb-save-btn{background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:var(--bg);padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer}
+.scb-steps{display:flex;background:rgba(0,0,0,0.4);flex-shrink:0;border-bottom:1px solid var(--border)}
+.scb-step{flex:1;padding:10px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--gray2);border-bottom:3px solid transparent;cursor:pointer;transition:all 0.2s;font-family:'Open Sans',sans-serif}
+.scb-step.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.05)}
+.scb-step.done{color:#4cd48a}
+.scb-body{flex:1;overflow-y:auto;padding:12px 14px 20px}
+.scb-step-content{display:none}.scb-step-content.active{display:block}
+.hb-table{width:100%;border-collapse:collapse}
+.hb-thead th{font-size:11px;font-weight:700;color:var(--gold);padding:8px 4px;text-align:center;border-bottom:2px solid var(--border2);background:var(--bg);position:sticky;top:0;z-index:2;font-family:'Cinzel',serif}
+.hb-td{padding:5px 3px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
+.hb-hole-badge{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--card2),var(--card3));display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--gold);font-family:'Cinzel',serif;border:1px solid var(--border)}
+.hb-par-select{display:flex;gap:3px;justify-content:center}
+.hb-par-btn{width:30px;height:30px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--gray);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
+.hb-par-btn.s3.sel{background:linear-gradient(135deg,#3a9660,#2d7a4f);color:white;border-color:#3a9660}
+.hb-par-btn.s4.sel{background:linear-gradient(135deg,var(--white),#d0d0c0);color:var(--bg);border-color:var(--white)}
+.hb-par-btn.s5.sel{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border-color:var(--gold)}
+.hb-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;padding:7px 2px;color:var(--white);font-size:15px;text-align:center;outline:none;-moz-appearance:textfield;min-width:42px}
+.hb-input::-webkit-outer-spin-button,.hb-input::-webkit-inner-spin-button{-webkit-appearance:none}
+.hb-input:focus{border-color:var(--gold);background:rgba(201,168,76,0.08)}
+.si-dupe{border-color:var(--red)!important;background:rgba(212,68,68,0.1)!important}
+.hb-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
+.hb-sum-cell{background:rgba(255,255,255,0.05);border-radius:8px;padding:8px;text-align:center;border:1px solid var(--border)}
+.hb-sum-val{font-size:18px;font-weight:900;color:var(--gold);font-family:'Cinzel',serif}
+.hb-sum-label{font-size:10px;color:var(--gray);margin-top:2px}
+.hb-sum-cell.warn .hb-sum-val{color:var(--red)}
+.hb-warning{background:rgba(212,68,68,0.12);border:1px solid rgba(212,68,68,0.4);border-radius:8px;padding:10px 12px;font-size:12px;color:#ff8888;margin-bottom:10px;display:none}
+.hb-warning.show{display:block}
+.hb-tip{background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.5}
+.hb-tip strong{color:var(--gold)}
+/* Loading spinner */
+.spinner{width:40px;height:40px;border:3px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:20px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;display:none}
+.loading-overlay.show{display:flex}
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="spinner"></div>
+  <div style="color:var(--gold);font-family:'Cinzel',serif;margin-top:12px;font-size:14px;">Syncing...</div>
+</div>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-banner">
+    <div class="header-title-main">The <em>'Jolly Boys'</em></div>
+    <div class="header-title-sub" id="header-season-text">Winter League</div>
+  </div>
+  <div class="header-nav-row">
+    <span class="header-season-badge">2025/26 ⛳</span>
+    <span style="font-size:11px;color:var(--gray);" id="header-events-count"></span>
+    <span class="header-format-badge" id="header-format-chip">Stableford</span>
+    <button onclick="showFirebaseSetup()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:3px 8px;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;"><span id="sync-dot" class="sync-dot off"></span><span id="sync-label" style="color:var(--gray);">Connect</span></button>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- FIREBASE SETUP PAGE (hidden by default now) -->
+  <div class="page" id="page-setup">
+    <div class="firebase-banner">
+      <div style="font-size:40px;margin-bottom:8px;">🔥</div>
+      <h2>Connect to Firebase</h2>
+      <p>Paste your Firebase config below so all players see the same live data. You only need to do this once — the config will be saved on this device.</p>
+      <div style="text-align:left;margin-bottom:8px;">
+        <div class="form-label">How to get your config:</div>
+        <div style="font-size:11px;color:var(--gray);line-height:1.8;">
+          1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
+          2. Create project → name it <strong style="color:var(--white);">jolly-boys-golf</strong><br>
+          3. Click ⚙️ Settings → <strong style="color:var(--white);">Your apps</strong> → Add Web app<br>
+          4. Copy the <strong style="color:var(--white);">firebaseConfig</strong> object and paste below<br>
+          5. Also enable <strong style="color:var(--white);">Firestore Database</strong> in test mode
+        </div>
+      </div>
+      <textarea class="firebase-input" id="firebase-config-input" placeholder='Paste your firebaseConfig here, e.g.:
+
+{
+  apiKey: "AIzaSy...",
+  authDomain: "jolly-boys-golf.firebaseapp.com",
+  projectId: "jolly-boys-golf",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+}'></textarea>
+      <button class="btn btn-gold btn-full" onclick="connectFirebase()">🔥 Connect & Launch App</button>
+      <div style="margin-top:12px;">
+        <button class="btn btn-outline btn-full" onclick="skipFirebase()" style="font-size:11px;">Skip for now — use local storage only</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <div class="page active" id="page-home">
+    <div id="home-podium"></div>
+    <div class="card" style="margin-top:10px;">
+      <div class="card-header"><span class="card-title">⛳ Latest Results</span></div>
+      <div id="home-latest"></div>
+    </div>
+  </div>
+
+  <!-- LEAGUE -->
+  <div class="page" id="page-league">
+    <div class="jb-board">
+      <div class="jb-board-header">
+        <div class="jb-board-title">The 'Jolly Boys'</div>
+        <div class="jb-board-sub" id="league-season-sub">Winter League 2025/26 ⛳</div>
+      </div>
+      <div style="overflow-x:auto;">
+        <table class="jb-table"><thead class="jb-thead" id="league-thead"></thead><tbody id="league-tbody"></tbody></table>
+      </div>
+      <div class="format-row">
+        <label class="form-label" style="margin:0;white-space:nowrap;">Format:</label>
+        <select class="format-sel" id="format-select" onchange="changeFormat(this.value)">
+          <option value="stableford">Stableford (Best 6)</option>
+          <option value="stroke">Stroke Play</option>
+        </select>
+        <span style="font-size:10px;color:var(--gray);margin-left:4px;">★ = best 6</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- EVENTS -->
+  <div class="page" id="page-events">
+    <button class="btn btn-gold btn-full" onclick="showModal('modal-add-event')">+ Schedule New Event</button>
+    <div style="margin-top:12px;" id="events-list"></div>
+  </div>
+
+  <!-- SCORE -->
+  <div class="page" id="page-score">
+    <div id="score-setup">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:12px;">🏌️ Enter Scores</div>
+        <div class="form-group"><label class="form-label">Select Event</label><select class="form-input" id="score-event-select"><option value="">— Pick event —</option></select></div>
+        <div class="form-group"><label class="form-label">Players &amp; Groups</label>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">Assign players to groups — all scores count for the week.</div>
+          <div id="player-group-assign"></div>
+        </div>
+        <button class="btn btn-gold btn-full" onclick="openScoreEntry()">⛳ Enter Scores</button>
+      </div>
+    </div>
+    <div id="score-entry-area" style="display:none;">
+      <div class="card" style="margin-bottom:8px;padding:10px 14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div><div class="card-title" id="active-event-name">Round</div></div>
+          <button class="btn btn-sm btn-gold" onclick="saveScores()">💾 Save</button>
+        </div>
+      </div>
+      <div id="score-entry-rows"></div>
+    </div>
+  </div>
+
+  <!-- PLAYERS -->
+  <div class="page" id="page-players">
+    <div style="display:flex;gap:8px;margin-bottom:4px;">
+      <button class="btn btn-gold" style="flex:1;" onclick="showModal('modal-add-player')">+ Add Player</button>
+      <button class="btn btn-outline" style="flex:1;" onclick="openHcpModal()">🏌️ Handicaps</button>
+    </div>
+    <div style="margin-top:12px;" id="players-list"></div>
+  </div>
+
+  <!-- COURSES -->
+  <div class="page" id="page-courses">
+    <button class="btn btn-gold btn-full" onclick="openSCBuilder(null)">✏️ Create Custom Scorecard</button>
+    <div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:var(--gray);">Build scorecards with real par &amp; stroke index per hole. Stableford points calculate automatically.</div>
+    <input type="text" class="search-box" placeholder="Search courses..." oninput="renderCourses(this.value)" style="margin-top:8px;">
+    <div id="courses-list"></div>
+  </div>
+
+</div><!-- end content -->
+
+<!-- BOTTOM NAV -->
+<div class="bottom-nav" id="bottom-nav" style="display:none;">
+  <button class="nav-btn active" onclick="goPage('home',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
+  <button class="nav-btn" onclick="goPage('league',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>League</button>
+  <button class="nav-btn" onclick="goPage('events',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Events</button>
+  <button class="nav-btn" onclick="goPage('score',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Score</button>
+  <button class="nav-btn" onclick="goPage('players',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Players</button>
+  <button class="nav-btn" onclick="goPage('courses',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-10"/></svg>Courses</button>
+</div>
+
+<!-- SCORECARD BUILDER -->
+<div class="scb-overlay" id="scb-overlay">
+  <div class="scb-header">
+    <button class="scb-back" onclick="closeSCBuilder()">←</button>
+    <div class="scb-title"><div class="scb-title-main" id="scb-title-main">New Scorecard</div><div class="scb-title-sub" id="scb-title-sub">Enter course details</div></div>
+    <button class="scb-save-btn" onclick="saveSCBuilder()">Save ✓</button>
+  </div>
+  <div class="scb-steps">
+    <div class="scb-step active" id="scb-tab-0" onclick="scbGoStep(0)">① Details</div>
+    <div class="scb-step" id="scb-tab-1" onclick="scbGoStep(1)">② Front 9</div>
+    <div class="scb-step" id="scb-tab-2" onclick="scbGoStep(2)">③ Back 9</div>
+    <div class="scb-step" id="scb-tab-3" onclick="scbGoStep(3)">④ Review</div>
+  </div>
+  <div class="scb-body">
+    <div class="scb-step-content active" id="scb-s0">
+      <div class="hb-tip">⛳ <strong>Create your own scorecard</strong> — enter the course name, then set par and stroke index for every hole.</div>
+      <div class="form-group"><label class="form-label">Course Name *</label><input class="form-input" id="scb-name" placeholder="e.g. Falkirk Golf Club" oninput="scbUpdateTitle()"></div>
+      <div class="form-group"><label class="form-label">Region / Location</label><input class="form-input" id="scb-region" placeholder="e.g. Falkirk, Central Scotland"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div class="form-group"><label class="form-label">SSS</label><input class="form-input" type="number" id="scb-sss" placeholder="70" min="55" max="80"></div>
+        <div class="form-group"><label class="form-label">Slope</label><input class="form-input" type="number" id="scb-slope" placeholder="113" min="55" max="155"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Quick Fill Template</label>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('standard')">Par 71</button>
+          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('par72')">Par 72</button>
+          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('par70')">Par 70</button>
+          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('links')">Links</button>
+        </div>
+      </div>
+      <button class="btn btn-gold btn-full" onclick="scbGoStep(1)">Next: Front 9 →</button>
+    </div>
+    <div class="scb-step-content" id="scb-s1">
+      <div class="hb-tip"><strong>Stroke Index (SI):</strong> Each hole needs a unique SI 1–18. Duplicates highlighted red.</div>
+      <div id="scb-warn-front" class="hb-warning"></div>
+      <div class="hb-summary" id="scb-summary-front"></div>
+      <table class="hb-table"><thead class="hb-thead"><tr><th>Hole</th><th>Par</th><th>SI</th><th>Yards</th></tr></thead><tbody id="scb-tbody-front"></tbody></table>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(0)">← Back</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="scbGoStep(2)">Next: Back 9 →</button></div>
+    </div>
+    <div class="scb-step-content" id="scb-s2">
+      <div class="hb-tip"><strong>Back 9:</strong> SI values are unique across all 18 holes.</div>
+      <div id="scb-warn-back" class="hb-warning"></div>
+      <div class="hb-summary" id="scb-summary-back"></div>
+      <table class="hb-table"><thead class="hb-thead"><tr><th>Hole</th><th>Par</th><th>SI</th><th>Yards</th></tr></thead><tbody id="scb-tbody-back"></tbody></table>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(1)">← Back</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="scbGoStep(3)">Review →</button></div>
+    </div>
+    <div class="scb-step-content" id="scb-s3">
+      <div id="scb-review-content"></div>
+      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(2)">← Edit</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="saveSCBuilder()">✓ Save Course</button></div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="modal-add-player" style="display:none;" onclick="closeModalOutside(event,'modal-add-player')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="add-player-modal-title">Add Player</span><button class="close-btn" onclick="closeModal('modal-add-player')">×</button></div>
+    <input type="hidden" id="edit-player-id">
+    <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="input-player-name" placeholder="e.g. John Smith"></div>
+    <div class="form-group"><label class="form-label">Handicap</label><input class="form-input" type="number" id="input-player-hcp" placeholder="e.g. 18" min="0" max="54"></div>
+    <button class="btn btn-gold btn-full" onclick="savePlayer()">Save Player</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-player-profile" style="display:none;" onclick="closeModalOutside(event,'modal-player-profile')">
+  <div class="modal"><div class="modal-header"><span class="modal-title" id="profile-name">Profile</span><button class="close-btn" onclick="closeModal('modal-player-profile')">×</button></div><div id="profile-content"></div></div>
+</div>
+
+<div class="modal-overlay" id="modal-add-event" style="display:none;" onclick="closeModalOutside(event,'modal-add-event')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="add-event-modal-title">Schedule Event</span><button class="close-btn" onclick="closeModal('modal-add-event')">×</button></div>
+    <input type="hidden" id="edit-event-id">
+    <div class="form-group"><label class="form-label">Event Name</label><input class="form-input" id="input-event-name" placeholder="e.g. Week 8"></div>
+    <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="input-event-date"></div>
+    <div class="form-group"><label class="form-label">Course</label><input class="form-input" id="input-event-course" placeholder="e.g. Falkirk Golf Club"></div>
+    <div class="form-group"><label class="form-label">Format</label><select class="form-input" id="input-event-format"><option value="stableford">Stableford</option><option value="stroke">Stroke Play</option></select></div>
+    <button class="btn btn-gold btn-full" onclick="saveEvent()">Save Event</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-round-results" style="display:none;" onclick="closeModalOutside(event,'modal-round-results')">
+  <div class="modal"><div class="modal-header"><span class="modal-title" id="round-results-title">Results</span><button class="close-btn" onclick="closeModal('modal-round-results')">×</button></div><div id="round-results-content"></div></div>
+</div>
+
+<div class="modal-overlay" id="modal-hcp" style="display:none;" onclick="closeModalOutside(event,'modal-hcp')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">🏌️ Update Handicaps</span><button class="close-btn" onclick="closeModal('modal-hcp')">×</button></div>
+    <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px;font-size:11px;color:var(--gray);line-height:1.8;">
+      <strong style="color:var(--gold);">Rules:</strong> 0–17pts +2 · 18–29pts +1 · 30–37pts no change · 38–42pts −1 · 43+pts −2<br>
+      <strong style="color:var(--gold2);">🏆 Weekly winner gets extra −1</strong>
+    </div>
+    <div id="hcp-rows"></div>
+    <div style="display:flex;gap:8px;margin-top:16px;">
+      <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modal-hcp')">Cancel</button>
+      <button class="btn btn-gold" style="flex:1;" onclick="applyHandicaps()">✅ Apply</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-firebase" style="display:none;" onclick="closeModalOutside(event,'modal-firebase')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">🔥 Connect to Firebase</span><button class="close-btn" onclick="closeModal('modal-firebase')">×</button></div>
+    <p style="font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.6;">Paste your Firebase config below to enable live sync across all players' phones.</p>
+    <div style="font-size:11px;color:var(--gray);line-height:1.8;margin-bottom:12px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
+      1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
+      2. Open your project → ⚙️ Settings → Your apps<br>
+      3. Scroll down and copy the <strong style="color:var(--white);">firebaseConfig</strong> code<br>
+      4. Paste it in the box below
+    </div>
+    <textarea class="firebase-input" id="firebase-config-input2" placeholder='Paste your firebaseConfig here:
+
+{
+  apiKey: "AIzaSy...",
+  authDomain: "jolly-boys-golf.firebaseapp.com",
+  projectId: "jolly-boys-golf",
+  storageBucket: "...",
+  messagingSenderId: "...",
+  appId: "..."
+}'></textarea>
+    <button class="btn btn-gold btn-full" onclick="connectFirebaseFromModal()">🔥 Connect & Sync Live</button>
+    <div id="fb-modal-status" style="margin-top:8px;text-align:center;font-size:11px;color:#4cd48a;display:none;">✅ Already connected to Firebase!</div>
+    <button class="btn btn-gray btn-full" style="margin-top:6px;font-size:11px;" onclick="disconnectFirebase()">Disconnect Firebase</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-course-detail" style="display:none;" onclick="closeModalOutside(event,'modal-course-detail')">
+  <div class="modal"><div class="modal-header"><span class="modal-title" id="course-detail-title">Course</span><button class="close-btn" onclick="closeModal('modal-course-detail')">×</button></div><div id="course-detail-content"></div></div>
+</div>
+
+<!-- Firebase SDK (compat - avoids ES module scoping issues with onclick handlers) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script>
+// Shims so the rest of the app code works unchanged
+function initializeApp(cfg){return firebase.initializeApp(cfg);}
+function getFirestore(app){return app.firestore();}
+function doc(db,col,id){return db.collection(col).doc(id);}
+function collection(db,col){return db.collection(col);}
+async function getDoc(ref){const s=await ref.get();return{exists:()=>s.exists,data:()=>s.data()};}
+async function getDocs(ref){const s=await ref.get();return{docs:s.docs.map(d=>({id:d.id,data:()=>d.data()})),empty:s.empty};}
+function setDoc(ref,data){return ref.set(data,{merge:true});}
+function deleteDoc(ref){return ref.delete();}
+function onSnapshot(ref,cb){return ref.onSnapshot(snap=>{if(snap.docs!==undefined){cb({docs:snap.docs.map(d=>({id:d.id,data:()=>d.data()})),empty:snap.empty});}else{cb({docs:[{id:snap.id,data:()=>snap.data()}],empty:!snap.exists});}});}
+</script>
+<script>
+
+// ─────────────────────────────────────────────────────────────
+// GLOBALS
+// ─────────────────────────────────────────────────────────────
+let db=null,fbApp=null,useFirebase=false;
+let unsubscribers=[];
+
+// LOCAL STATE (fallback / cache)
+let state={
+  format:'stableford',
+  season:'Winter League 2025/26',
+  players:[
+    {id:'p1',name:'Willy',hcp:10},
+    {id:'p2',name:'Harry',hcp:11},
+    {id:'p3',name:'Stephen',hcp:10},
+    {id:'p4',name:'Bob',hcp:19},
+    {id:'p5',name:'John',hcp:8},
+    {id:'p6',name:'Conner',hcp:19},
+    {id:'p7',name:'Peter',hcp:19},
+    {id:'p8',name:'Gareth',hcp:13},
+  ],
+  events:[
+    {id:'e1',name:'Week 1',date:'2025-10-06',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e2',name:'Week 2',date:'2025-10-13',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e3',name:'Week 3',date:'2025-10-20',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e4',name:'Week 4',date:'2025-10-27',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e5',name:'Week 5',date:'2025-11-03',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e6',name:'Week 6',date:'2025-11-10',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e7',name:'Week 7',date:'2025-11-17',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
+    {id:'e8',name:'Summer Opener',date:'2026-04-05',course:'Falkirk Golf Club',format:'stableford',status:'upcoming'},
+  ],
+  scores:{
+    e1:{p1:{stab:42},p2:{stab:28},p3:{stab:36},p4:{stab:32},p5:{stab:38},p6:{stab:26},p7:{stab:27},p8:{stab:0}},
+    e2:{p1:{stab:34},p2:{stab:30},p3:{stab:0}, p4:{stab:0}, p5:{stab:30},p6:{stab:23},p7:{stab:28},p8:{stab:39}},
+    e3:{p1:{stab:46},p2:{stab:42},p3:{stab:36},p4:{stab:33},p5:{stab:35},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
+    e4:{p1:{stab:36},p2:{stab:37},p3:{stab:37},p4:{stab:21},p5:{stab:29},p6:{stab:19},p7:{stab:0}, p8:{stab:0}},
+    e5:{p1:{stab:36},p2:{stab:40},p3:{stab:34},p4:{stab:32},p5:{stab:34},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
+    e6:{p1:{stab:42},p2:{stab:38},p3:{stab:34},p4:{stab:36},p5:{stab:28},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
+    e7:{p1:{stab:33},p2:{stab:38},p3:{stab:30},p4:{stab:41},p5:{stab:0}, p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
+  },
+  customCourses:[],
+};
+
+// ─────────────────────────────────────────────────────────────
+// FIREBASE CONNECT
+// ─────────────────────────────────────────────────────────────
+window.showFirebaseSetup=function(){
+  document.getElementById('modal-firebase').style.display='flex';
+  document.body.style.overflow='hidden';
+  const statusEl=document.getElementById('fb-modal-status');
+  if(statusEl)statusEl.style.display=useFirebase?'block':'none';
+  const saved=localStorage.getItem('jbg_fbcfg');
+  if(saved){const inp=document.getElementById('firebase-config-input2');if(inp&&!inp.value)inp.value=saved;}
+};
+window.connectFirebaseFromModal=async function(){
+  const raw=document.getElementById('firebase-config-input2').value.trim();
+  if(!raw){alert('Please paste your Firebase config');return;}
+  const btn=document.querySelector('#modal-firebase .btn-gold');
+  if(btn){btn.textContent='🔄 Connecting...';btn.disabled=true;}
+  try{
+    let cfg;
+    try{cfg=new Function('return ('+raw+')')();}
+    catch(e){cfg=JSON.parse(raw);}
+    if(!cfg.apiKey||!cfg.projectId)throw new Error('Invalid config — missing apiKey or projectId');
+    localStorage.setItem('jbg_fbcfg',JSON.stringify(cfg));
+    closeModal('modal-firebase');
+    await initFB(cfg,true);
+  }catch(e){
+    if(btn){btn.textContent='🔥 Connect & Sync Live';btn.disabled=false;}
+    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object and that Firestore is enabled in test mode.');
+  }
+};
+window.disconnectFirebase=function(){
+  if(!confirm('Disconnect Firebase? App will use local storage only.'))return;
+  localStorage.removeItem('jbg_fbcfg');
+  useFirebase=false;
+  unsubscribers.forEach(u=>u());unsubscribers=[];
+  const dot=document.getElementById('sync-dot');if(dot){dot.className='sync-dot off';}
+  const lbl=document.getElementById('sync-label');if(lbl)lbl.textContent='Connect';
+  closeModal('modal-firebase');
+  alert('Disconnected. App now uses local storage.');
+};
+window.connectFirebase=async function(){
+  const raw=document.getElementById('firebase-config-input').value.trim();
+  if(!raw){alert('Please paste your Firebase config');return;}
+  try{
+    // Parse config — handle both object literal and JSON
+    let cfg;
+    try{cfg=new Function('return ('+raw+')')();}
+    catch(e){cfg=JSON.parse(raw);}
+    if(!cfg.apiKey||!cfg.projectId)throw new Error('Invalid config');
+    localStorage.setItem('jbg_fbcfg',JSON.stringify(cfg));
+    await initFB(cfg);
+  }catch(e){
+    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object.');
+  }
+};
+
+window.skipFirebase=function(){
+  useFirebase=false;
+  launchApp();
+};
+
+async function initFB(cfg,showToast){
+  showLoading(true);
+  try{
+    fbApp=initializeApp(cfg);
+    db=getFirestore(fbApp);
+    // Test connection
+    await getDoc(doc(db,'meta','test'));
+    useFirebase=true;
+    // Upload existing default data if Firestore is empty
+    await seedFirestoreIfEmpty();
+    launchApp(showToast);
+  }catch(e){
+    showLoading(false);
+    alert('❌ Firebase connection failed: '+e.message+'\n\nCheck your config and make sure Firestore is enabled in test mode.');
+  }
+}
+
+async function seedFirestoreIfEmpty(){
+  // Check if players exist
+  const snap=await getDocs(collection(db,'players'));
+  if(!snap.empty)return; // Already has data
+  // Seed with default players
+  for(const p of state.players){
+    await setDoc(doc(db,'players',p.id),p);
+  }
+  // Seed events
+  for(const ev of state.events){
+    await setDoc(doc(db,'events',ev.id),ev);
+  }
+  // Seed scores
+  for(const [eid,scores] of Object.entries(state.scores)){
+    for(const [pid,sc] of Object.entries(scores)){
+      if(sc.stab>0){
+        await setDoc(doc(db,'scores',`${eid}_${pid}`),{eventId:eid,playerId:pid,stab:sc.stab});
+      }
+    }
+  }
+  // Seed format
+  await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
+}
+
+// ─────────────────────────────────────────────────────────────
+// LAUNCH APP
+// ─────────────────────────────────────────────────────────────
+async function launchApp(showToast){
+  showLoading(true);
+  if(useFirebase){
+    await loadFromFirebase();
+    subscribeRealtime();
+  } else {
+    loadLocal();
+  }
+  document.getElementById('page-setup').classList.remove('active');
+  document.getElementById('page-home').classList.add('active');
+  document.getElementById('bottom-nav').style.display='flex';
+  renderAll();
+  showLoading(false);
+  if(showToast&&useFirebase){
+    const t=document.createElement('div');
+    t.textContent='🔥 Connected! Live sync active for all players.';
+    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d7a4f;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;';
+    document.body.appendChild(t);
+    setTimeout(()=>t.remove(),3500);
+  }
+}
+
+async function loadFromFirebase(){
+  // Players
+  const ps=await getDocs(collection(db,'players'));
+  state.players=ps.docs.map(d=>d.data());
+  // Events
+  const es=await getDocs(collection(db,'events'));
+  state.events=es.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);
+  // Scores
+  const ss=await getDocs(collection(db,'scores'));
+  state.scores={};
+  ss.docs.forEach(d=>{
+    const{eventId,playerId,stab}=d.data();
+    if(!state.scores[eventId])state.scores[eventId]={};
+    state.scores[eventId][playerId]={stab};
+  });
+  // Settings
+  try{
+    const m=await getDoc(doc(db,'meta','settings'));
+    if(m.exists()){const d=m.data();state.format=d.format||'stableford';state.season=d.season||state.season;}
+  }catch(e){}
+  // Courses
+  try{
+    const cs=await getDocs(collection(db,'courses'));
+    state.customCourses=cs.docs.map(d=>d.data());
+  }catch(e){}
+}
+
+function subscribeRealtime(){
+  // Unsubscribe old listeners
+  unsubscribers.forEach(u=>u());unsubscribers=[];
+  // Players
+  unsubscribers.push(onSnapshot(collection(db,'players'),snap=>{
+    state.players=snap.docs.map(d=>d.data());renderAll();
+  }));
+  // Events
+  unsubscribers.push(onSnapshot(collection(db,'events'),snap=>{
+    state.events=snap.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);renderAll();
+  }));
+  // Scores
+  unsubscribers.push(onSnapshot(collection(db,'scores'),snap=>{
+    state.scores={};
+    snap.docs.forEach(d=>{
+      const{eventId,playerId,stab}=d.data();
+      if(!state.scores[eventId])state.scores[eventId]={};
+      state.scores[eventId][playerId]={stab};
+    });
+    renderAll();
+  }));
+}
+
+function loadLocal(){
+  try{const s=localStorage.getItem('jbgolf_nl');if(s){const d=JSON.parse(s);Object.assign(state,d);}}catch(e){}
+}
+
+function saveLocal(){
+  try{localStorage.setItem('jbgolf_nl',JSON.stringify({format:state.format,season:state.season,players:state.players,events:state.events,scores:state.scores,customCourses:state.customCourses}));}catch(e){}
+}
+
+// ─────────────────────────────────────────────────────────────
+// FIREBASE WRITE HELPERS
+// ─────────────────────────────────────────────────────────────
+async function fbSet(col,id,data){
+  if(useFirebase&&db)await setDoc(doc(db,col,id),data);
+  else saveLocal();
+}
+async function fbDel(col,id){
+  if(useFirebase&&db)await deleteDoc(doc(db,col,id));
+  else saveLocal();
+}
+async function fbSaveSettings(){
+  if(useFirebase&&db)await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
+  else saveLocal();
+}
+
+// ─────────────────────────────────────────────────────────────
+// AUTO-CONNECT ON LOAD
+// ─────────────────────────────────────────────────────────────
+(async()=>{
+  const saved=localStorage.getItem('jbg_fbcfg');
+  if(saved){
+    try{await initFB(JSON.parse(saved));}
+    catch(e){/* show setup page */showLoading(false);}
+  }
+})();
+
+// ─────────────────────────────────────────────────────────────
+// SCORING LOGIC
+// ─────────────────────────────────────────────────────────────
+function calcStab(score,par,si,hcp){
+  if(!score||score===0)return 0;
+  const shots=Math.floor(hcp/18)+(si<=(hcp%18)?1:0);
+  const d=par-(score-shots);
+  if(d>=2)return 4;if(d===1)return 3;if(d===0)return 2;if(d===-1)return 1;return 0;
+}
+
+// ─────────────────────────────────────────────────────────────
+// LEAGUE
+// ─────────────────────────────────────────────────────────────
+function calcLeague(){
+  const done=state.events.filter(e=>e.status==='complete');
+  return state.players.map(p=>{
+    let scores=[];
+    done.forEach(ev=>{
+      const s=state.scores[ev.id];
+      if(s&&s[p.id]&&s[p.id].stab>0)scores.push({eventId:ev.id,eventName:ev.name,stab:s[p.id].stab});
+    });
+    const sorted=[...scores].sort((a,b)=>b.stab-a.stab);
+    const b6=sorted.slice(0,6);
+    const b6ids=b6.map(s=>s.eventId);
+    const pts=b6.reduce((s,r)=>s+r.stab,0);
+    return{player:p,scores,totalPts:pts,best6ids:b6ids,rounds:scores.length};
+  }).sort((a,b)=>b.totalPts-a.totalPts);
+}
+
+// ─────────────────────────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────────────────────────
+function renderAll(){
+  renderHome();renderLeague();renderEvents();renderPlayers();renderScoreSetup();renderCourses('');
+  document.getElementById('format-select').value=state.format;
+  document.getElementById('header-format-chip').textContent=fL(state.format);
+  const done=state.events.filter(e=>e.status==='complete');
+  document.getElementById('header-events-count').textContent=`${done.length} Events`;
+  document.getElementById('league-season-sub').textContent=state.season;
+  // Sync indicator
+  const dot=document.getElementById('sync-dot');
+  if(dot)dot.className='sync-dot'+(useFirebase?'':' off');
+  const lbl=document.getElementById('sync-label');
+  if(lbl)lbl.textContent=useFirebase?'Live ✓':'Connect';
+}
+
+function renderHome(){
+  const t=calcLeague();
+  const pCls=['podium-1','podium-2','podium-3'];
+  const tr=['🥇','🥈','🥉'];
+  document.getElementById('home-podium').innerHTML=t.slice(0,3).map((r,i)=>`
+    <div class="podium-card ${pCls[i]}">
+      <div class="podium-icon">${tr[i]}</div>
+      <div class="podium-info">
+        <div class="podium-name">${r.player.name}</div>
+        <div class="podium-detail">HCP ${r.player.hcp} · ${r.rounds} rounds</div>
+        <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
+          ${r.scores.map(s=>`<span style="font-size:10px;background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:4px;color:${r.best6ids.includes(s.eventId)?'var(--gold2)':'var(--gray)'};">${s.stab}</span>`).join('')}
+        </div>
+      </div>
+      <div class="podium-pts"><div class="podium-pts-val">${r.totalPts}</div><div class="podium-pts-label">best 6 pts</div></div>
+    </div>`).join('');
+  const done=state.events.filter(e=>e.status==='complete');
+  const latest=done[done.length-1];
+  if(latest&&state.scores[latest.id]){
+    const rs=state.players.filter(p=>state.scores[latest.id][p.id]&&state.scores[latest.id][p.id].stab>0)
+      .map(p=>({name:p.name,pts:state.scores[latest.id][p.id].stab})).sort((a,b)=>b.pts-a.pts);
+    document.getElementById('home-latest').innerHTML=`<div style="font-size:12px;color:var(--gray);margin-bottom:8px;">${latest.name} · ${fD(latest.date)} · ${latest.course}</div>`+
+      rs.map((r,i)=>`<div class="stat-row"><span class="stat-label">${i===0?'🏆 ':''}${r.name}</span><span class="stat-val">${r.pts} pts</span></div>`).join('');
+  }else{
+    document.getElementById('home-latest').innerHTML='<div class="empty-state"><p>No completed rounds yet</p></div>';
+  }
+}
+
+function renderLeague(){
+  const t=calcLeague();
+  const done=state.events.filter(e=>e.status==='complete');
+  let th=`<tr><th>#</th><th style="text-align:left;padding-left:10px;">Player</th><th>HCP</th>`;
+  done.forEach(e=>{th+=`<th style="min-width:32px;">${e.name.replace('Week ','W')}</th>`;});
+  th+=`<th>Rnds</th><th>Total</th></tr>`;
+  document.getElementById('league-thead').innerHTML=th;
+  document.getElementById('league-tbody').innerHTML=t.map((r,i)=>{
+    const posEl=i===0?`<div class="jb-pos pos-1">1</div>`:i===1?`<div class="jb-pos pos-2">2</div>`:i===2?`<div class="jb-pos pos-3">3</div>`:`<div class="jb-pos pos-n">${i+1}</div>`;
+    const cells=done.map(ev=>{
+      const s=state.scores[ev.id];const ps=s&&s[r.player.id];
+      const v=ps&&ps.stab>0?ps.stab:0;const isBest=r.best6ids.includes(ev.id);
+      return v===0?`<td class="jb-td"><span class="score-cell-val score-zero">—</span></td>`
+        :`<td class="jb-td"><span class="score-cell-val ${isBest?'score-best':''}">${isBest?'★':''}${v}</span></td>`;
+    }).join('');
+    const rc=i===0?'jb-row pos1':i===1?'jb-row pos2':i===2?'jb-row pos3':'jb-row';
+    return`<tr class="${rc}"><td class="jb-td">${posEl}</td>
+      <td class="jb-td"><div class="jb-name">${r.player.name}</div><div class="jb-hcp">hcp ${r.player.hcp}</div></td>
+      <td class="jb-td" style="color:var(--gray);font-size:11px;">${r.player.hcp}</td>
+      ${cells}
+      <td class="jb-td" style="color:var(--gray);font-size:12px;">${r.rounds}</td>
+      <td class="jb-td"><span class="total-cell">${r.totalPts}</span></td></tr>`;
+  }).join('');
+}
+
+function renderEvents(){
+  if(!state.events.length){document.getElementById('events-list').innerHTML='<div class="empty-state"><div class="icon">📅</div><p>No events yet</p></div>';return;}
+  document.getElementById('events-list').innerHTML=[...state.events].reverse().map(ev=>{
+    const badge=ev.status==='complete'?'<span class="event-badge badge-complete">✓ Complete</span>':'<span class="event-badge badge-upcoming">Upcoming</span>';
+    let res='';
+    if(ev.status==='complete'&&state.scores[ev.id]){
+      const top=state.players.filter(p=>state.scores[ev.id][p.id]&&state.scores[ev.id][p.id].stab>0)
+        .map(p=>({name:p.name,pts:state.scores[ev.id][p.id].stab})).sort((a,b)=>b.pts-a.pts).slice(0,3);
+      res=`<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">${top.map((r,i)=>`<span style="font-size:11px;color:var(--gray);">${['🥇','🥈','🥉'][i]} ${r.name} <strong style="color:var(--white);">${r.pts}</strong></span>`).join('')}</div>`;
+    }
+    return`<div class="event-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
+        <div><div class="event-name">${ev.name}</div><div class="event-date">${fD(ev.date)} · ${ev.course}</div></div>${badge}
+      </div>${res}
+      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
+        ${ev.status==='complete'?`<button class="btn btn-sm btn-outline" onclick="viewResults('${ev.id}')">View Scores</button>`:''}
+        <button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">✏️ Edit Scores</button>
+        <button class="btn btn-sm btn-red" onclick="deleteEvent('${ev.id}')">Delete</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderPlayers(){
+  const t=calcLeague();const rm={};t.forEach((r,i)=>{rm[r.player.id]=i+1;});
+  document.getElementById('players-list').innerHTML=state.players.length
+    ? state.players.map(p=>`
+      <div class="player-card">
+        <div class="player-avatar">${p.name[0]}</div>
+        <div class="player-info"><div class="player-name">${p.name}</div><div class="player-hcp">HCP ${p.hcp} · Rank #${rm[p.id]||'—'}</div></div>
+        <div class="player-actions">
+          <button class="btn btn-sm btn-outline" onclick="viewProfile('${p.id}')">Profile</button>
+          <button class="btn btn-sm btn-green" onclick="editPlayer('${p.id}')">Edit</button>
+          <button class="btn btn-sm btn-red" onclick="deletePlayer('${p.id}')">✕</button>
+        </div>
+      </div>`).join('')
+    : '<div class="empty-state"><div class="icon">👤</div><p>No players yet</p></div>';
+}
+
+const playerGroups={};
+function renderScoreSetup(){
+  const sel=document.getElementById('score-event-select');
+  sel.innerHTML='<option value="">— Pick event —</option>';
+  state.events.forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=`${ev.name} · ${fD(ev.date)}`;sel.appendChild(o);});
+  state.players.forEach(p=>{if(!playerGroups[p.id])playerGroups[p.id]='g1';});
+  document.getElementById('player-group-assign').innerHTML=state.players.map(p=>{
+    const g=playerGroups[p.id]||'g1';
+    return`<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);padding:7px 10px;border-radius:10px;border:1px solid var(--border);margin-bottom:6px;">
+      <span style="flex:1;font-size:13px;font-weight:700;font-family:'Cinzel',serif;">${p.name}</span>
+      <div style="display:flex;gap:4px;">
+        ${['g1','g2','out'].map(grp=>`<button onclick="setGrp('${p.id}','${grp}')" style="padding:4px 8px;border-radius:6px;border:1px solid;font-size:10px;font-weight:700;cursor:pointer;${g===grp?(grp==='g1'?'background:#2d7a4f;border-color:#3a9660;color:white':grp==='g2'?'background:#4a8dd4;border-color:#5a9de4;color:white':'background:#663333;border-color:#884444;color:#ffaaaa'):'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--gray);'}">${grp==='out'?'Out':grp.toUpperCase()}</button>`).join('')}
+      </div>
+    </div>`;
+  }).join('');
+}
+window.setGrp=function(pid,grp){playerGroups[pid]=grp;renderScoreSetup();};
+
+function renderCourses(search){
+  const q=(search||'').toLowerCase();
+  const courses=state.customCourses.filter(c=>!q||c.name.toLowerCase().includes(q));
+  if(!courses.length){
+    document.getElementById('courses-list').innerHTML='<div class="empty-state"><div class="icon">⛳</div><p style="color:var(--gold);font-weight:700;margin-bottom:8px;">No courses yet</p><p style="font-size:12px;">Tap Create Custom Scorecard above to add your first course.</p></div>';
+    return;
+  }
+  document.getElementById('courses-list').innerHTML=courses.map(c=>{
+    const tp=c.holes.reduce((s,h)=>s+h.par,0);
+    return`<div class="course-card">
+      <div style="font-size:24px;flex-shrink:0;">⛳</div>
+      <div style="flex:1;cursor:pointer;" onclick="viewCourseDetail('${c.id}')"><div class="course-name">${c.name}</div><div class="course-detail">Par ${tp} · SSS ${c.sss}</div></div>
+      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
+        <span class="course-region">${c.region}</span>
+        <span class="custom-badge">Custom</span>
+        <button class="btn btn-sm btn-outline" style="font-size:10px;padding:3px 8px;" onclick="openSCBuilder('${c.id}')">✏️ Edit</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────────────────────
+// SCORE ENTRY
+// ─────────────────────────────────────────────────────────────
+let activeEid=null;
+window.openScoreEntry=function(){
+  const eid=document.getElementById('score-event-select').value;
+  if(!eid){alert('Select an event first');return;}
+  const ev=state.events.find(e=>e.id===eid);
+  activeEid=eid;
+  const playing=state.players.filter(p=>playerGroups[p.id]!=='out');
+  document.getElementById('score-setup').style.display='none';
+  document.getElementById('score-entry-area').style.display='block';
+  document.getElementById('active-event-name').textContent=ev?ev.name:'Round';
+  const existing=state.scores[eid]||{};
+  document.getElementById('score-entry-rows').innerHTML=`
+    <div style="font-size:11px;color:var(--gray);margin-bottom:10px;">Enter Stableford points for each player. Leave blank if not playing.</div>
+    ${playing.map(p=>`
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;">
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;font-family:'Cinzel',serif;">${p.name}</div><div style="font-size:10px;color:var(--gray);">HCP ${p.hcp} · ${playerGroups[p.id]==='g1'?'Group 1':'Group 2'}</div></div>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <button onclick="adjScore('${p.id}',-1)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:white;font-size:18px;cursor:pointer;">−</button>
+          <input type="number" min="0" max="60" value="${existing[p.id]&&existing[p.id].stab>0?existing[p.id].stab:''}" placeholder="pts"
+            style="width:60px;background:rgba(201,168,76,0.1);border:1px solid var(--border2);border-radius:8px;color:var(--gold2);text-align:center;padding:8px 4px;font-size:20px;font-weight:900;outline:none;font-family:'Cinzel',serif;"
+            id="stab-${p.id}">
+          <button onclick="adjScore('${p.id}',1)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:white;font-size:18px;cursor:pointer;">+</button>
+        </div>
+      </div>`).join('')}
+    <button class="btn btn-gray btn-full" onclick="cancelScores()" style="margin-top:4px;">← Back</button>`;
+};
+window.adjScore=function(pid,d){const el=document.getElementById('stab-'+pid);if(!el)return;el.value=Math.max(0,Math.min(60,(parseInt(el.value)||0)+d));};
+window.cancelScores=function(){activeEid=null;document.getElementById('score-setup').style.display='block';document.getElementById('score-entry-area').style.display='none';};
+
+window.saveScores=async function(){
+  if(!activeEid)return;
+  showLoading(true);
+  try{
+    const playing=state.players.filter(p=>playerGroups[p.id]!=='out');
+    for(const p of playing){
+      const el=document.getElementById('stab-'+p.id);
+      const stab=el?parseInt(el.value)||0:0;
+      if(!state.scores[activeEid])state.scores[activeEid]={};
+      state.scores[activeEid][p.id]={stab};
+      await fbSet('scores',`${activeEid}_${p.id}`,{eventId:activeEid,playerId:p.id,stab});
+    }
+    // Mark event complete
+    const ev=state.events.find(e=>e.id===activeEid);
+    if(ev){ev.status='complete';await fbSet('events',ev.id,ev);}
+    cancelScores();renderAll();
+    alert('✅ Scores saved!');
+  }catch(e){alert('Error saving: '+e.message);}
+  showLoading(false);
+};
+
+// Quick edit scores from events page
+window.quickEditScores=function(eid){
+  const sel=document.getElementById('score-event-select');
+  if(sel)sel.value=eid;
+  goPage('score',document.querySelectorAll('.nav-btn')[3]);
+  setTimeout(()=>window.openScoreEntry(),100);
+};
+
+// ─────────────────────────────────────────────────────────────
+// PLAYERS
+// ─────────────────────────────────────────────────────────────
+window.savePlayer=async function(){
+  const id=document.getElementById('edit-player-id').value;
+  const name=document.getElementById('input-player-name').value.trim();
+  const hcp=parseFloat(document.getElementById('input-player-hcp').value)||0;
+  if(!name){alert('Enter player name');return;}
+  showLoading(true);
+  try{
+    if(id){
+      const p=state.players.find(x=>x.id===id);if(p){p.name=name;p.hcp=hcp;}
+      await fbSet('players',id,{id,name,hcp});
+    }else{
+      const pid='p'+Date.now();
+      state.players.push({id:pid,name,hcp});
+      await fbSet('players',pid,{id:pid,name,hcp});
+    }
+    closeModal('modal-add-player');renderPlayers();
+  }catch(e){alert('Error: '+e.message);}
+  showLoading(false);
+};
+window.editPlayer=function(id){
+  const p=state.players.find(x=>x.id===id);if(!p)return;
+  document.getElementById('edit-player-id').value=p.id;
+  document.getElementById('input-player-name').value=p.name;
+  document.getElementById('input-player-hcp').value=p.hcp;
+  document.getElementById('add-player-modal-title').textContent='Edit Player';
+  showModal('modal-add-player');
+};
+window.deletePlayer=async function(id){
+  if(!confirm('Remove player?'))return;
+  showLoading(true);
+  state.players=state.players.filter(p=>p.id!==id);
+  await fbDel('players',id);
+  renderPlayers();showLoading(false);
+};
+window.viewProfile=function(id){
+  const p=state.players.find(x=>x.id===id);if(!p)return;
+  document.getElementById('profile-name').textContent=p.name;
+  const done=state.events.filter(e=>e.status==='complete');
+  const rounds=[];done.forEach(ev=>{const s=state.scores[ev.id];if(s&&s[id]&&s[id].stab>0)rounds.push({event:ev,stab:s[id].stab});});
+  const sorted=[...rounds].sort((a,b)=>b.stab-a.stab);const b6=sorted.slice(0,6);const b6t=b6.reduce((s,r)=>s+r.stab,0);
+  document.getElementById('profile-content').innerHTML=`
+    <div class="score-summary-grid">
+      <div class="score-summary-cell"><div class="score-summary-val">${p.hcp}</div><div class="score-summary-label">Handicap</div></div>
+      <div class="score-summary-cell"><div class="score-summary-val">${rounds.length}</div><div class="score-summary-label">Rounds</div></div>
+      <div class="score-summary-cell"><div class="score-summary-val">${b6t}</div><div class="score-summary-label">Best 6</div></div>
+    </div>
+    <div class="divider"></div>
+    ${rounds.map(r=>{const iB=b6.some(s=>s.event.id===r.event.id);return`<div class="stat-row"><span class="stat-label">${r.event.name}${iB?'<span class="chip chip-gold" style="margin-left:6px;">★</span>':''}</span><span class="stat-val">${r.stab} pts</span></div>`;}).join('')}
+    ${rounds.length===0?'<p style="color:var(--gray);font-size:13px;">No rounds yet</p>':''}`;
+  showModal('modal-player-profile');
+};
+
+// ─────────────────────────────────────────────────────────────
+// EVENTS
+// ─────────────────────────────────────────────────────────────
+window.saveEvent=async function(){
+  const id=document.getElementById('edit-event-id').value;
+  const name=document.getElementById('input-event-name').value.trim();
+  const date=document.getElementById('input-event-date').value;
+  const course=document.getElementById('input-event-course').value;
+  const format=document.getElementById('input-event-format').value;
+  if(!name||!date){alert('Enter name and date');return;}
+  showLoading(true);
+  try{
+    if(id){
+      const ev=state.events.find(e=>e.id===id);
+      if(ev){ev.name=name;ev.date=date;ev.course=course;ev.format=format;}
+      await fbSet('events',id,{id,name,date,course,format,status:ev?ev.status:'upcoming'});
+    }else{
+      const eid='e'+Date.now();
+      const ev={id:eid,name,date,course,format,status:'upcoming'};
+      state.events.push(ev);
+      await fbSet('events',eid,ev);
+    }
+    closeModal('modal-add-event');renderEvents();
+  }catch(e){alert('Error: '+e.message);}
+  showLoading(false);
+};
+window.deleteEvent=async function(id){
+  if(!confirm('Delete event?'))return;
+  showLoading(true);
+  state.events=state.events.filter(e=>e.id!==id);
+  await fbDel('events',id);
+  renderEvents();showLoading(false);
+};
+window.viewResults=function(eid){
+  const ev=state.events.find(e=>e.id===eid);const evs=state.scores[eid];if(!ev||!evs)return;
+  document.getElementById('round-results-title').textContent=`${ev.name} Results`;
+  const rs=state.players.filter(p=>evs[p.id]&&evs[p.id].stab>0).map(p=>({p,stab:evs[p.id].stab})).sort((a,b)=>b.stab-a.stab);
+  document.getElementById('round-results-content').innerHTML=`<div style="font-size:12px;color:var(--gray);margin-bottom:12px;">${fD(ev.date)} · ${ev.course}</div>`+
+    rs.map((r,i)=>`<div class="player-card" style="margin-bottom:6px;"><div class="player-avatar">${i===0?'🏆':i===1?'🥈':i===2?'🥉':r.p.name[0]}</div><div class="player-info"><div class="player-name">${r.p.name}</div><div class="player-hcp">HCP ${r.p.hcp}</div></div><div style="font-size:24px;font-weight:900;color:var(--gold2);font-family:'Cinzel',serif;">${r.stab} pts</div></div>`).join('');
+  showModal('modal-round-results');
+};
+
+// ─────────────────────────────────────────────────────────────
+// HANDICAPS
+// ─────────────────────────────────────────────────────────────
+function hcpChange(pts){if(pts<=17)return+2;if(pts<=29)return+1;if(pts<=37)return 0;if(pts<=42)return-1;return-2;}
+window.openHcpModal=function(){
+  const done=state.events.filter(e=>e.status==='complete').slice().reverse();
+  const results=state.players.map(p=>{
+    let stab=0;
+    for(const ev of done){const s=state.scores[ev.id];if(s&&s[p.id]&&s[p.id].stab>0){stab=s[p.id].stab;break;}}
+    return{p,stab};
+  }).filter(r=>r.stab>0);
+  if(!results.length){alert('No completed rounds yet');return;}
+  const maxPts=Math.max(...results.map(r=>r.stab));
+  let html='';
+  results.forEach(({p,stab})=>{
+    const isW=stab===maxPts;
+    const chg=hcpChange(stab)+(isW?-1:0);
+    const newH=Math.max(0,p.hcp+chg);
+    const col=chg>0?'#ff8888':chg<0?'#4cd48a':'var(--gray)';
+    html+=`<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
+      <div style="flex:1;"><div style="font-size:13px;font-weight:700;font-family:'Cinzel',serif;">${p.name}${isW?'<span style="font-size:9px;background:rgba(201,168,76,0.2);color:var(--gold);padding:1px 6px;border-radius:8px;margin-left:4px;">🏆 WINNER</span>':''}</div>
+      <div style="font-size:11px;color:var(--gray);">${stab} pts · <span style="color:${col};font-weight:700;">${chg===0?'no change':chg>0?'+'+chg+' shot'+(Math.abs(chg)>1?'s':''):chg+' shot'+(Math.abs(chg)>1?'s':'')}</span></div></div>
+      <div style="text-align:center;min-width:36px;"><div style="font-size:9px;color:var(--gray);">Now</div><div style="font-size:16px;font-weight:700;">${p.hcp}</div></div>
+      <div style="color:var(--gold);">→</div>
+      <div style="text-align:center;"><div style="font-size:9px;color:var(--gold);">New</div>
+      <input type="number" step="1" min="0" max="54" value="${newH}" id="nhcp-${p.id}" style="width:52px;background:rgba(201,168,76,0.1);border:1px solid var(--border2);border-radius:8px;color:var(--gold2);text-align:center;padding:5px;font-size:16px;font-weight:700;outline:none;font-family:'Cinzel',serif;"></div>
+    </div>`;
+  });
+  document.getElementById('hcp-rows').innerHTML=html;
+  window._hcpR=results;
+  showModal('modal-hcp');
+};
+window.applyHandicaps=async function(){
+  if(!window._hcpR)return;
+  showLoading(true);
+  try{
+    for(const{p} of window._hcpR){
+      const el=document.getElementById('nhcp-'+p.id);
+      if(!el)continue;
+      const v=parseFloat(el.value);
+      if(!isNaN(v)&&v>=0){
+        const player=state.players.find(x=>x.id===p.id);
+        if(player){player.hcp=Math.round(v*10)/10;await fbSet('players',p.id,player);}
+      }
+    }
+    closeModal('modal-hcp');renderAll();alert('✅ Handicaps updated!');
+  }catch(e){alert('Error: '+e.message);}
+  showLoading(false);
+};
+
+// ─────────────────────────────────────────────────────────────
+// COURSES (saved to Firebase or localStorage)
+// ─────────────────────────────────────────────────────────────
+window.viewCourseDetail=function(id){
+  const c=state.customCourses.find(x=>x.id===id);if(!c)return;
+  const tp=c.holes.reduce((s,h)=>s+h.par,0);
+  document.getElementById('course-detail-title').textContent=c.name;
+  document.getElementById('course-detail-content').innerHTML=`
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
+      <span class="chip chip-gold">${c.region}</span><span class="chip chip-green">Par ${tp}</span><span class="chip chip-blue">SSS ${c.sss}</span>
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead><tr style="color:var(--gold);font-size:10px;border-bottom:1px solid var(--border);">
+        <th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th>
+      </tr></thead><tbody>
+      ${c.holes.map(h=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:5px;text-align:center;">${h.hole}</td><td style="padding:5px;text-align:center;font-weight:700;">${h.par}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}
+      </tbody>
+    </table>
+    <div style="margin-top:12px;display:flex;gap:8px;">
+      <button class="btn btn-sm btn-green" onclick="openSCBuilder('${id}');closeModal('modal-course-detail');">✏️ Edit</button>
+      <button class="btn btn-sm btn-red" onclick="deleteCourse('${id}');closeModal('modal-course-detail');">Delete</button>
+    </div>`;
+  showModal('modal-course-detail');
+};
+window.deleteCourse=async function(id){
+  if(!confirm('Delete course?'))return;
+  state.customCourses=state.customCourses.filter(c=>c.id!==id);
+  await fbDel('courses',id);renderCourses('');
+};
+
+// ─────────────────────────────────────────────────────────────
+// SCORECARD BUILDER
+// ─────────────────────────────────────────────────────────────
+let scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
+function initScbH(){if(!scbData.holes.length)scbData.holes=Array.from({length:18},(_,i)=>({hole:i+1,par:4,si:i+1,yards:0}));}
+window.openSCBuilder=function(cid){
+  scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
+  if(cid){const c=state.customCourses.find(x=>x.id===cid);if(c){scbData={...c,holes:c.holes.map(h=>({...h}))}; }}
+  initScbH();
+  document.getElementById('scb-name').value=scbData.name;
+  document.getElementById('scb-region').value=scbData.region;
+  document.getElementById('scb-sss').value=scbData.sss||'';
+  document.getElementById('scb-slope').value=scbData.slope||'';
+  scbUpdateTitle();scbBuildTable('front',0,9);scbBuildTable('back',9,18);scbGoStep(0);
+  document.getElementById('scb-overlay').classList.add('open');document.body.style.overflow='hidden';
+};
+window.closeSCBuilder=function(){document.getElementById('scb-overlay').classList.remove('open');document.body.style.overflow='';};
+window.scbUpdateTitle=function(){const n=document.getElementById('scb-name').value||'New Course';document.getElementById('scb-title-main').textContent=scbData.id?`Edit: ${n}`:'New Scorecard';document.getElementById('scb-title-sub').textContent=n;};
+window.scbGoStep=function(n){scbReadDetails();if(n>=1)scbReadHoles();scbData._step=n;document.querySelectorAll('.scb-step').forEach((t,i)=>{t.classList.toggle('active',i===n);i<n?t.classList.add('done'):t.classList.remove('done');});document.querySelectorAll('.scb-step-content').forEach((c,i)=>c.classList.toggle('active',i===n));if(n===1||n===2){scbUpdateSummary(n===1?'front':'back',n===1?0:9,n===1?9:18);scbValidateSI();}if(n===3)scbBuildReview();};
+function scbReadDetails(){scbData.name=document.getElementById('scb-name').value.trim();scbData.region=document.getElementById('scb-region').value.trim();scbData.sss=parseInt(document.getElementById('scb-sss').value)||70;scbData.slope=parseInt(document.getElementById('scb-slope').value)||113;}
+function scbReadHoles(){for(let i=0;i<18;i++){const p=document.getElementById(`scb-par-${i}`);const s=document.getElementById(`scb-si-${i}`);const y=document.getElementById(`scb-yards-${i}`);if(p)scbData.holes[i].par=parseInt(p.value)||4;if(s)scbData.holes[i].si=parseInt(s.value)||i+1;if(y)scbData.holes[i].yards=parseInt(y.value)||0;}}
+function scbBuildTable(half,start,end){
+  document.getElementById(`scb-tbody-${half}`).innerHTML=Array.from({length:end-start},(_,j)=>{
+    const i=start+j;const h=scbData.holes[i];
+    return`<tr><td class="hb-td"><div class="hb-hole-badge">${i+1}</div></td>
+      <td class="hb-td"><div class="hb-par-select"><button type="button" class="hb-par-btn s3 ${h.par===3?'sel':''}" onclick="scbSetPar(${i},3,this)">3</button><button type="button" class="hb-par-btn s4 ${h.par===4?'sel':''}" onclick="scbSetPar(${i},4,this)">4</button><button type="button" class="hb-par-btn s5 ${h.par===5?'sel':''}" onclick="scbSetPar(${i},5,this)">5</button></div><input type="hidden" id="scb-par-${i}" value="${h.par}"></td>
+      <td class="hb-td"><input type="number" class="hb-input" id="scb-si-${i}" value="${h.si}" min="1" max="18" oninput="scbOnSI(${i},this)"></td>
+      <td class="hb-td"><input type="number" class="hb-input" id="scb-yards-${i}" value="${h.yards||''}" min="0" max="700" placeholder="yds" style="font-size:13px;"></td></tr>`;
+  }).join('');
+}
+window.scbSetPar=function(idx,par,btn){scbData.holes[idx].par=par;document.getElementById(`scb-par-${idx}`).value=par;btn.closest('tr').querySelectorAll('.hb-par-btn').forEach(b=>{b.classList.remove('sel');if(parseInt(b.textContent)===par)b.classList.add('sel');});scbUpdateSummary(idx<9?'front':'back',idx<9?0:9,idx<9?9:18);};
+window.scbOnSI=function(idx,el){scbData.holes[idx].si=parseInt(el.value)||0;scbValidateSI();scbUpdateSummary(idx<9?'front':'back',idx<9?0:9,idx<9?9:18);};
+function scbValidateSI(){const vals=scbData.holes.map(h=>h.si);const cnt={};vals.forEach(v=>{cnt[v]=(cnt[v]||0)+1;});const dupes=new Set(Object.keys(cnt).filter(k=>cnt[k]>1).map(Number));for(let i=0;i<18;i++){const el=document.getElementById(`scb-si-${i}`);if(el)el.classList.toggle('si-dupe',dupes.has(scbData.holes[i].si));}const msg=dupes.size>0?`⚠️ Duplicate SI: ${[...dupes].sort((a,b)=>a-b).join(', ')}`:'';['scb-warn-front','scb-warn-back'].forEach(id=>{const w=document.getElementById(id);if(w){w.textContent=msg;w.classList.toggle('show',!!msg);}});}
+function scbUpdateSummary(half,start,end){scbReadHoles();const holes=scbData.holes.slice(start,end);const tp=holes.reduce((s,h)=>s+h.par,0);const el=document.getElementById(`scb-summary-${half}`);if(!el)return;el.innerHTML=`<div class="hb-sum-cell ${tp<30||tp>40?'warn':''}"><div class="hb-sum-val">${tp}</div><div class="hb-sum-label">Par</div></div><div class="hb-sum-cell"><div class="hb-sum-val" style="color:#4cd48a;">${holes.filter(h=>h.par===3).length}</div><div class="hb-sum-label">Par 3s</div></div><div class="hb-sum-cell"><div class="hb-sum-val">${holes.filter(h=>h.par===4).length}</div><div class="hb-sum-label">Par 4s</div></div><div class="hb-sum-cell"><div class="hb-sum-val" style="color:var(--gold);">${holes.filter(h=>h.par===5).length}</div><div class="hb-sum-label">Par 5s</div></div>`;}
+function scbBuildReview(){scbReadDetails();scbReadHoles();const front=scbData.holes.slice(0,9);const back=scbData.holes.slice(9,18);const fp=front.reduce((s,h)=>s+h.par,0);const bp=back.reduce((s,h)=>s+h.par,0);const mkT=(holes,from)=>`<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;"><thead><tr style="color:var(--gold);font-size:10px;border-bottom:1px solid var(--border);"><th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th></tr></thead><tbody>${holes.map((h,i)=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:4px;text-align:center;">${from+i+1}</td><td style="padding:4px;text-align:center;color:${h.par===3?'#4cd48a':h.par===5?'var(--gold)':'var(--white)'};">${h.par}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}</tbody></table>`;document.getElementById('scb-review-content').innerHTML=`<div style="background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;"><div style="font-size:16px;font-weight:700;color:var(--gold2);font-family:Cinzel,serif;">${scbData.name||'Unnamed'}</div><div style="font-size:12px;color:var(--gray);">${scbData.region} · SSS ${scbData.sss}</div><div style="display:flex;gap:16px;margin-top:8px;"><span>Par <strong style="color:var(--gold2);">${fp+bp}</strong></span><span>Out <strong style="color:var(--gold);">${fp}</strong></span><span>In <strong style="color:var(--gold);">${bp}</strong></span></div></div><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;font-family:Cinzel,serif;">FRONT 9</div>${mkT(front,0)}<div style="font-size:11px;font-weight:700;color:var(--gold);margin:10px 0 6px;font-family:Cinzel,serif;">BACK 9</div>${mkT(back,9)}`;}
+window.scbQuickFill=function(p){const P={standard:{pars:[4,3,4,4,5,3,4,4,4,4,3,5,4,4,3,4,5,4],sis:[3,9,1,11,5,15,7,13,17,8,16,2,10,4,14,6,12,18]},par72:{pars:[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4],sis:[1,5,17,3,9,7,15,11,13,2,6,18,4,10,8,16,12,14]},par70:{pars:[4,4,3,4,4,4,3,4,4,4,4,3,4,4,3,4,4,4],sis:[1,5,17,7,3,9,15,11,13,2,6,18,4,10,16,8,12,14]},links:{pars:[4,4,3,5,4,4,3,4,4,5,3,4,4,3,5,4,4,4],sis:[1,7,17,3,9,5,15,11,13,2,18,6,10,16,4,8,12,14]}};const preset=P[p];if(!preset)return;scbData.holes=preset.pars.map((par,i)=>({hole:i+1,par,si:preset.sis[i],yards:0}));scbBuildTable('front',0,9);scbBuildTable('back',9,18);};
+window.saveSCBuilder=async function(){
+  scbReadDetails();scbReadHoles();
+  if(!scbData.name){alert('Enter course name');scbGoStep(0);return;}
+  showLoading(true);
+  try{
+    const course={id:scbData.id||'cc'+Date.now(),name:scbData.name,region:scbData.region||'Scotland',sss:scbData.sss,slope:scbData.slope,holes:scbData.holes.map(h=>({...h}))};
+    if(scbData.id){const idx=state.customCourses.findIndex(c=>c.id===scbData.id);if(idx>=0)state.customCourses[idx]=course;else state.customCourses.push(course);}
+    else state.customCourses.push(course);
+    await fbSet('courses',course.id,course);
+    closeSCBuilder();renderCourses('');alert(`✅ "${course.name}" saved!`);
+  }catch(e){alert('Error: '+e.message);}
+  showLoading(false);
+};
+
+// ─────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────
+window.goPage=function(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  if(name==='score')renderScoreSetup();
+  if(name==='courses')renderCourses('');
+};
+window.changeFormat=async function(val){
+  state.format=val;
+  await fbSaveSettings();
+  document.getElementById('header-format-chip').textContent=fL(val);
+  renderLeague();renderHome();
+};
+window.showModal=function(id){document.getElementById(id).style.display='flex';document.body.style.overflow='hidden';if(id==='modal-add-player'&&!document.getElementById('edit-player-id').value){document.getElementById('add-player-modal-title').textContent='Add Player';document.getElementById('input-player-name').value='';document.getElementById('input-player-hcp').value='';document.getElementById('edit-player-id').value='';}};
+window.closeModal=function(id){document.getElementById(id).style.display='none';document.body.style.overflow='';const el=document.getElementById('edit-player-id');if(el)el.value='';const ee=document.getElementById('edit-event-id');if(ee)ee.value='';};
+window.closeModalOutside=function(e,id){if(e.target.id===id)closeModal(id);};
+function showLoading(v){document.getElementById('loading-overlay').classList.toggle('show',v);}
+function fL(f){return f==='stableford'?'Stableford':'Stroke Play';}
+function fD(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch(e){return d;}}
+</script>
+</body>
+</html>
+  
