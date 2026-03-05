@@ -1,6 +1,3 @@
-etlify · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,13 +140,11 @@ select.form-input option{background:#1a3d1a}
 .custom-badge{font-size:10px;background:rgba(74,141,212,0.2);color:var(--blue);padding:2px 6px;border-radius:8px;font-weight:700}
 .search-box{background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--white);font-size:14px;width:100%;outline:none;margin-bottom:10px;font-family:'Open Sans',sans-serif}
 .search-box:focus{border-color:var(--gold)}
-/* Firebase setup banner */
 .firebase-banner{background:linear-gradient(135deg,#1a2a3d,#0e1a2a);border:2px solid var(--blue);border-radius:14px;padding:20px;margin-bottom:16px;text-align:center}
 .firebase-banner h2{font-family:'Cinzel',serif;color:var(--gold2);font-size:18px;margin-bottom:8px}
 .firebase-banner p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:12px}
 .firebase-input{width:100%;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--white);font-size:12px;outline:none;font-family:monospace;margin-bottom:8px;min-height:120px;resize:vertical}
 .firebase-input:focus{border-color:var(--blue)}
-/* Scorecard builder */
 .scb-overlay{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;overflow:hidden}
 .scb-overlay.open{display:flex}
 .scb-header{background:linear-gradient(135deg,#0a1e0a,#1a3a1a);padding:12px 16px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:10px;flex-shrink:0}
@@ -184,11 +179,82 @@ select.form-input option{background:#1a3d1a}
 .hb-warning.show{display:block}
 .hb-tip{background:rgba(201,168,76,0.08);border:1px solid var(--border);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.5}
 .hb-tip strong{color:var(--gold)}
-/* Loading spinner */
 .spinner{width:40px;height:40px;border:3px solid rgba(201,168,76,0.2);border-top-color:var(--gold);border-radius:50%;animation:spin 0.8s linear infinite;margin:20px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
 .loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;display:none}
 .loading-overlay.show{display:flex}
+
+/* ─── HOLE-BY-HOLE SCORECARD ─── */
+.hbs-overlay{position:fixed;inset:0;z-index:500;display:none;flex-direction:column;background:var(--bg);overflow:hidden;}
+.hbs-overlay.open{display:flex;}
+
+.hbs-topbar{background:linear-gradient(135deg,#0a1e0a,#1a3a1a);border-bottom:2px solid var(--gold);padding:10px 14px;flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.hbs-back{background:rgba(201,168,76,0.15);border:1px solid var(--border);color:var(--gold);width:36px;height:36px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.hbs-event-info{flex:1;}
+.hbs-event-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--gold2);}
+.hbs-event-sub{font-size:11px;color:var(--gray);}
+.hbs-save-all{background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:var(--bg);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+
+/* Hole progress bar */
+.hbs-progress{background:rgba(0,0,0,0.4);padding:10px 14px 8px;flex-shrink:0;border-bottom:1px solid var(--border);}
+.hbs-hole-dots{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;}
+.hbs-hole-dot{width:24px;height:24px;border-radius:50%;border:2px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.05);color:var(--gray);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;font-family:'Cinzel',serif;}
+.hbs-hole-dot.active{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);border-color:var(--gold);transform:scale(1.2);}
+.hbs-hole-dot.done{background:rgba(45,122,79,0.5);border-color:#3a9660;color:#4cd48a;}
+
+/* Group tabs */
+.hbs-group-tabs{display:flex;background:rgba(0,0,0,0.3);flex-shrink:0;border-bottom:1px solid var(--border);}
+.hbs-gtab{flex:1;padding:10px 4px;text-align:center;font-size:12px;font-weight:700;color:var(--gray2);border-bottom:3px solid transparent;cursor:pointer;font-family:'Open Sans',sans-serif;transition:all 0.2s;}
+.hbs-gtab.active{color:var(--gold);border-bottom-color:var(--gold);background:rgba(201,168,76,0.05);}
+
+/* Main hole card area */
+.hbs-body{flex:1;overflow-y:auto;padding:0;}
+.hbs-hole-panel{display:none;flex-direction:column;height:100%;}
+.hbs-hole-panel.active{display:flex;}
+
+/* Hole header */
+.hbs-hole-header{background:linear-gradient(135deg,#0e2010,#163018);padding:14px 16px 12px;text-align:center;border-bottom:1px solid var(--border);flex-shrink:0;}
+.hbs-hole-num{font-family:'Cinzel',serif;font-size:36px;font-weight:900;color:var(--gold2);line-height:1;text-shadow:2px 2px 8px rgba(0,0,0,0.8);}
+.hbs-hole-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;}
+.hbs-hole-meta{display:flex;gap:12px;justify-content:center;margin-top:8px;}
+.hbs-meta-chip{background:rgba(255,255,255,0.08);border:1px solid var(--border);border-radius:20px;padding:3px 12px;font-size:11px;font-weight:700;color:var(--white);}
+.hbs-meta-chip span{color:var(--gold);}
+
+/* Player score rows */
+.hbs-players{padding:10px 12px;flex:1;}
+.hbs-player-row{background:linear-gradient(135deg,var(--card),var(--card2));border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;transition:border-color 0.2s;}
+.hbs-player-row.has-score{border-color:rgba(201,168,76,0.5);}
+.hbs-player-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--card2),var(--card3));display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;color:var(--gold);flex-shrink:0;border:2px solid var(--border);font-family:'Cinzel',serif;}
+.hbs-player-info{flex:1;}
+.hbs-player-name{font-family:'Cinzel',serif;font-size:15px;font-weight:700;color:var(--white);}
+.hbs-player-sub{font-size:11px;color:var(--gray);margin-top:2px;}
+.hbs-stab-badge{font-size:11px;font-weight:700;margin-top:3px;}
+.hbs-stab-pos{color:#4cd48a;}
+.hbs-stab-neg{color:var(--red);}
+.hbs-stab-par{color:var(--gold);}
+
+/* Score stepper */
+.hbs-stepper{display:flex;align-items:center;gap:8px;}
+.hbs-step-btn{width:38px;height:38px;border-radius:50%;border:2px solid var(--border);background:rgba(255,255,255,0.07);color:var(--white);font-size:22px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.1s;line-height:1;padding:0;}
+.hbs-step-btn:active{transform:scale(0.9);}
+.hbs-step-btn.minus:active{background:rgba(212,68,68,0.3);border-color:var(--red);}
+.hbs-step-btn.plus:active{background:rgba(45,122,79,0.3);border-color:#4cd48a;}
+.hbs-score-display{width:56px;height:56px;border-radius:12px;background:rgba(201,168,76,0.1);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Cinzel',serif;font-size:28px;font-weight:900;color:var(--gold2);text-align:center;cursor:pointer;transition:all 0.15s;}
+.hbs-score-display.empty{color:var(--gray2);font-size:20px;border-style:dashed;}
+.hbs-score-display.has-val{border-color:var(--gold);background:rgba(201,168,76,0.15);}
+
+/* Nav footer */
+.hbs-footer{background:linear-gradient(0deg,#071207,#0e1e0e);border-top:2px solid var(--border);padding:10px 14px;padding-bottom:calc(10px + env(safe-area-inset-bottom));flex-shrink:0;display:flex;align-items:center;gap:10px;}
+.hbs-nav-btn{flex:1;padding:12px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;font-family:'Open Sans',sans-serif;transition:all 0.15s;}
+.hbs-nav-btn:active{transform:scale(0.97);}
+.hbs-prev{background:rgba(255,255,255,0.08);color:var(--gray);}
+.hbs-next{background:linear-gradient(135deg,var(--green),var(--green2));color:white;}
+.hbs-next.last{background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);}
+.hbs-hole-counter{font-family:'Cinzel',serif;font-size:13px;font-weight:700;color:var(--gold);white-space:nowrap;min-width:60px;text-align:center;}
+
+/* Scorecard summary modal */
+.hbs-summary-row{display:flex;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.hbs-sum-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:12px;font-family:'Cinzel',serif;flex-shrink:0;margin-right:10px;}
 </style>
 </head>
 <body>
@@ -215,32 +281,13 @@ select.form-input option{background:#1a3d1a}
 
 <div class="content">
 
-  <!-- FIREBASE SETUP PAGE (hidden by default now) -->
+  <!-- FIREBASE SETUP PAGE -->
   <div class="page" id="page-setup">
     <div class="firebase-banner">
       <div style="font-size:40px;margin-bottom:8px;">🔥</div>
       <h2>Connect to Firebase</h2>
-      <p>Paste your Firebase config below so all players see the same live data. You only need to do this once — the config will be saved on this device.</p>
-      <div style="text-align:left;margin-bottom:8px;">
-        <div class="form-label">How to get your config:</div>
-        <div style="font-size:11px;color:var(--gray);line-height:1.8;">
-          1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
-          2. Create project → name it <strong style="color:var(--white);">jolly-boys-golf</strong><br>
-          3. Click ⚙️ Settings → <strong style="color:var(--white);">Your apps</strong> → Add Web app<br>
-          4. Copy the <strong style="color:var(--white);">firebaseConfig</strong> object and paste below<br>
-          5. Also enable <strong style="color:var(--white);">Firestore Database</strong> in test mode
-        </div>
-      </div>
-      <textarea class="firebase-input" id="firebase-config-input" placeholder='Paste your firebaseConfig here, e.g.:
-
-{
-  apiKey: "AIzaSy...",
-  authDomain: "jolly-boys-golf.firebaseapp.com",
-  projectId: "jolly-boys-golf",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-}'></textarea>
+      <p>Paste your Firebase config below so all players see the same live data. You only need to do this once.</p>
+      <textarea class="firebase-input" id="firebase-config-input" placeholder='Paste your firebaseConfig here...'></textarea>
       <button class="btn btn-gold btn-full" onclick="connectFirebase()">🔥 Connect & Launch App</button>
       <div style="margin-top:12px;">
         <button class="btn btn-outline btn-full" onclick="skipFirebase()" style="font-size:11px;">Skip for now — use local storage only</button>
@@ -289,12 +336,37 @@ select.form-input option{background:#1a3d1a}
     <div id="score-setup">
       <div class="card">
         <div class="card-title" style="margin-bottom:12px;">🏌️ Enter Scores</div>
-        <div class="form-group"><label class="form-label">Select Event</label><select class="form-input" id="score-event-select"><option value="">— Pick event —</option></select></div>
-        <div class="form-group"><label class="form-label">Players &amp; Groups</label>
-          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">Assign players to groups — all scores count for the week.</div>
+
+        <div class="form-group">
+          <label class="form-label">Select Event</label>
+          <select class="form-input" id="score-event-select" onchange="onEventSelected()"><option value="">— Pick event —</option></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Course / Scorecard</label>
+          <select class="form-input" id="score-course-select" onchange="onCourseSelected()">
+            <option value="default">Falkirk Golf Club (Default — Par 71)</option>
+          </select>
+          <div id="score-course-info" style="margin-top:6px;font-size:11px;color:var(--gray);padding:6px 10px;background:rgba(255,255,255,0.04);border-radius:6px;display:none;"></div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Competition Format</label>
+          <select class="form-input" id="score-format-select">
+            <option value="stableford">Stableford (handicap adjusted)</option>
+            <option value="stroke">Stroke Play (net — handicap adjusted)</option>
+            <option value="stroke_gross">Stroke Play (gross — no handicap)</option>
+            <option value="par">Par / Match vs Course (handicap adjusted)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Players &amp; Groups</label>
+          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">Assign players to groups — or mark as Out to exclude from this round.</div>
           <div id="player-group-assign"></div>
         </div>
-        <button class="btn btn-gold btn-full" onclick="openScoreEntry()">⛳ Enter Scores</button>
+        <button class="btn btn-gold btn-full" onclick="openHoleByHole()">⛳ Start Hole-by-Hole Scoring</button>
+        <button class="btn btn-outline btn-full" style="margin-top:6px;font-size:12px;" onclick="openScoreEntry()">📝 Quick Score Entry (totals only)</button>
       </div>
     </div>
     <div id="score-entry-area" style="display:none;">
@@ -320,12 +392,12 @@ select.form-input option{background:#1a3d1a}
   <!-- COURSES -->
   <div class="page" id="page-courses">
     <button class="btn btn-gold btn-full" onclick="openSCBuilder(null)">✏️ Create Custom Scorecard</button>
-    <div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:var(--gray);">Build scorecards with real par &amp; stroke index per hole. Stableford points calculate automatically.</div>
+    <div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:var(--gray);">Build scorecards with real par &amp; stroke index per hole.</div>
     <input type="text" class="search-box" placeholder="Search courses..." oninput="renderCourses(this.value)" style="margin-top:8px;">
     <div id="courses-list"></div>
   </div>
 
-</div><!-- end content -->
+</div>
 
 <!-- BOTTOM NAV -->
 <div class="bottom-nav" id="bottom-nav" style="display:none;">
@@ -335,6 +407,43 @@ select.form-input option{background:#1a3d1a}
   <button class="nav-btn" onclick="goPage('score',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Score</button>
   <button class="nav-btn" onclick="goPage('players',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Players</button>
   <button class="nav-btn" onclick="goPage('courses',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-10"/></svg>Courses</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- HOLE-BY-HOLE SCORECARD OVERLAY                             -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div class="hbs-overlay" id="hbs-overlay">
+
+  <!-- Top bar -->
+  <div class="hbs-topbar">
+    <button class="hbs-back" onclick="closeHoleByHole()">←</button>
+    <div class="hbs-event-info">
+      <div class="hbs-event-name" id="hbs-event-name">Round</div>
+      <div class="hbs-event-sub" id="hbs-event-sub">Hole by hole scoring</div>
+    </div>
+    <button class="hbs-save-all" onclick="saveAllHoleScores()">Save All ✓</button>
+  </div>
+
+  <!-- Hole progress dots -->
+  <div class="hbs-progress">
+    <div class="hbs-hole-dots" id="hbs-hole-dots"></div>
+  </div>
+
+  <!-- Group tabs -->
+  <div class="hbs-group-tabs" id="hbs-group-tabs"></div>
+
+  <!-- Body: one panel per hole -->
+  <div class="hbs-body" id="hbs-body">
+    <!-- Panels injected by JS -->
+  </div>
+
+  <!-- Footer nav -->
+  <div class="hbs-footer">
+    <button class="hbs-nav-btn hbs-prev" id="hbs-prev-btn" onclick="hbsChangeHole(-1)">← Prev</button>
+    <div class="hbs-hole-counter" id="hbs-hole-counter">1 / 18</div>
+    <button class="hbs-nav-btn hbs-next" id="hbs-next-btn" onclick="hbsChangeHole(1)">Next →</button>
+  </div>
+
 </div>
 
 <!-- SCORECARD BUILDER -->
@@ -441,22 +550,7 @@ select.form-input option{background:#1a3d1a}
   <div class="modal">
     <div class="modal-header"><span class="modal-title">🔥 Connect to Firebase</span><button class="close-btn" onclick="closeModal('modal-firebase')">×</button></div>
     <p style="font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.6;">Paste your Firebase config below to enable live sync across all players' phones.</p>
-    <div style="font-size:11px;color:var(--gray);line-height:1.8;margin-bottom:12px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
-      1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
-      2. Open your project → ⚙️ Settings → Your apps<br>
-      3. Scroll down and copy the <strong style="color:var(--white);">firebaseConfig</strong> code<br>
-      4. Paste it in the box below
-    </div>
-    <textarea class="firebase-input" id="firebase-config-input2" placeholder='Paste your firebaseConfig here:
-
-{
-  apiKey: "AIzaSy...",
-  authDomain: "jolly-boys-golf.firebaseapp.com",
-  projectId: "jolly-boys-golf",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-}'></textarea>
+    <textarea class="firebase-input" id="firebase-config-input2" placeholder='Paste your firebaseConfig here...'></textarea>
     <button class="btn btn-gold btn-full" onclick="connectFirebaseFromModal()">🔥 Connect & Sync Live</button>
     <div id="fb-modal-status" style="margin-top:8px;text-align:center;font-size:11px;color:#4cd48a;display:none;">✅ Already connected to Firebase!</div>
     <button class="btn btn-gray btn-full" style="margin-top:6px;font-size:11px;" onclick="disconnectFirebase()">Disconnect Firebase</button>
@@ -467,11 +561,20 @@ select.form-input option{background:#1a3d1a}
   <div class="modal"><div class="modal-header"><span class="modal-title" id="course-detail-title">Course</span><button class="close-btn" onclick="closeModal('modal-course-detail')">×</button></div><div id="course-detail-content"></div></div>
 </div>
 
-<!-- Firebase SDK (compat - avoids ES module scoping issues with onclick handlers) -->
+<!-- Round complete summary modal -->
+<div class="modal-overlay" id="modal-round-summary" style="display:none;" onclick="closeModalOutside(event,'modal-round-summary')">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">🏆 Round Complete!</span><button class="close-btn" onclick="closeModal('modal-round-summary')">×</button></div>
+    <div id="round-summary-content"></div>
+    <button class="btn btn-gold btn-full" onclick="confirmSaveHoleScores()">💾 Save & Update League</button>
+    <button class="btn btn-gray btn-full" style="margin-top:6px;" onclick="closeModal('modal-round-summary')">Keep Editing</button>
+  </div>
+</div>
+
+<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <script>
-// Shims so the rest of the app code works unchanged
 function initializeApp(cfg){return firebase.initializeApp(cfg);}
 function getFirestore(app){return app.firestore();}
 function doc(db,col,id){return db.collection(col).doc(id);}
@@ -490,19 +593,13 @@ function onSnapshot(ref,cb){return ref.onSnapshot(snap=>{if(snap.docs!==undefine
 let db=null,fbApp=null,useFirebase=false;
 let unsubscribers=[];
 
-// LOCAL STATE (fallback / cache)
 let state={
   format:'stableford',
   season:'Winter League 2025/26',
   players:[
-    {id:'p1',name:'Willy',hcp:10},
-    {id:'p2',name:'Harry',hcp:11},
-    {id:'p3',name:'Stephen',hcp:10},
-    {id:'p4',name:'Bob',hcp:19},
-    {id:'p5',name:'John',hcp:8},
-    {id:'p6',name:'Conner',hcp:19},
-    {id:'p7',name:'Peter',hcp:19},
-    {id:'p8',name:'Gareth',hcp:13},
+    {id:'p1',name:'Willy',hcp:10},{id:'p2',name:'Harry',hcp:11},{id:'p3',name:'Stephen',hcp:10},
+    {id:'p4',name:'Bob',hcp:19},{id:'p5',name:'John',hcp:8},{id:'p6',name:'Conner',hcp:19},
+    {id:'p7',name:'Peter',hcp:19},{id:'p8',name:'Gareth',hcp:13},
   ],
   events:[
     {id:'e1',name:'Week 1',date:'2025-10-06',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
@@ -524,6 +621,470 @@ let state={
     e7:{p1:{stab:33},p2:{stab:38},p3:{stab:30},p4:{stab:41},p5:{stab:0}, p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
   },
   customCourses:[],
+};
+
+// ─────────────────────────────────────────────────────────────
+// HOLE-BY-HOLE SCORING STATE
+// ─────────────────────────────────────────────────────────────
+let hbsState = {
+  eventId: null,
+  currentHole: 0,
+  currentGroup: 'g1',
+  groups: {},
+  holeScores: {},   // holeScores[playerId][holeIdx] = raw strokes
+  courseHoles: [],  // [{hole,par,si,yards}, ...]
+  format: 'stableford', // stableford | stroke | stroke_gross | par
+};
+
+// Default 18-hole course (Falkirk par 71)
+const DEFAULT_HOLES = [
+  {hole:1,par:4,si:3},{hole:2,par:3,si:9},{hole:3,par:4,si:1},{hole:4,par:4,si:11},
+  {hole:5,par:5,si:5},{hole:6,par:3,si:15},{hole:7,par:4,si:7},{hole:8,par:4,si:13},
+  {hole:9,par:4,si:17},{hole:10,par:4,si:8},{hole:11,par:3,si:16},{hole:12,par:5,si:2},
+  {hole:13,par:4,si:10},{hole:14,par:4,si:4},{hole:15,par:3,si:14},{hole:16,par:4,si:6},
+  {hole:17,par:5,si:12},{hole:18,par:4,si:18}
+];
+
+// ─── CORE SCORING ENGINE ──────────────────────────────────────
+// Returns shots given on a hole based on handicap + stroke index
+function shotsOnHole(hcp, si) {
+  // e.g. hcp=18 gets 1 shot on every hole
+  // hcp=19 gets 2 shots on SI 1, 1 shot on all others
+  // hcp=0 gets 0 shots everywhere
+  return Math.floor(hcp / 18) + (si <= (hcp % 18) ? 1 : 0);
+}
+
+// STABLEFORD: points per hole
+function calcStabHole(strokes, par, si, hcp) {
+  if (!strokes || strokes === 0) return null;
+  const shots = shotsOnHole(hcp, si);
+  const netScore = strokes - shots;       // net strokes on the hole
+  const diff = par - netScore;            // how many under/over par (net)
+  if (diff >= 2) return 4 + (diff - 2);  // eagle = 4, albatross = 5 etc
+  if (diff === 1) return 3;               // birdie
+  if (diff === 0) return 2;               // par
+  if (diff === -1) return 1;             // bogey
+  return 0;                               // double bogey or worse = 0
+}
+
+// STROKE PLAY NET: returns net strokes on hole (lower = better)
+function calcStrokeNetHole(strokes, si, hcp) {
+  if (!strokes || strokes === 0) return null;
+  return strokes - shotsOnHole(hcp, si);
+}
+
+// STROKE PLAY GROSS: raw strokes, no handicap
+function calcStrokeGrossHole(strokes) {
+  if (!strokes || strokes === 0) return null;
+  return strokes;
+}
+
+// PAR (match vs course): +1 win hole, 0 halved, -1 lost
+function calcParHole(strokes, par, si, hcp) {
+  if (!strokes || strokes === 0) return null;
+  const net = strokes - shotsOnHole(hcp, si);
+  if (net < par) return 1;    // won hole
+  if (net === par) return 0;  // halved
+  return -1;                  // lost hole
+}
+
+// Master scorer — returns {value, label, cssClass} for display
+function scoreHole(strokes, par, si, hcp, format) {
+  if (!strokes || strokes === 0) return { value: null, label: '', cssClass: '' };
+
+  if (format === 'stableford') {
+    const pts = calcStabHole(strokes, par, si, hcp);
+    const labels = { 0:'No pts', 1:'Bogey', 2:'Par', 3:'Birdie', 4:'Eagle', 5:'Albatross' };
+    const css = pts >= 3 ? 'hbs-stab-pos' : pts === 2 ? 'hbs-stab-par' : 'hbs-stab-neg';
+    return { value: pts, label: labels[pts] || pts + ' pts', cssClass: css };
+  }
+
+  if (format === 'stroke') {
+    const net = calcStrokeNetHole(strokes, si, hcp);
+    const diff = net - par;
+    const diffStr = diff === 0 ? 'Level' : diff > 0 ? '+' + diff : String(diff);
+    const css = diff < 0 ? 'hbs-stab-pos' : diff === 0 ? 'hbs-stab-par' : 'hbs-stab-neg';
+    return { value: net, label: `Net ${net} (${diffStr})`, cssClass: css };
+  }
+
+  if (format === 'stroke_gross') {
+    const diff = strokes - par;
+    const diffStr = diff === 0 ? 'Level' : diff > 0 ? '+' + diff : String(diff);
+    const css = diff < 0 ? 'hbs-stab-pos' : diff === 0 ? 'hbs-stab-par' : 'hbs-stab-neg';
+    return { value: strokes, label: `Gross ${strokes} (${diffStr})`, cssClass: css };
+  }
+
+  if (format === 'par') {
+    const result = calcParHole(strokes, par, si, hcp);
+    const labels = { 1: 'Won ✓', 0: 'Halved', '-1': 'Lost ✗' };
+    const css = result === 1 ? 'hbs-stab-pos' : result === 0 ? 'hbs-stab-par' : 'hbs-stab-neg';
+    return { value: result, label: labels[String(result)], cssClass: css };
+  }
+
+  return { value: null, label: '', cssClass: '' };
+}
+
+// Running total label for each format
+function runningTotalLabel(format) {
+  if (format === 'stableford') return 'pts';
+  if (format === 'stroke') return 'net strokes';
+  if (format === 'stroke_gross') return 'gross strokes';
+  if (format === 'par') return 'vs par';
+  return '';
+}
+
+// Calculate total for a player across all holes
+function calcPlayerTotal(pid, format) {
+  const { holeScores, courseHoles } = hbsState;
+  const player = state.players.find(p => p.id === pid);
+  if (!player) return { total: 0, holesPlayed: 0 };
+  let total = 0, holesPlayed = 0;
+  courseHoles.forEach((h, i) => {
+    const s = holeScores[pid] && holeScores[pid][i];
+    if (s > 0) {
+      const result = scoreHole(s, h.par, h.si, player.hcp, format);
+      if (result.value !== null) { total += result.value; holesPlayed++; }
+    }
+  });
+  return { total, holesPlayed };
+}
+
+// Convert total to stableford-equivalent for league table storage
+// For stroke play, store total net/gross; for par store total +/-; for stableford store pts
+function totalToStab(pid, format) {
+  return calcPlayerTotal(pid, format).total;
+}
+
+// ─── COURSE & FORMAT SELECTORS ────────────────────────────────
+window.onEventSelected = function() {
+  const eid = document.getElementById('score-event-select').value;
+  if (!eid) return;
+  const ev = state.events.find(e => e.id === eid);
+  if (!ev) return;
+  // Auto-select format from event
+  const fmtSel = document.getElementById('score-format-select');
+  if (fmtSel && ev.format) fmtSel.value = ev.format === 'stroke' ? 'stroke' : 'stableford';
+  // Auto-select course if event has a matching custom course
+  populateCourseDropdown(ev.course);
+};
+
+function populateCourseDropdown(preferredName) {
+  const sel = document.getElementById('score-course-select');
+  sel.innerHTML = '<option value="default">Falkirk Golf Club (Default — Par 71)</option>';
+  state.customCourses.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    const tp = c.holes.reduce((s, h) => s + h.par, 0);
+    opt.textContent = `${c.name} — Par ${tp} · SSS ${c.sss}`;
+    if (c.name === preferredName) opt.selected = true;
+    sel.appendChild(opt);
+  });
+  onCourseSelected();
+}
+
+window.onCourseSelected = function() {
+  const val = document.getElementById('score-course-select').value;
+  const info = document.getElementById('score-course-info');
+  if (val === 'default') {
+    info.style.display = 'none';
+    return;
+  }
+  const course = state.customCourses.find(c => c.id === val);
+  if (course) {
+    const tp = course.holes.reduce((s, h) => s + h.par, 0);
+    info.style.display = 'block';
+    info.innerHTML = `⛳ <strong style="color:var(--gold)">${course.name}</strong> · Par ${tp} · SSS ${course.sss} · ${course.region}`;
+  }
+};
+
+// Open the hole-by-hole scorecard
+window.openHoleByHole = function() {
+  const eid = document.getElementById('score-event-select').value;
+  if (!eid) { alert('Select an event first'); return; }
+  const ev = state.events.find(e => e.id === eid);
+  if (!ev) return;
+
+  // Build groups
+  const groups = { g1: [], g2: [] };
+  state.players.forEach(p => {
+    const g = playerGroups[p.id] || 'g1';
+    if (g !== 'out') groups[g].push(p);
+  });
+  if (!groups.g1.length && !groups.g2.length) { alert('No players assigned to groups'); return; }
+
+  // Get selected course
+  const courseVal = document.getElementById('score-course-select').value;
+  let holes = DEFAULT_HOLES;
+  if (courseVal !== 'default') {
+    const custom = state.customCourses.find(c => c.id === courseVal);
+    if (custom && custom.holes && custom.holes.length === 18) holes = custom.holes;
+  } else {
+    // Also try matching by event course name
+    const byName = state.customCourses.find(c => c.name === ev.course);
+    if (byName && byName.holes && byName.holes.length === 18) holes = byName.holes;
+  }
+
+  // Get selected format
+  const format = document.getElementById('score-format-select').value || 'stableford';
+
+  // Init state
+  hbsState.eventId = eid;
+  hbsState.currentHole = 0;
+  hbsState.currentGroup = groups.g1.length ? 'g1' : 'g2';
+  hbsState.groups = groups;
+  hbsState.courseHoles = holes;
+  hbsState.format = format;
+  hbsState.holeScores = {};
+  state.players.forEach(p => { hbsState.holeScores[p.id] = {}; });
+
+  // Header
+  const formatLabels = { stableford:'Stableford', stroke:'Stroke Play (Net)', stroke_gross:'Stroke Play (Gross)', par:'Par Competition' };
+  document.getElementById('hbs-event-name').textContent = ev.name;
+  document.getElementById('hbs-event-sub').textContent = `${fD(ev.date)} · ${ev.course} · ${formatLabels[format] || format}`;
+
+  buildHbsUI();
+  document.getElementById('hbs-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+function buildHbsUI() {
+  const { groups, courseHoles } = hbsState;
+
+  // Hole dots
+  const dotsEl = document.getElementById('hbs-hole-dots');
+  dotsEl.innerHTML = courseHoles.map((h, i) =>
+    `<div class="hbs-hole-dot ${i === 0 ? 'active' : ''}" id="hbs-dot-${i}" onclick="hbsGoHole(${i})">${h.hole}</div>`
+  ).join('');
+
+  // Group tabs — only show tabs that have players
+  const tabsEl = document.getElementById('hbs-group-tabs');
+  const activeTabs = Object.entries(groups).filter(([,players]) => players.length > 0);
+  tabsEl.innerHTML = activeTabs.map(([grp, players]) =>
+    `<div class="hbs-gtab ${grp === hbsState.currentGroup ? 'active' : ''}" id="hbs-gtab-${grp}" onclick="hbsSwitchGroup('${grp}')">
+      ${grp === 'g1' ? '🟢' : '🔵'} Group ${grp === 'g1' ? '1' : '2'}
+      <span style="font-size:10px;color:var(--gray);margin-left:4px;">(${players.map(p=>p.name).join(', ')})</span>
+    </div>`
+  ).join('');
+
+  // Build hole panels
+  const bodyEl = document.getElementById('hbs-body');
+  bodyEl.innerHTML = courseHoles.map((h, i) => buildHolePanel(h, i)).join('');
+
+  hbsGoHole(0);
+}
+
+function buildHolePanel(holeData, idx) {
+  return `<div class="hbs-hole-panel" id="hbs-panel-${idx}">
+    <div class="hbs-hole-header">
+      <div class="hbs-hole-label">Hole</div>
+      <div class="hbs-hole-num">${holeData.hole}</div>
+      <div class="hbs-hole-meta">
+        <div class="hbs-meta-chip">Par <span>${holeData.par}</span></div>
+        <div class="hbs-meta-chip">SI <span>${holeData.si}</span></div>
+        ${holeData.yards ? `<div class="hbs-meta-chip"><span>${holeData.yards}</span> yds</div>` : ''}
+      </div>
+    </div>
+    <div class="hbs-players" id="hbs-players-${idx}">
+      <!-- Filled by renderHolePlayers -->
+    </div>
+  </div>`;
+}
+
+function renderHolePlayers(holeIdx) {
+  const { groups, currentGroup, courseHoles, holeScores, format } = hbsState;
+  const players = groups[currentGroup] || [];
+  const hole = courseHoles[holeIdx];
+  const el = document.getElementById(`hbs-players-${holeIdx}`);
+  if (!el) return;
+
+  if (!players.length) {
+    el.innerHTML = `<div class="empty-state"><p>No players in this group</p></div>`;
+    return;
+  }
+
+  const isStrokeFormat = format === 'stroke' || format === 'stroke_gross';
+  // For stroke play, lower = better; for stableford/par, higher = better
+  const totalLabel = runningTotalLabel(format);
+
+  el.innerHTML = players.map(p => {
+    const strokes = holeScores[p.id] && holeScores[p.id][holeIdx] != null
+      ? holeScores[p.id][holeIdx] : null;
+    const hasVal = strokes != null && strokes > 0;
+
+    const scored = scoreHole(strokes || 0, hole.par, hole.si, p.hcp, format);
+
+    // Running total
+    const { total: runTotal, holesPlayed } = calcPlayerTotal(p.id, format);
+
+    // Show shots given on this hole (for stableford/net stroke/par)
+    const shots = (format !== 'stroke_gross') ? shotsOnHole(p.hcp, hole.si) : 0;
+    const shotsStr = shots > 0 ? `· ${shots} shot${shots > 1 ? 's' : ''} here` : '';
+
+    return `<div class="hbs-player-row ${hasVal ? 'has-score' : ''}" id="hbs-prow-${holeIdx}-${p.id}">
+      <div class="hbs-player-avatar">${p.name[0]}</div>
+      <div class="hbs-player-info">
+        <div class="hbs-player-name">${p.name}</div>
+        <div class="hbs-player-sub">HCP ${p.hcp} ${shotsStr}</div>
+        ${hasVal && scored.label ? `<div class="hbs-stab-badge ${scored.cssClass}">${scored.label}${holesPlayed > 0 ? ` · Running: ${runTotal} ${totalLabel}` : ''}</div>` : ''}
+      </div>
+      <div class="hbs-stepper">
+        <button class="hbs-step-btn minus" onclick="hbsAdj('${p.id}',${holeIdx},-1)">−</button>
+        <div class="hbs-score-display ${hasVal ? 'has-val' : 'empty'}" id="hbs-disp-${holeIdx}-${p.id}" onclick="hbsPromptScore('${p.id}',${holeIdx})">
+          ${hasVal ? strokes : '—'}
+        </div>
+        <button class="hbs-step-btn plus" onclick="hbsAdj('${p.id}',${holeIdx},1)">+</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.hbsAdj = function(pid, holeIdx, delta) {
+  if (!hbsState.holeScores[pid]) hbsState.holeScores[pid] = {};
+  const current = hbsState.holeScores[pid][holeIdx] || 0;
+  const newVal = Math.max(0, Math.min(15, current + delta));
+  hbsState.holeScores[pid][holeIdx] = newVal > 0 ? newVal : null;
+  renderHolePlayers(holeIdx);
+  updateDot(holeIdx);
+};
+
+window.hbsPromptScore = function(pid, holeIdx) {
+  const hole = hbsState.courseHoles[holeIdx];
+  const current = hbsState.holeScores[pid] && hbsState.holeScores[pid][holeIdx];
+  const val = prompt(`Hole ${hole.hole} (Par ${hole.par}) — Enter strokes for ${state.players.find(p=>p.id===pid)?.name || pid}:`, current || '');
+  if (val === null) return;
+  const n = parseInt(val);
+  if (!isNaN(n) && n >= 0) {
+    if (!hbsState.holeScores[pid]) hbsState.holeScores[pid] = {};
+    hbsState.holeScores[pid][holeIdx] = n > 0 ? n : null;
+    renderHolePlayers(holeIdx);
+    updateDot(holeIdx);
+  }
+};
+
+window.hbsSwitchGroup = function(grp) {
+  hbsState.currentGroup = grp;
+  document.querySelectorAll('.hbs-gtab').forEach(t => t.classList.remove('active'));
+  const tab = document.getElementById(`hbs-gtab-${grp}`);
+  if (tab) tab.classList.add('active');
+  renderHolePlayers(hbsState.currentHole);
+};
+
+window.hbsGoHole = function(idx) {
+  const total = hbsState.courseHoles.length;
+  if (idx < 0 || idx >= total) return;
+
+  // Hide old panel
+  const old = document.getElementById(`hbs-panel-${hbsState.currentHole}`);
+  if (old) old.classList.remove('active');
+  document.getElementById(`hbs-dot-${hbsState.currentHole}`)?.classList.remove('active');
+
+  hbsState.currentHole = idx;
+
+  // Show new panel
+  const panel = document.getElementById(`hbs-panel-${idx}`);
+  if (panel) panel.classList.add('active');
+  document.getElementById(`hbs-dot-${idx}`)?.classList.add('active');
+
+  // Scroll dot into view
+  document.getElementById(`hbs-dot-${idx}`)?.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+
+  renderHolePlayers(idx);
+
+  // Update counter & buttons
+  document.getElementById('hbs-hole-counter').textContent = `${idx + 1} / ${total}`;
+  const prevBtn = document.getElementById('hbs-prev-btn');
+  const nextBtn = document.getElementById('hbs-next-btn');
+  prevBtn.style.visibility = idx === 0 ? 'hidden' : 'visible';
+  if (idx === total - 1) {
+    nextBtn.textContent = '✓ Finish';
+    nextBtn.classList.add('last');
+  } else {
+    nextBtn.textContent = 'Next →';
+    nextBtn.classList.remove('last');
+  }
+};
+
+window.hbsChangeHole = function(dir) {
+  const total = hbsState.courseHoles.length;
+  const next = hbsState.currentHole + dir;
+  if (next >= total) {
+    // Last hole — show summary
+    showRoundSummary();
+    return;
+  }
+  hbsGoHole(next);
+};
+
+function updateDot(holeIdx) {
+  const dot = document.getElementById(`hbs-dot-${holeIdx}`);
+  if (!dot) return;
+  const { groups, holeScores } = hbsState;
+  const allPlayers = [...(groups.g1 || []), ...(groups.g2 || [])];
+  const anyScore = allPlayers.some(p => holeScores[p.id] && holeScores[p.id][holeIdx] > 0);
+  if (anyScore) dot.classList.add('done');
+  else dot.classList.remove('done');
+}
+
+function showRoundSummary() {
+  const { groups, format } = hbsState;
+  const allPlayers = [...(groups.g1 || []), ...(groups.g2 || [])];
+  const formatLabels = { stableford:'Stableford pts', stroke:'Net strokes', stroke_gross:'Gross strokes', par:'vs Par' };
+  const isLowerBetter = format === 'stroke' || format === 'stroke_gross';
+
+  const results = allPlayers.map(p => {
+    const { total, holesPlayed } = calcPlayerTotal(p.id, format);
+    return { player: p, total, holesPlayed };
+  }).sort((a, b) => isLowerBetter ? a.total - b.total : b.total - a.total);
+
+  const medals = ['🥇','🥈','🥉'];
+
+  document.getElementById('round-summary-content').innerHTML = `
+    <p style="font-size:12px;color:var(--gray);margin-bottom:4px;"><strong style="color:var(--gold)">${formatLabels[format] || format}</strong> · ${isLowerBetter ? 'Lower is better' : 'Higher is better'}</p>
+    <p style="font-size:12px;color:var(--gray);margin-bottom:16px;">Tap Save to update the league table.</p>
+    ${results.map((r, i) => `
+      <div class="hbs-summary-row" style="padding:12px 0;">
+        <div class="hbs-sum-rank ${i===0?'pos-1':i===1?'pos-2':i===2?'pos-3':'pos-n'}">${medals[i] || i+1}</div>
+        <div style="flex:1;">
+          <div style="font-family:'Cinzel',serif;font-size:15px;font-weight:700;">${r.player.name}</div>
+          <div style="font-size:11px;color:var(--gray);">${r.holesPlayed} holes · HCP ${r.player.hcp}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Cinzel',serif;font-size:22px;font-weight:900;color:var(--gold2);">${r.total}</div>
+          <div style="font-size:10px;color:var(--gray);">${formatLabels[format] || ''}</div>
+        </div>
+      </div>`
+    ).join('')}`;
+
+  showModal('modal-round-summary');
+}
+
+window.saveAllHoleScores = function() { showRoundSummary(); };
+
+window.confirmSaveHoleScores = async function() {
+  closeModal('modal-round-summary');
+  const { groups, eventId, format } = hbsState;
+  const allPlayers = [...(groups.g1 || []), ...(groups.g2 || [])];
+  showLoading(true);
+  try {
+    for (const p of allPlayers) {
+      const { total, holesPlayed } = calcPlayerTotal(p.id, format);
+      if (holesPlayed === 0) continue;
+      if (!state.scores[eventId]) state.scores[eventId] = {};
+      state.scores[eventId][p.id] = { stab: total };
+      await fbSet('scores', `${eventId}_${p.id}`, { eventId, playerId: p.id, stab: total, format });
+    }
+    const ev = state.events.find(e => e.id === eventId);
+    if (ev) { ev.status = 'complete'; ev.format = format; await fbSet('events', ev.id, ev); }
+    closeHoleByHole();
+    renderAll();
+    alert('✅ Scores saved! League table updated.');
+  } catch(e) { alert('Error saving: ' + e.message); }
+  showLoading(false);
+};
+
+window.closeHoleByHole = function() {
+  document.getElementById('hbs-overlay').classList.remove('open');
+  document.body.style.overflow = '';
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -552,189 +1113,104 @@ window.connectFirebaseFromModal=async function(){
     await initFB(cfg,true);
   }catch(e){
     if(btn){btn.textContent='🔥 Connect & Sync Live';btn.disabled=false;}
-    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object and that Firestore is enabled in test mode.');
+    alert('❌ Could not connect: '+e.message);
   }
 };
 window.disconnectFirebase=function(){
-  if(!confirm('Disconnect Firebase? App will use local storage only.'))return;
+  if(!confirm('Disconnect Firebase?'))return;
   localStorage.removeItem('jbg_fbcfg');
   useFirebase=false;
   unsubscribers.forEach(u=>u());unsubscribers=[];
   const dot=document.getElementById('sync-dot');if(dot){dot.className='sync-dot off';}
   const lbl=document.getElementById('sync-label');if(lbl)lbl.textContent='Connect';
   closeModal('modal-firebase');
-  alert('Disconnected. App now uses local storage.');
 };
 window.connectFirebase=async function(){
   const raw=document.getElementById('firebase-config-input').value.trim();
   if(!raw){alert('Please paste your Firebase config');return;}
   try{
-    // Parse config — handle both object literal and JSON
     let cfg;
-    try{cfg=new Function('return ('+raw+')')();}
-    catch(e){cfg=JSON.parse(raw);}
+    try{cfg=new Function('return ('+raw+')')();}catch(e){cfg=JSON.parse(raw);}
     if(!cfg.apiKey||!cfg.projectId)throw new Error('Invalid config');
     localStorage.setItem('jbg_fbcfg',JSON.stringify(cfg));
     await initFB(cfg);
-  }catch(e){
-    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object.');
-  }
+  }catch(e){alert('❌ Could not connect: '+e.message);}
 };
-
-window.skipFirebase=function(){
-  useFirebase=false;
-  launchApp();
-};
+window.skipFirebase=function(){useFirebase=false;launchApp();};
 
 async function initFB(cfg,showToast){
   showLoading(true);
   try{
-    fbApp=initializeApp(cfg);
-    db=getFirestore(fbApp);
-    // Test connection
+    fbApp=initializeApp(cfg);db=getFirestore(fbApp);
     await getDoc(doc(db,'meta','test'));
     useFirebase=true;
-    // Upload existing default data if Firestore is empty
     await seedFirestoreIfEmpty();
     launchApp(showToast);
   }catch(e){
     showLoading(false);
-    alert('❌ Firebase connection failed: '+e.message+'\n\nCheck your config and make sure Firestore is enabled in test mode.');
+    alert('❌ Firebase connection failed: '+e.message);
   }
 }
 
 async function seedFirestoreIfEmpty(){
-  // Check if players exist
   const snap=await getDocs(collection(db,'players'));
-  if(!snap.empty)return; // Already has data
-  // Seed with default players
-  for(const p of state.players){
-    await setDoc(doc(db,'players',p.id),p);
-  }
-  // Seed events
-  for(const ev of state.events){
-    await setDoc(doc(db,'events',ev.id),ev);
-  }
-  // Seed scores
+  if(!snap.empty)return;
+  for(const p of state.players)await setDoc(doc(db,'players',p.id),p);
+  for(const ev of state.events)await setDoc(doc(db,'events',ev.id),ev);
   for(const [eid,scores] of Object.entries(state.scores)){
     for(const [pid,sc] of Object.entries(scores)){
-      if(sc.stab>0){
-        await setDoc(doc(db,'scores',`${eid}_${pid}`),{eventId:eid,playerId:pid,stab:sc.stab});
-      }
+      if(sc.stab>0)await setDoc(doc(db,'scores',`${eid}_${pid}`),{eventId:eid,playerId:pid,stab:sc.stab});
     }
   }
-  // Seed format
   await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
 }
 
-// ─────────────────────────────────────────────────────────────
-// LAUNCH APP
-// ─────────────────────────────────────────────────────────────
 async function launchApp(showToast){
   showLoading(true);
-  if(useFirebase){
-    await loadFromFirebase();
-    subscribeRealtime();
-  } else {
-    loadLocal();
-  }
+  if(useFirebase){await loadFromFirebase();subscribeRealtime();}
+  else loadLocal();
   document.getElementById('page-setup').classList.remove('active');
   document.getElementById('page-home').classList.add('active');
   document.getElementById('bottom-nav').style.display='flex';
-  renderAll();
-  showLoading(false);
+  renderAll();showLoading(false);
   if(showToast&&useFirebase){
     const t=document.createElement('div');
-    t.textContent='🔥 Connected! Live sync active for all players.';
+    t.textContent='🔥 Connected! Live sync active.';
     t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d7a4f;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;';
-    document.body.appendChild(t);
-    setTimeout(()=>t.remove(),3500);
+    document.body.appendChild(t);setTimeout(()=>t.remove(),3500);
   }
 }
 
 async function loadFromFirebase(){
-  // Players
-  const ps=await getDocs(collection(db,'players'));
-  state.players=ps.docs.map(d=>d.data());
-  // Events
-  const es=await getDocs(collection(db,'events'));
-  state.events=es.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);
-  // Scores
-  const ss=await getDocs(collection(db,'scores'));
-  state.scores={};
-  ss.docs.forEach(d=>{
-    const{eventId,playerId,stab}=d.data();
-    if(!state.scores[eventId])state.scores[eventId]={};
-    state.scores[eventId][playerId]={stab};
-  });
-  // Settings
-  try{
-    const m=await getDoc(doc(db,'meta','settings'));
-    if(m.exists()){const d=m.data();state.format=d.format||'stableford';state.season=d.season||state.season;}
-  }catch(e){}
-  // Courses
-  try{
-    const cs=await getDocs(collection(db,'courses'));
-    state.customCourses=cs.docs.map(d=>d.data());
-  }catch(e){}
+  const ps=await getDocs(collection(db,'players'));state.players=ps.docs.map(d=>d.data());
+  const es=await getDocs(collection(db,'events'));state.events=es.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);
+  const ss=await getDocs(collection(db,'scores'));state.scores={};
+  ss.docs.forEach(d=>{const{eventId,playerId,stab}=d.data();if(!state.scores[eventId])state.scores[eventId]={};state.scores[eventId][playerId]={stab};});
+  try{const m=await getDoc(doc(db,'meta','settings'));if(m.exists()){const d=m.data();state.format=d.format||'stableford';state.season=d.season||state.season;}}catch(e){}
+  try{const cs=await getDocs(collection(db,'courses'));state.customCourses=cs.docs.map(d=>d.data());}catch(e){}
 }
 
 function subscribeRealtime(){
-  // Unsubscribe old listeners
   unsubscribers.forEach(u=>u());unsubscribers=[];
-  // Players
-  unsubscribers.push(onSnapshot(collection(db,'players'),snap=>{
-    state.players=snap.docs.map(d=>d.data());renderAll();
-  }));
-  // Events
-  unsubscribers.push(onSnapshot(collection(db,'events'),snap=>{
-    state.events=snap.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);renderAll();
-  }));
-  // Scores
+  unsubscribers.push(onSnapshot(collection(db,'players'),snap=>{state.players=snap.docs.map(d=>d.data());renderAll();}));
+  unsubscribers.push(onSnapshot(collection(db,'events'),snap=>{state.events=snap.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);renderAll();}));
   unsubscribers.push(onSnapshot(collection(db,'scores'),snap=>{
     state.scores={};
-    snap.docs.forEach(d=>{
-      const{eventId,playerId,stab}=d.data();
-      if(!state.scores[eventId])state.scores[eventId]={};
-      state.scores[eventId][playerId]={stab};
-    });
+    snap.docs.forEach(d=>{const{eventId,playerId,stab}=d.data();if(!state.scores[eventId])state.scores[eventId]={};state.scores[eventId][playerId]={stab};});
     renderAll();
   }));
 }
 
-function loadLocal(){
-  try{const s=localStorage.getItem('jbgolf_nl');if(s){const d=JSON.parse(s);Object.assign(state,d);}}catch(e){}
-}
+function loadLocal(){try{const s=localStorage.getItem('jbgolf_nl');if(s){const d=JSON.parse(s);Object.assign(state,d);}}catch(e){}}
+function saveLocal(){try{localStorage.setItem('jbgolf_nl',JSON.stringify({format:state.format,season:state.season,players:state.players,events:state.events,scores:state.scores,customCourses:state.customCourses}));}catch(e){}}
 
-function saveLocal(){
-  try{localStorage.setItem('jbgolf_nl',JSON.stringify({format:state.format,season:state.season,players:state.players,events:state.events,scores:state.scores,customCourses:state.customCourses}));}catch(e){}
-}
+async function fbSet(col,id,data){if(useFirebase&&db)await setDoc(doc(db,col,id),data);else saveLocal();}
+async function fbDel(col,id){if(useFirebase&&db)await deleteDoc(doc(db,col,id));else saveLocal();}
+async function fbSaveSettings(){if(useFirebase&&db)await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});else saveLocal();}
 
-// ─────────────────────────────────────────────────────────────
-// FIREBASE WRITE HELPERS
-// ─────────────────────────────────────────────────────────────
-async function fbSet(col,id,data){
-  if(useFirebase&&db)await setDoc(doc(db,col,id),data);
-  else saveLocal();
-}
-async function fbDel(col,id){
-  if(useFirebase&&db)await deleteDoc(doc(db,col,id));
-  else saveLocal();
-}
-async function fbSaveSettings(){
-  if(useFirebase&&db)await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
-  else saveLocal();
-}
-
-// ─────────────────────────────────────────────────────────────
-// AUTO-CONNECT ON LOAD
-// ─────────────────────────────────────────────────────────────
 (async()=>{
   const saved=localStorage.getItem('jbg_fbcfg');
-  if(saved){
-    try{await initFB(JSON.parse(saved));}
-    catch(e){/* show setup page */showLoading(false);}
-  }
+  if(saved){try{await initFB(JSON.parse(saved));}catch(e){showLoading(false);}}
 })();
 
 // ─────────────────────────────────────────────────────────────
@@ -754,13 +1230,9 @@ function calcLeague(){
   const done=state.events.filter(e=>e.status==='complete');
   return state.players.map(p=>{
     let scores=[];
-    done.forEach(ev=>{
-      const s=state.scores[ev.id];
-      if(s&&s[p.id]&&s[p.id].stab>0)scores.push({eventId:ev.id,eventName:ev.name,stab:s[p.id].stab});
-    });
+    done.forEach(ev=>{const s=state.scores[ev.id];if(s&&s[p.id]&&s[p.id].stab>0)scores.push({eventId:ev.id,eventName:ev.name,stab:s[p.id].stab});});
     const sorted=[...scores].sort((a,b)=>b.stab-a.stab);
-    const b6=sorted.slice(0,6);
-    const b6ids=b6.map(s=>s.eventId);
+    const b6=sorted.slice(0,6);const b6ids=b6.map(s=>s.eventId);
     const pts=b6.reduce((s,r)=>s+r.stab,0);
     return{player:p,scores,totalPts:pts,best6ids:b6ids,rounds:scores.length};
   }).sort((a,b)=>b.totalPts-a.totalPts);
@@ -776,17 +1248,13 @@ function renderAll(){
   const done=state.events.filter(e=>e.status==='complete');
   document.getElementById('header-events-count').textContent=`${done.length} Events`;
   document.getElementById('league-season-sub').textContent=state.season;
-  // Sync indicator
-  const dot=document.getElementById('sync-dot');
-  if(dot)dot.className='sync-dot'+(useFirebase?'':' off');
-  const lbl=document.getElementById('sync-label');
-  if(lbl)lbl.textContent=useFirebase?'Live ✓':'Connect';
+  const dot=document.getElementById('sync-dot');if(dot)dot.className='sync-dot'+(useFirebase?'':' off');
+  const lbl=document.getElementById('sync-label');if(lbl)lbl.textContent=useFirebase?'Live ✓':'Connect';
 }
 
 function renderHome(){
   const t=calcLeague();
-  const pCls=['podium-1','podium-2','podium-3'];
-  const tr=['🥇','🥈','🥉'];
+  const pCls=['podium-1','podium-2','podium-3'];const tr=['🥇','🥈','🥉'];
   document.getElementById('home-podium').innerHTML=t.slice(0,3).map((r,i)=>`
     <div class="podium-card ${pCls[i]}">
       <div class="podium-icon">${tr[i]}</div>
@@ -799,21 +1267,17 @@ function renderHome(){
       </div>
       <div class="podium-pts"><div class="podium-pts-val">${r.totalPts}</div><div class="podium-pts-label">best 6 pts</div></div>
     </div>`).join('');
-  const done=state.events.filter(e=>e.status==='complete');
-  const latest=done[done.length-1];
+  const done=state.events.filter(e=>e.status==='complete');const latest=done[done.length-1];
   if(latest&&state.scores[latest.id]){
     const rs=state.players.filter(p=>state.scores[latest.id][p.id]&&state.scores[latest.id][p.id].stab>0)
       .map(p=>({name:p.name,pts:state.scores[latest.id][p.id].stab})).sort((a,b)=>b.pts-a.pts);
     document.getElementById('home-latest').innerHTML=`<div style="font-size:12px;color:var(--gray);margin-bottom:8px;">${latest.name} · ${fD(latest.date)} · ${latest.course}</div>`+
       rs.map((r,i)=>`<div class="stat-row"><span class="stat-label">${i===0?'🏆 ':''}${r.name}</span><span class="stat-val">${r.pts} pts</span></div>`).join('');
-  }else{
-    document.getElementById('home-latest').innerHTML='<div class="empty-state"><p>No completed rounds yet</p></div>';
-  }
+  }else{document.getElementById('home-latest').innerHTML='<div class="empty-state"><p>No completed rounds yet</p></div>';}
 }
 
 function renderLeague(){
-  const t=calcLeague();
-  const done=state.events.filter(e=>e.status==='complete');
+  const t=calcLeague();const done=state.events.filter(e=>e.status==='complete');
   let th=`<tr><th>#</th><th style="text-align:left;padding-left:10px;">Player</th><th>HCP</th>`;
   done.forEach(e=>{th+=`<th style="min-width:32px;">${e.name.replace('Week ','W')}</th>`;});
   th+=`<th>Rnds</th><th>Total</th></tr>`;
@@ -821,17 +1285,14 @@ function renderLeague(){
   document.getElementById('league-tbody').innerHTML=t.map((r,i)=>{
     const posEl=i===0?`<div class="jb-pos pos-1">1</div>`:i===1?`<div class="jb-pos pos-2">2</div>`:i===2?`<div class="jb-pos pos-3">3</div>`:`<div class="jb-pos pos-n">${i+1}</div>`;
     const cells=done.map(ev=>{
-      const s=state.scores[ev.id];const ps=s&&s[r.player.id];
-      const v=ps&&ps.stab>0?ps.stab:0;const isBest=r.best6ids.includes(ev.id);
-      return v===0?`<td class="jb-td"><span class="score-cell-val score-zero">—</span></td>`
-        :`<td class="jb-td"><span class="score-cell-val ${isBest?'score-best':''}">${isBest?'★':''}${v}</span></td>`;
+      const s=state.scores[ev.id];const ps=s&&s[r.player.id];const v=ps&&ps.stab>0?ps.stab:0;const isBest=r.best6ids.includes(ev.id);
+      return v===0?`<td class="jb-td"><span class="score-cell-val score-zero">—</span></td>`:`<td class="jb-td"><span class="score-cell-val ${isBest?'score-best':''}">${isBest?'★':''}${v}</span></td>`;
     }).join('');
     const rc=i===0?'jb-row pos1':i===1?'jb-row pos2':i===2?'jb-row pos3':'jb-row';
     return`<tr class="${rc}"><td class="jb-td">${posEl}</td>
       <td class="jb-td"><div class="jb-name">${r.player.name}</div><div class="jb-hcp">hcp ${r.player.hcp}</div></td>
       <td class="jb-td" style="color:var(--gray);font-size:11px;">${r.player.hcp}</td>
-      ${cells}
-      <td class="jb-td" style="color:var(--gray);font-size:12px;">${r.rounds}</td>
+      ${cells}<td class="jb-td" style="color:var(--gray);font-size:12px;">${r.rounds}</td>
       <td class="jb-td"><span class="total-cell">${r.totalPts}</span></td></tr>`;
   }).join('');
 }
@@ -852,7 +1313,7 @@ function renderEvents(){
       </div>${res}
       <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
         ${ev.status==='complete'?`<button class="btn btn-sm btn-outline" onclick="viewResults('${ev.id}')">View Scores</button>`:''}
-        <button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">✏️ Edit Scores</button>
+        <button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">⛳ Score Round</button>
         <button class="btn btn-sm btn-red" onclick="deleteEvent('${ev.id}')">Delete</button>
       </div>
     </div>`;
@@ -862,17 +1323,15 @@ function renderEvents(){
 function renderPlayers(){
   const t=calcLeague();const rm={};t.forEach((r,i)=>{rm[r.player.id]=i+1;});
   document.getElementById('players-list').innerHTML=state.players.length
-    ? state.players.map(p=>`
-      <div class="player-card">
-        <div class="player-avatar">${p.name[0]}</div>
-        <div class="player-info"><div class="player-name">${p.name}</div><div class="player-hcp">HCP ${p.hcp} · Rank #${rm[p.id]||'—'}</div></div>
-        <div class="player-actions">
-          <button class="btn btn-sm btn-outline" onclick="viewProfile('${p.id}')">Profile</button>
-          <button class="btn btn-sm btn-green" onclick="editPlayer('${p.id}')">Edit</button>
-          <button class="btn btn-sm btn-red" onclick="deletePlayer('${p.id}')">✕</button>
-        </div>
-      </div>`).join('')
-    : '<div class="empty-state"><div class="icon">👤</div><p>No players yet</p></div>';
+    ?state.players.map(p=>`<div class="player-card">
+      <div class="player-avatar">${p.name[0]}</div>
+      <div class="player-info"><div class="player-name">${p.name}</div><div class="player-hcp">HCP ${p.hcp} · Rank #${rm[p.id]||'—'}</div></div>
+      <div class="player-actions">
+        <button class="btn btn-sm btn-outline" onclick="viewProfile('${p.id}')">Profile</button>
+        <button class="btn btn-sm btn-green" onclick="editPlayer('${p.id}')">Edit</button>
+        <button class="btn btn-sm btn-red" onclick="deletePlayer('${p.id}')">✕</button>
+      </div></div>`).join('')
+    :'<div class="empty-state"><div class="icon">👤</div><p>No players yet</p></div>';
 }
 
 const playerGroups={};
@@ -880,15 +1339,16 @@ function renderScoreSetup(){
   const sel=document.getElementById('score-event-select');
   sel.innerHTML='<option value="">— Pick event —</option>';
   state.events.forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=`${ev.name} · ${fD(ev.date)}`;sel.appendChild(o);});
+  // Always rebuild course dropdown with current custom courses
+  populateCourseDropdown('');
   state.players.forEach(p=>{if(!playerGroups[p.id])playerGroups[p.id]='g1';});
   document.getElementById('player-group-assign').innerHTML=state.players.map(p=>{
     const g=playerGroups[p.id]||'g1';
     return`<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);padding:7px 10px;border-radius:10px;border:1px solid var(--border);margin-bottom:6px;">
       <span style="flex:1;font-size:13px;font-weight:700;font-family:'Cinzel',serif;">${p.name}</span>
       <div style="display:flex;gap:4px;">
-        ${['g1','g2','out'].map(grp=>`<button onclick="setGrp('${p.id}','${grp}')" style="padding:4px 8px;border-radius:6px;border:1px solid;font-size:10px;font-weight:700;cursor:pointer;${g===grp?(grp==='g1'?'background:#2d7a4f;border-color:#3a9660;color:white':grp==='g2'?'background:#4a8dd4;border-color:#5a9de4;color:white':'background:#663333;border-color:#884444;color:#ffaaaa'):'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--gray);'}">${grp==='out'?'Out':grp.toUpperCase()}</button>`).join('')}
-      </div>
-    </div>`;
+        ${['g1','g2','out'].map(grp=>`<button onclick="setGrp('${p.id}','${grp}')" style="padding:4px 10px;border-radius:6px;border:1px solid;font-size:11px;font-weight:700;cursor:pointer;transition:all 0.15s;${g===grp?(grp==='g1'?'background:#2d7a4f;border-color:#3a9660;color:white':grp==='g2'?'background:#1a62c4;border-color:#4a8dd4;color:white':'background:#663333;border-color:#884444;color:#ffaaaa'):'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--gray);'}">${grp==='out'?'Out':grp==='g1'?'Grp 1':'Grp 2'}</button>`).join('')}
+      </div></div>`;
   }).join('');
 }
 window.setGrp=function(pid,grp){playerGroups[pid]=grp;renderScoreSetup();};
@@ -896,26 +1356,21 @@ window.setGrp=function(pid,grp){playerGroups[pid]=grp;renderScoreSetup();};
 function renderCourses(search){
   const q=(search||'').toLowerCase();
   const courses=state.customCourses.filter(c=>!q||c.name.toLowerCase().includes(q));
-  if(!courses.length){
-    document.getElementById('courses-list').innerHTML='<div class="empty-state"><div class="icon">⛳</div><p style="color:var(--gold);font-weight:700;margin-bottom:8px;">No courses yet</p><p style="font-size:12px;">Tap Create Custom Scorecard above to add your first course.</p></div>';
-    return;
-  }
+  if(!courses.length){document.getElementById('courses-list').innerHTML='<div class="empty-state"><div class="icon">⛳</div><p style="color:var(--gold);font-weight:700;margin-bottom:8px;">No courses yet</p><p style="font-size:12px;">Tap Create Custom Scorecard above to add your first course.</p></div>';return;}
   document.getElementById('courses-list').innerHTML=courses.map(c=>{
     const tp=c.holes.reduce((s,h)=>s+h.par,0);
     return`<div class="course-card">
       <div style="font-size:24px;flex-shrink:0;">⛳</div>
       <div style="flex:1;cursor:pointer;" onclick="viewCourseDetail('${c.id}')"><div class="course-name">${c.name}</div><div class="course-detail">Par ${tp} · SSS ${c.sss}</div></div>
       <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
-        <span class="course-region">${c.region}</span>
-        <span class="custom-badge">Custom</span>
+        <span class="course-region">${c.region}</span><span class="custom-badge">Custom</span>
         <button class="btn btn-sm btn-outline" style="font-size:10px;padding:3px 8px;" onclick="openSCBuilder('${c.id}')">✏️ Edit</button>
-      </div>
-    </div>`;
+      </div></div>`;
   }).join('');
 }
 
 // ─────────────────────────────────────────────────────────────
-// SCORE ENTRY
+// QUICK SCORE ENTRY (totals)
 // ─────────────────────────────────────────────────────────────
 let activeEid=null;
 window.openScoreEntry=function(){
@@ -929,10 +1384,10 @@ window.openScoreEntry=function(){
   document.getElementById('active-event-name').textContent=ev?ev.name:'Round';
   const existing=state.scores[eid]||{};
   document.getElementById('score-entry-rows').innerHTML=`
-    <div style="font-size:11px;color:var(--gray);margin-bottom:10px;">Enter Stableford points for each player. Leave blank if not playing.</div>
+    <div style="font-size:11px;color:var(--gray);margin-bottom:10px;">Enter Stableford points for each player.</div>
     ${playing.map(p=>`
       <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:10px 12px;margin-bottom:8px;">
-        <div style="flex:1;"><div style="font-size:14px;font-weight:700;font-family:'Cinzel',serif;">${p.name}</div><div style="font-size:10px;color:var(--gray);">HCP ${p.hcp} · ${playerGroups[p.id]==='g1'?'Group 1':'Group 2'}</div></div>
+        <div style="flex:1;"><div style="font-size:14px;font-weight:700;font-family:'Cinzel',serif;">${p.name}</div><div style="font-size:10px;color:var(--gray);">HCP ${p.hcp}</div></div>
         <div style="display:flex;align-items:center;gap:6px;">
           <button onclick="adjScore('${p.id}',-1)" style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:white;font-size:18px;cursor:pointer;">−</button>
           <input type="number" min="0" max="60" value="${existing[p.id]&&existing[p.id].stab>0?existing[p.id].stab:''}" placeholder="pts"
@@ -945,34 +1400,27 @@ window.openScoreEntry=function(){
 };
 window.adjScore=function(pid,d){const el=document.getElementById('stab-'+pid);if(!el)return;el.value=Math.max(0,Math.min(60,(parseInt(el.value)||0)+d));};
 window.cancelScores=function(){activeEid=null;document.getElementById('score-setup').style.display='block';document.getElementById('score-entry-area').style.display='none';};
-
 window.saveScores=async function(){
-  if(!activeEid)return;
-  showLoading(true);
+  if(!activeEid)return;showLoading(true);
   try{
     const playing=state.players.filter(p=>playerGroups[p.id]!=='out');
     for(const p of playing){
-      const el=document.getElementById('stab-'+p.id);
-      const stab=el?parseInt(el.value)||0:0;
+      const el=document.getElementById('stab-'+p.id);const stab=el?parseInt(el.value)||0:0;
       if(!state.scores[activeEid])state.scores[activeEid]={};
       state.scores[activeEid][p.id]={stab};
       await fbSet('scores',`${activeEid}_${p.id}`,{eventId:activeEid,playerId:p.id,stab});
     }
-    // Mark event complete
     const ev=state.events.find(e=>e.id===activeEid);
     if(ev){ev.status='complete';await fbSet('events',ev.id,ev);}
-    cancelScores();renderAll();
-    alert('✅ Scores saved!');
-  }catch(e){alert('Error saving: '+e.message);}
+    cancelScores();renderAll();alert('✅ Scores saved!');
+  }catch(e){alert('Error: '+e.message);}
   showLoading(false);
 };
 
-// Quick edit scores from events page
 window.quickEditScores=function(eid){
-  const sel=document.getElementById('score-event-select');
-  if(sel)sel.value=eid;
+  const sel=document.getElementById('score-event-select');if(sel)sel.value=eid;
   goPage('score',document.querySelectorAll('.nav-btn')[3]);
-  setTimeout(()=>window.openScoreEntry(),100);
+  setTimeout(()=>window.openHoleByHole(),100);
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -985,32 +1433,21 @@ window.savePlayer=async function(){
   if(!name){alert('Enter player name');return;}
   showLoading(true);
   try{
-    if(id){
-      const p=state.players.find(x=>x.id===id);if(p){p.name=name;p.hcp=hcp;}
-      await fbSet('players',id,{id,name,hcp});
-    }else{
-      const pid='p'+Date.now();
-      state.players.push({id:pid,name,hcp});
-      await fbSet('players',pid,{id:pid,name,hcp});
-    }
+    if(id){const p=state.players.find(x=>x.id===id);if(p){p.name=name;p.hcp=hcp;}await fbSet('players',id,{id,name,hcp});}
+    else{const pid='p'+Date.now();state.players.push({id:pid,name,hcp});await fbSet('players',pid,{id:pid,name,hcp});}
     closeModal('modal-add-player');renderPlayers();
   }catch(e){alert('Error: '+e.message);}
   showLoading(false);
 };
 window.editPlayer=function(id){
   const p=state.players.find(x=>x.id===id);if(!p)return;
-  document.getElementById('edit-player-id').value=p.id;
-  document.getElementById('input-player-name').value=p.name;
-  document.getElementById('input-player-hcp').value=p.hcp;
-  document.getElementById('add-player-modal-title').textContent='Edit Player';
+  document.getElementById('edit-player-id').value=p.id;document.getElementById('input-player-name').value=p.name;
+  document.getElementById('input-player-hcp').value=p.hcp;document.getElementById('add-player-modal-title').textContent='Edit Player';
   showModal('modal-add-player');
 };
 window.deletePlayer=async function(id){
-  if(!confirm('Remove player?'))return;
-  showLoading(true);
-  state.players=state.players.filter(p=>p.id!==id);
-  await fbDel('players',id);
-  renderPlayers();showLoading(false);
+  if(!confirm('Remove player?'))return;showLoading(true);
+  state.players=state.players.filter(p=>p.id!==id);await fbDel('players',id);renderPlayers();showLoading(false);
 };
 window.viewProfile=function(id){
   const p=state.players.find(x=>x.id===id);if(!p)return;
@@ -1023,8 +1460,7 @@ window.viewProfile=function(id){
       <div class="score-summary-cell"><div class="score-summary-val">${p.hcp}</div><div class="score-summary-label">Handicap</div></div>
       <div class="score-summary-cell"><div class="score-summary-val">${rounds.length}</div><div class="score-summary-label">Rounds</div></div>
       <div class="score-summary-cell"><div class="score-summary-val">${b6t}</div><div class="score-summary-label">Best 6</div></div>
-    </div>
-    <div class="divider"></div>
+    </div><div class="divider"></div>
     ${rounds.map(r=>{const iB=b6.some(s=>s.event.id===r.event.id);return`<div class="stat-row"><span class="stat-label">${r.event.name}${iB?'<span class="chip chip-gold" style="margin-left:6px;">★</span>':''}</span><span class="stat-val">${r.stab} pts</span></div>`;}).join('')}
     ${rounds.length===0?'<p style="color:var(--gray);font-size:13px;">No rounds yet</p>':''}`;
   showModal('modal-player-profile');
@@ -1042,26 +1478,15 @@ window.saveEvent=async function(){
   if(!name||!date){alert('Enter name and date');return;}
   showLoading(true);
   try{
-    if(id){
-      const ev=state.events.find(e=>e.id===id);
-      if(ev){ev.name=name;ev.date=date;ev.course=course;ev.format=format;}
-      await fbSet('events',id,{id,name,date,course,format,status:ev?ev.status:'upcoming'});
-    }else{
-      const eid='e'+Date.now();
-      const ev={id:eid,name,date,course,format,status:'upcoming'};
-      state.events.push(ev);
-      await fbSet('events',eid,ev);
-    }
+    if(id){const ev=state.events.find(e=>e.id===id);if(ev){ev.name=name;ev.date=date;ev.course=course;ev.format=format;}await fbSet('events',id,{id,name,date,course,format,status:ev?ev.status:'upcoming'});}
+    else{const eid='e'+Date.now();const ev={id:eid,name,date,course,format,status:'upcoming'};state.events.push(ev);await fbSet('events',eid,ev);}
     closeModal('modal-add-event');renderEvents();
   }catch(e){alert('Error: '+e.message);}
   showLoading(false);
 };
 window.deleteEvent=async function(id){
-  if(!confirm('Delete event?'))return;
-  showLoading(true);
-  state.events=state.events.filter(e=>e.id!==id);
-  await fbDel('events',id);
-  renderEvents();showLoading(false);
+  if(!confirm('Delete event?'))return;showLoading(true);
+  state.events=state.events.filter(e=>e.id!==id);await fbDel('events',id);renderEvents();showLoading(false);
 };
 window.viewResults=function(eid){
   const ev=state.events.find(e=>e.id===eid);const evs=state.scores[eid];if(!ev||!evs)return;
@@ -1078,52 +1503,35 @@ window.viewResults=function(eid){
 function hcpChange(pts){if(pts<=17)return+2;if(pts<=29)return+1;if(pts<=37)return 0;if(pts<=42)return-1;return-2;}
 window.openHcpModal=function(){
   const done=state.events.filter(e=>e.status==='complete').slice().reverse();
-  const results=state.players.map(p=>{
-    let stab=0;
-    for(const ev of done){const s=state.scores[ev.id];if(s&&s[p.id]&&s[p.id].stab>0){stab=s[p.id].stab;break;}}
-    return{p,stab};
-  }).filter(r=>r.stab>0);
+  const results=state.players.map(p=>{let stab=0;for(const ev of done){const s=state.scores[ev.id];if(s&&s[p.id]&&s[p.id].stab>0){stab=s[p.id].stab;break;}}return{p,stab};}).filter(r=>r.stab>0);
   if(!results.length){alert('No completed rounds yet');return;}
   const maxPts=Math.max(...results.map(r=>r.stab));
   let html='';
   results.forEach(({p,stab})=>{
-    const isW=stab===maxPts;
-    const chg=hcpChange(stab)+(isW?-1:0);
-    const newH=Math.max(0,p.hcp+chg);
+    const isW=stab===maxPts;const chg=hcpChange(stab)+(isW?-1:0);const newH=Math.max(0,p.hcp+chg);
     const col=chg>0?'#ff8888':chg<0?'#4cd48a':'var(--gray)';
     html+=`<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
       <div style="flex:1;"><div style="font-size:13px;font-weight:700;font-family:'Cinzel',serif;">${p.name}${isW?'<span style="font-size:9px;background:rgba(201,168,76,0.2);color:var(--gold);padding:1px 6px;border-radius:8px;margin-left:4px;">🏆 WINNER</span>':''}</div>
-      <div style="font-size:11px;color:var(--gray);">${stab} pts · <span style="color:${col};font-weight:700;">${chg===0?'no change':chg>0?'+'+chg+' shot'+(Math.abs(chg)>1?'s':''):chg+' shot'+(Math.abs(chg)>1?'s':'')}</span></div></div>
+      <div style="font-size:11px;color:var(--gray);">${stab} pts · <span style="color:${col};font-weight:700;">${chg===0?'no change':chg>0?'+'+chg:''+chg}</span></div></div>
       <div style="text-align:center;min-width:36px;"><div style="font-size:9px;color:var(--gray);">Now</div><div style="font-size:16px;font-weight:700;">${p.hcp}</div></div>
       <div style="color:var(--gold);">→</div>
       <div style="text-align:center;"><div style="font-size:9px;color:var(--gold);">New</div>
       <input type="number" step="1" min="0" max="54" value="${newH}" id="nhcp-${p.id}" style="width:52px;background:rgba(201,168,76,0.1);border:1px solid var(--border2);border-radius:8px;color:var(--gold2);text-align:center;padding:5px;font-size:16px;font-weight:700;outline:none;font-family:'Cinzel',serif;"></div>
     </div>`;
   });
-  document.getElementById('hcp-rows').innerHTML=html;
-  window._hcpR=results;
-  showModal('modal-hcp');
+  document.getElementById('hcp-rows').innerHTML=html;window._hcpR=results;showModal('modal-hcp');
 };
 window.applyHandicaps=async function(){
-  if(!window._hcpR)return;
-  showLoading(true);
+  if(!window._hcpR)return;showLoading(true);
   try{
-    for(const{p} of window._hcpR){
-      const el=document.getElementById('nhcp-'+p.id);
-      if(!el)continue;
-      const v=parseFloat(el.value);
-      if(!isNaN(v)&&v>=0){
-        const player=state.players.find(x=>x.id===p.id);
-        if(player){player.hcp=Math.round(v*10)/10;await fbSet('players',p.id,player);}
-      }
-    }
+    for(const{p} of window._hcpR){const el=document.getElementById('nhcp-'+p.id);if(!el)continue;const v=parseFloat(el.value);if(!isNaN(v)&&v>=0){const player=state.players.find(x=>x.id===p.id);if(player){player.hcp=Math.round(v*10)/10;await fbSet('players',p.id,player);}}}
     closeModal('modal-hcp');renderAll();alert('✅ Handicaps updated!');
   }catch(e){alert('Error: '+e.message);}
   showLoading(false);
 };
 
 // ─────────────────────────────────────────────────────────────
-// COURSES (saved to Firebase or localStorage)
+// COURSES
 // ─────────────────────────────────────────────────────────────
 window.viewCourseDetail=function(id){
   const c=state.customCourses.find(x=>x.id===id);if(!c)return;
@@ -1138,19 +1546,14 @@ window.viewCourseDetail=function(id){
         <th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th>
       </tr></thead><tbody>
       ${c.holes.map(h=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:5px;text-align:center;">${h.hole}</td><td style="padding:5px;text-align:center;font-weight:700;">${h.par}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}
-      </tbody>
-    </table>
+      </tbody></table>
     <div style="margin-top:12px;display:flex;gap:8px;">
       <button class="btn btn-sm btn-green" onclick="openSCBuilder('${id}');closeModal('modal-course-detail');">✏️ Edit</button>
       <button class="btn btn-sm btn-red" onclick="deleteCourse('${id}');closeModal('modal-course-detail');">Delete</button>
     </div>`;
   showModal('modal-course-detail');
 };
-window.deleteCourse=async function(id){
-  if(!confirm('Delete course?'))return;
-  state.customCourses=state.customCourses.filter(c=>c.id!==id);
-  await fbDel('courses',id);renderCourses('');
-};
+window.deleteCourse=async function(id){if(!confirm('Delete course?'))return;state.customCourses=state.customCourses.filter(c=>c.id!==id);await fbDel('courses',id);renderCourses('');};
 
 // ─────────────────────────────────────────────────────────────
 // SCORECARD BUILDER
@@ -1159,12 +1562,10 @@ let scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
 function initScbH(){if(!scbData.holes.length)scbData.holes=Array.from({length:18},(_,i)=>({hole:i+1,par:4,si:i+1,yards:0}));}
 window.openSCBuilder=function(cid){
   scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
-  if(cid){const c=state.customCourses.find(x=>x.id===cid);if(c){scbData={...c,holes:c.holes.map(h=>({...h}))}; }}
+  if(cid){const c=state.customCourses.find(x=>x.id===cid);if(c){scbData={...c,holes:c.holes.map(h=>({...h}))};}}
   initScbH();
-  document.getElementById('scb-name').value=scbData.name;
-  document.getElementById('scb-region').value=scbData.region;
-  document.getElementById('scb-sss').value=scbData.sss||'';
-  document.getElementById('scb-slope').value=scbData.slope||'';
+  document.getElementById('scb-name').value=scbData.name;document.getElementById('scb-region').value=scbData.region;
+  document.getElementById('scb-sss').value=scbData.sss||'';document.getElementById('scb-slope').value=scbData.slope||'';
   scbUpdateTitle();scbBuildTable('front',0,9);scbBuildTable('back',9,18);scbGoStep(0);
   document.getElementById('scb-overlay').classList.add('open');document.body.style.overflow='hidden';
 };
@@ -1189,8 +1590,7 @@ function scbUpdateSummary(half,start,end){scbReadHoles();const holes=scbData.hol
 function scbBuildReview(){scbReadDetails();scbReadHoles();const front=scbData.holes.slice(0,9);const back=scbData.holes.slice(9,18);const fp=front.reduce((s,h)=>s+h.par,0);const bp=back.reduce((s,h)=>s+h.par,0);const mkT=(holes,from)=>`<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;"><thead><tr style="color:var(--gold);font-size:10px;border-bottom:1px solid var(--border);"><th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th></tr></thead><tbody>${holes.map((h,i)=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:4px;text-align:center;">${from+i+1}</td><td style="padding:4px;text-align:center;color:${h.par===3?'#4cd48a':h.par===5?'var(--gold)':'var(--white)'};">${h.par}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}</tbody></table>`;document.getElementById('scb-review-content').innerHTML=`<div style="background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;"><div style="font-size:16px;font-weight:700;color:var(--gold2);font-family:Cinzel,serif;">${scbData.name||'Unnamed'}</div><div style="font-size:12px;color:var(--gray);">${scbData.region} · SSS ${scbData.sss}</div><div style="display:flex;gap:16px;margin-top:8px;"><span>Par <strong style="color:var(--gold2);">${fp+bp}</strong></span><span>Out <strong style="color:var(--gold);">${fp}</strong></span><span>In <strong style="color:var(--gold);">${bp}</strong></span></div></div><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;font-family:Cinzel,serif;">FRONT 9</div>${mkT(front,0)}<div style="font-size:11px;font-weight:700;color:var(--gold);margin:10px 0 6px;font-family:Cinzel,serif;">BACK 9</div>${mkT(back,9)}`;}
 window.scbQuickFill=function(p){const P={standard:{pars:[4,3,4,4,5,3,4,4,4,4,3,5,4,4,3,4,5,4],sis:[3,9,1,11,5,15,7,13,17,8,16,2,10,4,14,6,12,18]},par72:{pars:[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4],sis:[1,5,17,3,9,7,15,11,13,2,6,18,4,10,8,16,12,14]},par70:{pars:[4,4,3,4,4,4,3,4,4,4,4,3,4,4,3,4,4,4],sis:[1,5,17,7,3,9,15,11,13,2,6,18,4,10,16,8,12,14]},links:{pars:[4,4,3,5,4,4,3,4,4,5,3,4,4,3,5,4,4,4],sis:[1,7,17,3,9,5,15,11,13,2,18,6,10,16,4,8,12,14]}};const preset=P[p];if(!preset)return;scbData.holes=preset.pars.map((par,i)=>({hole:i+1,par,si:preset.sis[i],yards:0}));scbBuildTable('front',0,9);scbBuildTable('back',9,18);};
 window.saveSCBuilder=async function(){
-  scbReadDetails();scbReadHoles();
-  if(!scbData.name){alert('Enter course name');scbGoStep(0);return;}
+  scbReadDetails();scbReadHoles();if(!scbData.name){alert('Enter course name');scbGoStep(0);return;}
   showLoading(true);
   try{
     const course={id:scbData.id||'cc'+Date.now(),name:scbData.name,region:scbData.region||'Scotland',sss:scbData.sss,slope:scbData.slope,holes:scbData.holes.map(h=>({...h}))};
@@ -1214,8 +1614,7 @@ window.goPage=function(name,btn){
   if(name==='courses')renderCourses('');
 };
 window.changeFormat=async function(val){
-  state.format=val;
-  await fbSaveSettings();
+  state.format=val;await fbSaveSettings();
   document.getElementById('header-format-chip').textContent=fL(val);
   renderLeague();renderHome();
 };
@@ -1228,4 +1627,3 @@ function fD(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateStr
 </script>
 </body>
 </html>
-  
