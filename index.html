@@ -1,1482 +1,405 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Jolly Boys Golf">
-<meta name="theme-color" content="#0a0f1e">
-<title>The 'Jolly Boys' Golf League</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="theme-color" content="#0b0d12"/>
+<title>N5 English Coach</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&family=Lora:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#0a0f1e;--bg2:#0d1426;--bg3:#101830;
-  --card:#131d35;--card2:#162040;--card3:#1a254a;
-  --accent:#3b82f6;--accent2:#60a5fa;--accent3:#93c5fd;
-  --gold:#f59e0b;--gold2:#fbbf24;--gold3:#fcd34d;
-  --white:#f1f5f9;--gray:#64748b;--gray2:#475569;
-  --red:#ef4444;--green:#10b981;
-  --border:rgba(59,130,246,0.2);--border2:rgba(59,130,246,0.4);
-  --shadow:0 4px 24px rgba(0,0,0,0.4);
-  --text-shadow:none;
+  --bg:#0b0d12;--surface:#13161f;--card:#1b1f2c;--border:#252c3d;
+  --gold:#f5c842;--goldDim:#201a00;
+  --green:#34d399;--greenDim:#0a1f14;
+  --red:#f87171;--redDim:#200a0a;
+  --blue:#60a5fa;--blueDim:#0a1830;
+  --amber:#fbbf24;--amberDim:#201500;
+  --purple:#a78bfa;--purpleDim:#160a2a;
+  --t1:#f0f4ff;--t2:#8b93a8;--t3:#4a5270;
+  --r:14px;
+  /* System font stacks as fallbacks so text shows instantly on mobile */
+  --sans:'DM Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  --serif:'Lora','Georgia',serif;
+  --sat:env(safe-area-inset-top,0px);
+  --sab:env(safe-area-inset-bottom,0px);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif;min-height:100vh;overflow-x:hidden;background-image:radial-gradient(ellipse at 20% 0%,rgba(59,130,246,0.08) 0%,transparent 60%),radial-gradient(ellipse at 80% 100%,rgba(99,102,241,0.06) 0%,transparent 60%)}
-.header{background:rgba(10,15,30,0.97);backdrop-filter:blur(20px);padding:0 0 8px;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;box-shadow:0 4px 24px rgba(0,0,0,0.3)}
-.header-banner{padding:12px 16px 8px;text-align:center;position:relative}
-.header-banner::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(59,130,246,0.04),transparent)}
-.header-title-main{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:900;color:var(--white);letter-spacing:-0.5px;line-height:1.1}
-.header-title-main em{font-style:normal;color:var(--accent2)}
-.header-title-sub{font-size:10px;font-weight:600;color:var(--gray);letter-spacing:3px;text-transform:uppercase;margin-top:2px}
-.header-nav-row{display:flex;align-items:center;justify-content:space-between;padding:6px 12px 0;gap:8px}
-.header-season-badge{background:linear-gradient(135deg,var(--accent),#2563eb);color:white;font-size:10px;font-weight:700;padding:4px 12px;border-radius:20px}
-.header-format-badge{background:rgba(59,130,246,0.1);border:1px solid var(--border);color:var(--accent2);font-size:10px;font-weight:600;padding:4px 10px;border-radius:20px}
-.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;margin-right:4px;animation:pulse 2s infinite}
-.sync-dot.off{background:var(--red);animation:none}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:rgba(10,15,30,0.98);backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:10px 4px 7px;cursor:pointer;border:none;background:none;color:var(--gray2);font-size:9px;gap:3px;transition:all 0.2s;font-family:'Montserrat',sans-serif;font-weight:600;letter-spacing:0.3px}
-.nav-btn.active{color:var(--accent2)}
-.nav-btn svg{width:20px;height:20px}
-.content{padding:12px 12px 90px;max-width:600px;margin:0 auto}
-.jb-board{background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
-.jb-board-header{background:linear-gradient(135deg,var(--card2),var(--card3));padding:16px;text-align:center;border-bottom:1px solid var(--border)}
-.jb-board-title{font-size:17px;font-weight:800;color:var(--white)}
-.jb-board-sub{font-size:10px;letter-spacing:2px;color:var(--gray);margin-top:3px;text-transform:uppercase;font-weight:600}
-.jb-table{width:100%;border-collapse:collapse}
-.jb-thead th{background:rgba(0,0,0,0.25);color:var(--accent2);font-size:10px;font-weight:700;padding:9px 4px;text-align:center;border-bottom:1px solid var(--border2);font-family:'Montserrat',sans-serif;letter-spacing:0.5px;white-space:nowrap;text-transform:uppercase}
-.jb-thead th:first-child{text-align:center;width:36px}
-.jb-thead th:nth-child(2){text-align:left;padding-left:10px}
-.jb-row{transition:background 0.15s}
-.jb-row:nth-child(odd){background:rgba(255,255,255,0.02)}
-.jb-row:nth-child(even){background:rgba(0,0,0,0.1)}
-.jb-row.pos1{background:linear-gradient(90deg,rgba(245,158,11,0.1),rgba(245,158,11,0.02))}
-.jb-row.pos2{background:linear-gradient(90deg,rgba(148,163,184,0.07),rgba(148,163,184,0.01))}
-.jb-row.pos3{background:linear-gradient(90deg,rgba(205,127,50,0.07),rgba(205,127,50,0.01))}
-.jb-td{padding:10px 4px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.03);vertical-align:middle}
-.jb-td:nth-child(2){text-align:left;padding-left:8px}
-.jb-pos{width:28px;height:28px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-weight:800;font-size:12px}
-.pos-1{background:linear-gradient(135deg,#f59e0b,#d97706);color:white;box-shadow:0 2px 8px rgba(245,158,11,0.3)}
-.pos-2{background:linear-gradient(135deg,#94a3b8,#64748b);color:white}
-.pos-3{background:linear-gradient(135deg,#cd7f32,#a05a1a);color:white}
-.pos-n{background:rgba(255,255,255,0.06);color:var(--gray)}
-.jb-name{font-size:13px;font-weight:700;color:var(--white)}
-.jb-hcp{font-size:10px;color:var(--gray);margin-top:1px;font-weight:500}
-.score-cell-val{display:inline-block;min-width:26px;padding:2px 4px;border-radius:4px;font-size:11px;font-weight:600}
-.score-zero{color:var(--gray2);opacity:0.5}
-.score-best{background:rgba(245,158,11,0.15);color:var(--gold2);font-weight:700;border:1px solid rgba(245,158,11,0.3);border-radius:4px;padding:1px 5px}
-.total-cell{font-size:14px;font-weight:800;color:var(--accent2)}
-.format-row{display:flex;align-items:center;gap:8px;padding:10px 14px;background:rgba(0,0,0,0.2);border-top:1px solid var(--border)}
-.format-sel{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--white);font-size:11px;outline:none;font-family:'Montserrat',sans-serif;font-weight:600}
-.format-sel option{background:#131d35}
-.card{background:var(--card);border-radius:14px;padding:16px;margin-bottom:12px;border:1px solid var(--border);box-shadow:var(--shadow)}
-.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.card-title{font-size:11px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px}
-.podium-card{border-radius:14px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow)}
-.podium-1{background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(245,158,11,0.03));border:1px solid rgba(245,158,11,0.2)}
-.podium-2{background:linear-gradient(135deg,rgba(148,163,184,0.08),rgba(148,163,184,0.02));border:1px solid rgba(148,163,184,0.15)}
-.podium-3{background:linear-gradient(135deg,rgba(205,127,50,0.08),rgba(205,127,50,0.02));border:1px solid rgba(205,127,50,0.15)}
-.podium-icon{font-size:28px;flex-shrink:0}
-.podium-info{flex:1}
-.podium-name{font-size:15px;font-weight:800;color:var(--white)}
-.podium-detail{font-size:11px;color:var(--gray);margin-top:2px;font-weight:500}
-.podium-pts{text-align:right}
-.podium-pts-val{font-size:26px;font-weight:900;color:var(--accent2);line-height:1}
-.podium-pts-label{font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;font-weight:600}
-.btn{display:inline-flex;align-items:center;gap:6px;padding:11px 18px;border-radius:10px;border:none;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.15s;font-family:'Montserrat',sans-serif}
-.btn-gold{background:linear-gradient(135deg,var(--accent),#2563eb);color:white;box-shadow:0 2px 16px rgba(59,130,246,0.3)}
-.btn-gold:active{transform:scale(0.97)}
-.btn-outline{background:transparent;border:1px solid var(--accent);color:var(--accent2)}
-.btn-red{background:linear-gradient(135deg,#ef4444,#dc2626);color:white}
-.btn-sm{padding:6px 12px;font-size:11px;border-radius:8px}
-.btn-green{background:linear-gradient(135deg,#10b981,#059669);color:white}
-.btn-blue{background:linear-gradient(135deg,var(--accent),#2563eb);color:white}
-.btn-full{width:100%;justify-content:center;margin-top:8px}
-.btn-gray{background:rgba(255,255,255,0.06);color:var(--gray);border:1px solid var(--border)}
-.event-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;border:1px solid var(--border)}
-.event-name{font-size:14px;font-weight:700;color:var(--white)}
-.event-date{font-size:11px;color:var(--gray);font-weight:500;margin-top:2px}
-.event-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700}
-.badge-upcoming{background:rgba(59,130,246,0.12);color:var(--accent2);border:1px solid rgba(59,130,246,0.2)}
-.badge-complete{background:rgba(16,185,129,0.12);color:#34d399;border:1px solid rgba(16,185,129,0.2)}
-.player-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:12px;margin-bottom:8px;border:1px solid var(--border)}
-.player-avatar{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:white;flex-shrink:0}
-.player-info{flex:1}
-.player-name{font-size:14px;font-weight:700;color:var(--white)}
-.player-hcp{font-size:11px;color:var(--gray);font-weight:500}
-.player-actions{display:flex;gap:5px}
-.form-group{margin-bottom:14px}
-.form-label{font-size:10px;color:var(--gray);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:1.5px;font-weight:700}
-.form-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--white);font-size:14px;outline:none;font-family:'Montserrat',sans-serif;font-weight:500}
-.form-input:focus{border-color:var(--accent);background:rgba(59,130,246,0.05)}
-select.form-input option{background:#131d35}
-.format-toggle{display:flex;background:rgba(0,0,0,0.3);border-radius:10px;padding:3px;gap:3px}
-.format-btn{flex:1;padding:8px;text-align:center;font-size:11px;font-weight:700;border-radius:8px;cursor:pointer;border:none;background:none;color:var(--gray);transition:all 0.2s;font-family:'Montserrat',sans-serif}
-.format-btn.active{background:linear-gradient(135deg,var(--accent),#2563eb);color:white}
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:200;display:flex;align-items:flex-end;justify-content:center}
-.modal{background:var(--card2);border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:20px 16px 36px;border-top:1px solid var(--border2)}
-.modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
-.modal-title{font-size:16px;font-weight:800;color:var(--white)}
-.close-btn{background:rgba(255,255,255,0.07);border:none;color:var(--white);width:32px;height:32px;border-radius:10px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center}
-.stat-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.04);font-size:13px}
-.stat-label{color:var(--gray);font-weight:500}.stat-val{font-weight:700;color:var(--accent2)}
-.chip{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700}
-.chip-gold{background:rgba(245,158,11,0.12);color:var(--gold2);border:1px solid rgba(245,158,11,0.2)}
-.chip-green{background:rgba(16,185,129,0.12);color:#34d399}
-.chip-blue{background:rgba(59,130,246,0.12);color:var(--accent2)}
-.divider{height:1px;background:rgba(255,255,255,0.05);margin:14px 0}
-.page{display:none}.page.active{display:block}
-.empty-state{text-align:center;padding:40px 16px;color:var(--gray)}
-.empty-state .icon{font-size:44px;margin-bottom:10px}
-.score-summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:10px}
-.score-summary-cell{background:rgba(59,130,246,0.07);border-radius:12px;padding:12px;text-align:center;border:1px solid var(--border)}
-.score-summary-val{font-size:22px;font-weight:900;color:var(--accent2)}
-.score-summary-label{font-size:10px;color:var(--gray);margin-top:3px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600}
-.course-card{background:var(--card);border-radius:12px;padding:14px;margin-bottom:10px;display:flex;align-items:center;gap:12px;border:1px solid var(--border)}
-.course-name{font-size:13px;font-weight:700;color:var(--white)}
-.course-detail{font-size:11px;color:var(--gray);font-weight:500}
-.course-region{font-size:10px;background:rgba(59,130,246,0.12);color:var(--accent2);padding:3px 8px;border-radius:20px;font-weight:700}
-.custom-badge{font-size:10px;background:rgba(99,102,241,0.12);color:#a5b4fc;padding:3px 8px;border-radius:20px;font-weight:700}
-.search-box{background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--white);font-size:14px;width:100%;outline:none;margin-bottom:12px;font-family:'Montserrat',sans-serif;font-weight:500}
-.search-box:focus{border-color:var(--accent)}
-.firebase-banner{background:var(--card2);border:1px solid var(--border2);border-radius:16px;padding:22px;margin-bottom:16px;text-align:center}
-.firebase-banner h2{color:var(--white);font-size:18px;margin-bottom:8px;font-weight:800}
-.firebase-banner p{font-size:12px;color:var(--gray);line-height:1.6;margin-bottom:12px;font-weight:500}
-.firebase-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--white);font-size:12px;outline:none;font-family:monospace;margin-bottom:8px;min-height:120px;resize:vertical}
-.firebase-input:focus{border-color:var(--accent)}
-.scb-overlay{position:fixed;inset:0;background:var(--bg);z-index:400;display:none;flex-direction:column;overflow:hidden}
-.scb-overlay.open{display:flex}
-.scb-header{background:var(--card2);padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
-.scb-back{background:rgba(59,130,246,0.12);border:none;color:var(--accent2);width:36px;height:36px;border-radius:10px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.scb-title{flex:1}.scb-title-main{font-size:15px;font-weight:800;color:var(--white)}.scb-title-sub{font-size:11px;color:var(--gray);font-weight:500}
-.scb-save-btn{background:linear-gradient(135deg,var(--accent),#2563eb);border:none;color:white;padding:9px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer}
-.scb-steps{display:flex;background:rgba(0,0,0,0.3);flex-shrink:0;border-bottom:1px solid var(--border)}
-.scb-step{flex:1;padding:11px 4px;text-align:center;font-size:11px;font-weight:700;color:var(--gray2);border-bottom:2px solid transparent;cursor:pointer;transition:all 0.2s;font-family:'Montserrat',sans-serif}
-.scb-step.active{color:var(--accent2);border-bottom-color:var(--accent2);background:rgba(59,130,246,0.04)}
-.scb-step.done{color:var(--green)}
-.scb-body{flex:1;overflow-y:auto;padding:14px 14px 20px}
-.scb-step-content{display:none}.scb-step-content.active{display:block}
-.hb-table{width:100%;border-collapse:collapse}
-.hb-thead th{font-size:11px;font-weight:700;color:var(--accent2);padding:8px 4px;text-align:center;border-bottom:1px solid var(--border2);background:var(--bg);position:sticky;top:0;z-index:2;font-family:'Montserrat',sans-serif;text-transform:uppercase;letter-spacing:0.5px}
-.hb-td{padding:5px 3px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
-.hb-hole-badge{width:26px;height:26px;border-radius:8px;background:rgba(59,130,246,0.12);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent2);border:1px solid var(--border)}
-.hb-par-select{display:flex;gap:3px;justify-content:center}
-.hb-par-btn{width:30px;height:30px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.04);color:var(--gray);font-size:12px;font-weight:700;cursor:pointer;transition:all 0.15s}
-.hb-par-btn.s3.sel{background:linear-gradient(135deg,#10b981,#059669);color:white;border-color:#10b981}
-.hb-par-btn.s4.sel{background:linear-gradient(135deg,var(--accent),#2563eb);color:white;border-color:var(--accent)}
-.hb-par-btn.s5.sel{background:linear-gradient(135deg,var(--gold),var(--gold2));color:#1a1a00;border-color:var(--gold)}
-.hb-input{width:100%;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:7px 2px;color:var(--white);font-size:15px;text-align:center;outline:none;-moz-appearance:textfield;min-width:42px;font-family:'Montserrat',sans-serif;font-weight:600}
-.hb-input::-webkit-outer-spin-button,.hb-input::-webkit-inner-spin-button{-webkit-appearance:none}
-.hb-input:focus{border-color:var(--accent);background:rgba(59,130,246,0.07)}
-.si-dupe{border-color:var(--red)!important;background:rgba(239,68,68,0.1)!important}
-.hb-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px}
-.hb-sum-cell{background:rgba(59,130,246,0.07);border-radius:10px;padding:8px;text-align:center;border:1px solid var(--border)}
-.hb-sum-val{font-size:18px;font-weight:900;color:var(--accent2)}
-.hb-sum-label{font-size:10px;color:var(--gray);margin-top:2px;font-weight:600}
-.hb-sum-cell.warn .hb-sum-val{color:var(--red)}
-.hb-warning{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.25);border-radius:10px;padding:10px 12px;font-size:12px;color:#fca5a5;margin-bottom:10px;display:none;font-weight:500}
-.hb-warning.show{display:block}
-.hb-tip{background:rgba(59,130,246,0.05);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.5;font-weight:500}
-.hb-tip strong{color:var(--accent2)}
-.spinner{width:40px;height:40px;border:3px solid rgba(59,130,246,0.2);border-top-color:var(--accent2);border-radius:50%;animation:spin 0.8s linear infinite;margin:20px auto}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(6px);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;display:none}
-.loading-overlay.show{display:flex}
+html{font-size:16px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{
+  background:var(--bg);color:var(--t1);
+  font-family:var(--sans);
+  min-height:100dvh;
+  -webkit-tap-highlight-color:transparent;
+  overscroll-behavior-y:none;
+  /* prevent horizontal scroll on mobile */
+  overflow-x:hidden;
+  width:100%;
+}
+/* Prevent text from overflowing containers on mobile */
+p,div,span,li{word-break:break-word;overflow-wrap:break-word}
+button{font-family:var(--sans);cursor:pointer;-webkit-appearance:none;appearance:none}
+img,svg{max-width:100%;height:auto}
+
+/* TOP NAV */
+#top-nav{position:sticky;top:0;z-index:90;background:rgba(11,13,18,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding-top:var(--sat)}
+.tnav{display:flex;align-items:center;justify-content:space-between;height:52px;padding:0 16px}
+.nav-logo{display:flex;align-items:center;gap:9px;background:none;border:none;padding:0;cursor:pointer}
+.nav-badge{width:30px;height:30px;background:var(--gold);border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:11px;color:#000;flex-shrink:0}
+.nav-title{font-family:var(--serif);font-size:17px;color:var(--t1)}
+.nav-back{background:none;border:1px solid var(--border);color:var(--t2);padding:7px 14px;border-radius:9px;font-size:14px;font-weight:600;display:none;min-height:36px}
+
+/* BOTTOM NAV */
+#bot-nav{
+  position:fixed;bottom:0;left:0;right:0;z-index:90;
+  background:rgba(11,13,18,.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border-top:1px solid var(--border);
+  /* iOS safe area for home indicator */
+  padding-bottom:max(var(--sab), env(safe-area-inset-bottom, 0px));
+}
+.bnav{display:flex;height:60px}
+.bnav-btn{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:3px;
+  background:none;border:none;
+  color:var(--t3);font-size:10px;font-weight:600;
+  letter-spacing:.3px;text-transform:uppercase;
+  padding:0;
+  /* iOS minimum tap target */
+  min-height:44px;min-width:44px;
+  transition:color .15s;
+  -webkit-tap-highlight-color:transparent;
+}
+.bnav-btn .bi{font-size:22px;line-height:1}
+.bnav-btn.active{color:var(--gold)}
+
+/* SCREENS — bottom padding must clear nav + safe area */
+.screen{
+  display:none;
+  padding:20px 16px;
+  /* enough space for fixed bottom nav + iOS home indicator */
+  padding-bottom:calc(80px + max(var(--sab), env(safe-area-inset-bottom, 0px)));
+  max-width:680px;margin:0 auto;
+}
+.screen.active{display:block}
+
+/* HOME */
+.home-badge{display:inline-block;background:var(--goldDim);border:1px solid rgba(245,200,66,.2);border-radius:7px;padding:4px 11px;font-size:11px;font-weight:700;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:16px}
+/* Responsive heading — readable on any screen width */
+.home-h1{font-family:var(--serif);font-size:clamp(28px,8vw,46px);line-height:1.15;font-weight:600;margin-bottom:12px}
+.home-h1 em{color:var(--gold);font-style:italic}
+.home-sub{font-size:16px;color:var(--t2);line-height:1.7;margin-bottom:28px}
+/* Big tap targets on home cards */
+.menu-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--r);padding:18px;
+  width:100%;text-align:left;display:flex;
+  align-items:center;gap:14px;margin-bottom:10px;
+  color:var(--t1);transition:border-color .2s;
+  min-height:76px; /* comfortable tap height */
+}
+.menu-card:active{opacity:.75;transform:scale(.99)}
+.mc-icon{font-size:28px;flex-shrink:0}
+.mc-body{flex:1;min-width:0}
+.mc-title{font-size:17px;font-weight:700;margin-bottom:3px}
+.mc-desc{font-size:14px;color:var(--t2);line-height:1.45}
+.mc-arr{color:var(--t3);font-size:22px;flex-shrink:0}
+.tip-box{background:var(--goldDim);border:1px solid rgba(245,200,66,.18);border-radius:12px;padding:14px 16px;margin-top:20px}
+.tip-label{font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.tip-text{font-family:var(--serif);font-size:15px;color:var(--t1);line-height:1.75;font-style:italic;opacity:.9}
+
+/* SHARED */
+.pg-title{font-family:var(--serif);font-size:28px;color:var(--t1);margin-bottom:4px}
+.pg-sub{font-size:15px;color:var(--t2);margin-bottom:20px;line-height:1.5}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;margin-bottom:10px;overflow:hidden}
+.sec-label{font-size:11px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:10px;display:block}
+.pill{display:inline-flex;align-items:center;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;border:1px solid;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.scroll-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:10px;margin-bottom:16px;scrollbar-width:none;-ms-overflow-style:none}
+.scroll-row::-webkit-scrollbar{display:none}
+/* Scroll chips — big enough to tap comfortably */
+.scroll-chip{padding:10px 16px;border-radius:10px;white-space:nowrap;font-size:14px;font-weight:700;border:1px solid var(--border);background:var(--card);color:var(--t2);flex-shrink:0;min-height:44px;transition:all .15s}
+.scroll-chip.active{color:#000}
+.seg-ctrl{display:flex;gap:4px;background:var(--surface);padding:4px;border-radius:11px;margin-bottom:18px}
+/* Segment buttons — taller on mobile */
+.seg-btn{flex:1;padding:10px 6px;background:none;border:none;color:var(--t2);font-size:13px;font-weight:600;border-radius:8px;transition:all .15s;cursor:pointer;min-height:42px}
+.seg-btn.active{background:var(--card);color:var(--t1)}
+.ibox{border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid}
+.ibox-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.ibox-text{font-size:15px;line-height:1.65}
+.tmpl-box{background:var(--blueDim);border:1px solid rgba(96,165,250,.18);border-radius:10px;padding:14px;margin-bottom:10px}
+.tmpl-label{font-size:11px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.tmpl-text{font-family:var(--serif);font-size:15px;color:#b0d0ff;line-height:1.75;font-style:italic;white-space:pre-line}
+.formula-row{display:flex;gap:12px;margin-bottom:12px;align-items:flex-start}
+.fnum{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;margin-top:2px}
+.ftext{font-size:15px;color:var(--t1);line-height:1.65}
+/* Accordion — tall enough to tap */
+.acc{background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden;transition:border-color .2s}
+.acc.open{border-color:rgba(245,200,66,.3)}
+.acc-head{width:100%;padding:16px;background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:12px;text-align:left;min-height:60px}
+.acc-icon{font-size:22px;flex-shrink:0}
+.acc-title{flex:1;font-size:16px;font-weight:700;color:var(--t1)}
+.acc-time{font-size:13px;color:var(--t2);flex-shrink:0}
+.acc-chev{color:var(--t2);font-size:20px;transition:transform .2s;flex-shrink:0}
+.acc.open .acc-chev{transform:rotate(90deg)}
+.acc-body{display:none;padding:0 16px 18px}
+.acc.open .acc-body{display:block}
+.acc-rule{height:1px;background:var(--border);margin-bottom:14px}
+.peel-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border)}
+.peel-row:last-child{border-bottom:none}
+.peel-letter{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;flex-shrink:0;margin-top:2px}
+.peel-text{font-size:15px;color:var(--t1);line-height:1.65;padding-top:6px}
+.quote-card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 16px;margin-bottom:10px;overflow:hidden}
+/* Quote text scales down on very narrow screens */
+.quote-text{font-family:var(--serif);font-size:clamp(16px,5vw,20px);color:var(--gold);line-height:1.55;margin-bottom:10px}
+.quote-analysis{font-size:15px;color:var(--t2);line-height:1.7}
+.we-box{border-radius:10px;padding:13px 14px;margin-bottom:9px;border:1px solid}
+.we-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.we-text{font-size:15px;line-height:1.7;font-style:italic}
+/* Reveal button — full-width, easy to tap */
+.reveal-btn{background:none;border:1px solid var(--border);color:var(--t2);border-radius:10px;padding:13px 16px;font-size:15px;font-weight:600;width:100%;margin-top:12px;min-height:48px}
+.callout{background:var(--goldDim);border:1px solid rgba(245,200,66,.18);border-radius:12px;padding:14px 16px}
+.callout-label{font-size:11px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:1.2px;margin-bottom:6px}
+.prog-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.prog-track{flex:1;height:5px;background:var(--border);border-radius:3px}
+.prog-fill{height:100%;background:var(--gold);border-radius:3px;transition:width .4s}
+.prog-label{font-size:13px;color:var(--t2);flex-shrink:0}
+/* Flashcard — min-height so text has room */
+.fc-card{min-height:200px;background:var(--card);border:1.5px solid var(--border);border-radius:18px;padding:24px 20px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;margin-bottom:16px;cursor:pointer;transition:all .2s;user-select:none;-webkit-user-select:none}
+.fc-card.flipped{background:#1a2244;border-color:rgba(96,165,250,.35)}
+.fc-card.fade{opacity:0;transform:scale(.97)}
+.fc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:14px;color:var(--t3)}
+.fc-card.flipped .fc-label{color:rgba(96,165,250,.6)}
+.fc-front{font-family:var(--serif);font-size:clamp(16px,4.5vw,19px);line-height:1.75;color:var(--t1)}
+.fc-back{font-size:15px;line-height:1.85;color:#b8d0ff;white-space:pre-line;text-align:left;width:100%}
+/* Rate buttons — full width, big tap targets */
+.rate-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+.rate-review{padding:16px;background:var(--amberDim);color:var(--amber);border:1px solid rgba(251,191,36,.2);border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--sans);min-height:54px}
+.rate-got{padding:16px;background:var(--greenDim);color:var(--green);border:1px solid rgba(52,211,153,.2);border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;font-family:var(--sans);min-height:54px}
+.fc-hint{text-align:center;font-size:14px;color:var(--t3);margin-top:6px}
+.fc-tally{display:flex;justify-content:center;gap:24px;margin-top:16px}
+.done-wrap{text-align:center;padding:32px 0}
+.done-emoji{font-size:56px;margin-bottom:12px}
+.done-h{font-family:var(--serif);font-size:32px;margin-bottom:20px}
+.done-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:260px;margin:0 auto 24px}
+.done-stat{border-radius:12px;padding:16px 10px;border:1px solid}
+.done-n{font-size:30px;font-weight:800}
+.done-l{font-size:13px;opacity:.8;margin-top:2px}
+.big-btn{width:100%;padding:17px;background:var(--gold);color:#000;border:none;border-radius:12px;font-size:16px;font-weight:800;cursor:pointer;font-family:var(--sans);min-height:54px}
+.text-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
+.text-tab{padding:13px 10px;border:1px solid var(--border);border-radius:12px;background:none;color:var(--t2);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans);min-height:50px;transition:all .15s}
+.text-tab.active{background:var(--card);color:var(--t1);border-color:rgba(245,200,66,.3)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:fadeUp .28s ease both}
 </style>
 </head>
 <body>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loading-overlay">
-  <div class="spinner"></div>
-  <div style="color:var(--accent2);font-family:'Montserrat',sans-serif;margin-top:12px;font-size:14px;font-weight:700;">Syncing...</div>
+<header id="top-nav">
+  <div class="tnav">
+    <button class="nav-logo" onclick="goHome()">
+      <div class="nav-badge">N5</div>
+      <span class="nav-title">English Coach</span>
+    </button>
+    <button class="nav-back" id="nav-back" onclick="goHome()">← Back</button>
+  </div>
+</header>
+
+<!-- HOME -->
+<div class="screen active" id="s-home">
+  <div style="padding-top:28px">
+    <div class="home-badge">National 5 English</div>
+    <h1 class="home-h1">Pass with<br><em>confidence.</em></h1>
+    <p class="home-sub">Real techniques, worked examples, set text notes — everything you need for exam day.</p>
+    <button class="menu-card" onclick="go('s-techniques')">
+      <span class="mc-icon">💬</span>
+      <div class="mc-body"><div class="mc-title">Question Techniques</div><div class="mc-desc">Word choice, tone, summary, link, sentence structure</div></div>
+      <span class="mc-arr">›</span>
+    </button>
+    <button class="menu-card" onclick="go('s-essay')">
+      <span class="mc-icon">📝</span>
+      <div class="mc-body"><div class="mc-title">Essay Guide</div><div class="mc-desc">PEEL structure, intro to conclusion, what markers reward</div></div>
+      <span class="mc-arr">›</span>
+    </button>
+    <button class="menu-card" onclick="go('s-texts')">
+      <span class="mc-icon">📖</span>
+      <div class="mc-body"><div class="mc-title">Set Texts</div><div class="mc-desc">Glasgow 5th March &amp; Tally's Blood — themes, quotes, analysis</div></div>
+      <span class="mc-arr">›</span>
+    </button>
+    <button class="menu-card" onclick="go('s-flashcards')">
+      <span class="mc-icon">🎴</span>
+      <div class="mc-body"><div class="mc-title">Flashcards</div><div class="mc-desc">Test yourself on techniques, set texts, and rescue tips</div></div>
+      <span class="mc-arr">›</span>
+    </button>
+    <div class="tip-box" style="margin-top:20px">
+      <div class="tip-label">Remember</div>
+      <div class="tip-text">"Two strong PEEL paragraphs beat four weak ones every time. Quality always beats quantity."</div>
+    </div>
+  </div>
 </div>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="header-banner">
-    <div class="header-title-main">The <em>'Jolly Boys'</em></div>
-    <div class="header-title-sub" id="header-season-text">Winter League</div>
-  </div>
-  <div class="header-nav-row">
-    <span class="header-season-badge">2026 ⛳</span>
-    <span style="font-size:11px;color:var(--gray);" id="header-events-count"></span>
-    <span class="header-format-badge" id="header-format-chip">Stableford</span>
-    <button onclick="showFirebaseSetup()" style="background:none;border:1px solid var(--border);border-radius:8px;padding:3px 8px;cursor:pointer;font-size:10px;font-weight:700;display:flex;align-items:center;gap:4px;"><span id="sync-dot" class="sync-dot off"></span><span id="sync-label" style="color:var(--gray);">Connect</span></button>
-  </div>
+<!-- TECHNIQUES -->
+<div class="screen" id="s-techniques">
+  <div class="pg-title">Question Techniques</div>
+  <div class="pg-sub">Select a type to see exactly how to answer it.</div>
+  <div class="scroll-row" id="qt-chips"></div>
+  <div id="qt-body"></div>
 </div>
 
-<div class="content">
-
-  <!-- FIREBASE SETUP PAGE (hidden by default now) -->
-  <div class="page" id="page-setup">
-    <div class="firebase-banner">
-      <div style="font-size:40px;margin-bottom:8px;">🔥</div>
-      <h2>Connect to Firebase</h2>
-      <p>Paste your Firebase config below so all players see the same live data. You only need to do this once — the config will be saved on this device.</p>
-      <div style="text-align:left;margin-bottom:8px;">
-        <div class="form-label">How to get your config:</div>
-        <div style="font-size:11px;color:var(--gray);line-height:1.8;">
-          1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
-          2. Create project → name it <strong style="color:var(--white);">jolly-boys-golf</strong><br>
-          3. Click ⚙️ Settings → <strong style="color:var(--white);">Your apps</strong> → Add Web app<br>
-          4. Copy the <strong style="color:var(--white);">firebaseConfig</strong> object and paste below<br>
-          5. Also enable <strong style="color:var(--white);">Firestore Database</strong> in test mode
-        </div>
-      </div>
-      <textarea class="firebase-input" id="firebase-config-input" placeholder='Paste your firebaseConfig here, e.g.:
-
-{
-  apiKey: "AIzaSy...",
-  authDomain: "jolly-boys-golf.firebaseapp.com",
-  projectId: "jolly-boys-golf",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-}'></textarea>
-      <button class="btn btn-gold btn-full" onclick="connectFirebase()">🔥 Connect & Launch App</button>
-      <div style="margin-top:12px;">
-        <button class="btn btn-outline btn-full" onclick="skipFirebase()" style="font-size:11px;">Skip for now — use local storage only</button>
-      </div>
-    </div>
+<!-- ESSAY -->
+<div class="screen" id="s-essay">
+  <div class="pg-title">Essay Guide</div>
+  <div class="pg-sub">Structure, PEEL, and what markers reward.</div>
+  <div class="callout" style="margin-bottom:18px">
+    <div class="callout-label">The key truth</div>
+    <div style="font-size:14px;color:var(--t1);line-height:1.65">A pass essay is not fancy. It's <strong>clear, organised, and evidence-based</strong>. Marks come from analysis — not beautiful writing.</div>
   </div>
+  <div id="essay-accs"></div>
+  <div class="card" style="margin-top:6px"><span class="sec-label">PEEL — what every paragraph needs</span><div id="peel-rows"></div></div>
+  <div class="card" style="margin-top:6px"><span class="sec-label">Marker's top tips</span><div id="essay-tips"></div></div>
+</div>
 
-  <!-- HOME -->
-  <div class="page active" id="page-home">
-    <div id="home-podium"></div>
-    <div class="card" style="margin-top:10px;">
-      <div class="card-header"><span class="card-title">⛳ Latest Results</span></div>
-      <div id="home-latest"></div>
-    </div>
+<!-- SET TEXTS -->
+<div class="screen" id="s-texts">
+  <div class="pg-title">Set Texts</div>
+  <div class="pg-sub">Everything you need for both texts in the exam.</div>
+  <div class="text-tabs">
+    <button class="text-tab active" id="tt-glasgow" onclick="setTextTab('glasgow')">🏙️ Glasgow</button>
+    <button class="text-tab" id="tt-tallys" onclick="setTextTab('tallys')">🩸 Tally's Blood</button>
   </div>
-
-  <!-- LEAGUE -->
-  <div class="page" id="page-league">
-    <div class="jb-board">
-      <div class="jb-board-header">
-        <div class="jb-board-title">The 'Jolly Boys'</div>
-        <div class="jb-board-sub" id="league-season-sub">Winter League 2026 ⛳</div>
-      </div>
-      <div style="overflow-x:auto;">
-        <table class="jb-table"><thead class="jb-thead" id="league-thead"></thead><tbody id="league-tbody"></tbody></table>
-      </div>
-      <div class="format-row">
-        <label class="form-label" style="margin:0;white-space:nowrap;">Format:</label>
-        <select class="format-sel" id="format-select" onchange="changeFormat(this.value)">
-          <option value="stableford">Stableford (Best 6)</option>
-          <option value="stroke">Stroke Play</option>
-        </select>
-        <span style="font-size:10px;color:var(--gray);margin-left:4px;">★ = best 6</span>
-      </div>
-    </div>
+  <div class="seg-ctrl">
+    <button class="seg-btn active" id="ts-overview" onclick="setTextSec('overview')">Overview</button>
+    <button class="seg-btn" id="ts-techniques" onclick="setTextSec('techniques')">Techniques</button>
+    <button class="seg-btn" id="ts-analysis" onclick="setTextSec('analysis')">Analysis</button>
   </div>
+  <div id="text-body"></div>
+</div>
 
-  <!-- EVENTS -->
-  <div class="page" id="page-events">
-    <button class="btn btn-gold btn-full" onclick="showModal('modal-add-event')">+ Schedule New Event</button>
-    <div style="margin-top:12px;" id="events-list"></div>
-  </div>
-
-  <!-- SCORE -->
-  <div class="page" id="page-score">
-    <div id="score-setup">
-      <div class="card">
-        <div class="card-title" style="margin-bottom:12px;">🏌️ Enter Scores</div>
-        <div class="form-group"><label class="form-label">Select Event</label><select class="form-input" id="score-event-select"><option value="">— Pick event —</option></select></div>
-        <div class="form-group"><label class="form-label">Select Course</label><select class="form-input" id="score-course-select"><option value="">— Pick course —</option></select></div>
-        <div class="form-group"><label class="form-label">Players &amp; Groups</label>
-          <div style="font-size:11px;color:var(--gray);margin-bottom:8px;">Assign players to groups — all scores count for the week.</div>
-          <div id="player-group-assign"></div>
-        </div>
-        <button class="btn btn-gold btn-full" onclick="openScoreEntry()">⛳ Enter Scores</button>
-      </div>
-    </div>
-    <div id="score-entry-area" style="display:none;">
-      <div class="card" style="margin-bottom:8px;padding:10px 14px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;">
-          <div><div class="card-title" id="active-event-name">Round</div><div id="autosave-indicator" style="font-size:10px;color:#4cd48a;margin-top:2px;opacity:0;transition:opacity 0.5s;">✓ Saved</div></div>
-          <button class="btn btn-sm btn-gold" onclick="saveScores()">✅ Finish Round</button>
-        </div>
-      </div>
-      <!-- Live leaderboard -->
-      <div id="live-leaderboard" style="margin-bottom:10px;"></div>
-      <div id="score-entry-rows"></div>
-    </div>
-  </div>
-
-  <!-- PLAYERS -->
-  <div class="page" id="page-players">
-    <div style="display:flex;gap:8px;margin-bottom:4px;">
-      <button class="btn btn-gold" style="flex:1;" onclick="showModal('modal-add-player')">+ Add Player</button>
-      <button class="btn btn-outline" style="flex:1;" onclick="openHcpModal()">🏌️ Handicaps</button>
-    </div>
-    <div style="margin-top:12px;" id="players-list"></div>
-  </div>
-
-  <!-- COURSES -->
-  <div class="page" id="page-courses">
-    <button class="btn btn-gold btn-full" onclick="openSCBuilder(null)">✏️ Create Custom Scorecard</button>
-    <div style="margin-top:6px;margin-bottom:4px;font-size:11px;color:var(--gray);">Build scorecards with real par &amp; stroke index per hole. Stableford points calculate automatically.</div>
-    <input type="text" class="search-box" placeholder="Search courses..." oninput="renderCourses(this.value)" style="margin-top:8px;">
-    <div id="courses-list"></div>
-  </div>
-
-</div><!-- end content -->
+<!-- FLASHCARDS -->
+<div class="screen" id="s-flashcards">
+  <div class="pg-title">Flashcards</div>
+  <div class="pg-sub">Tap to reveal, then rate yourself.</div>
+  <div class="scroll-row" id="fc-cats"></div>
+  <div id="fc-body"></div>
+</div>
 
 <!-- BOTTOM NAV -->
-<div class="bottom-nav" id="bottom-nav" style="display:none;">
-  <button class="nav-btn active" onclick="goPage('home',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home</button>
-  <button class="nav-btn" onclick="goPage('league',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>League</button>
-  <button class="nav-btn" onclick="goPage('events',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Events</button>
-  <button class="nav-btn" onclick="goPage('score',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Score</button>
-  <button class="nav-btn" onclick="goPage('players',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Players</button>
-  <button class="nav-btn" onclick="goPage('courses',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-10"/></svg>Courses</button>
-</div>
-
-<!-- SCORECARD BUILDER -->
-<div class="scb-overlay" id="scb-overlay">
-  <div class="scb-header">
-    <button class="scb-back" onclick="closeSCBuilder()">←</button>
-    <div class="scb-title"><div class="scb-title-main" id="scb-title-main">New Scorecard</div><div class="scb-title-sub" id="scb-title-sub">Enter course details</div></div>
-    <button class="scb-save-btn" onclick="saveSCBuilder()">Save ✓</button>
+<nav id="bot-nav">
+  <div class="bnav">
+    <button class="bnav-btn active" id="bn-home" onclick="go('s-home')"><span class="bi">🏠</span>Home</button>
+    <button class="bnav-btn" id="bn-techniques" onclick="go('s-techniques')"><span class="bi">💬</span>Techniques</button>
+    <button class="bnav-btn" id="bn-essay" onclick="go('s-essay')"><span class="bi">📝</span>Essay</button>
+    <button class="bnav-btn" id="bn-texts" onclick="go('s-texts')"><span class="bi">📖</span>Texts</button>
+    <button class="bnav-btn" id="bn-flashcards" onclick="go('s-flashcards')"><span class="bi">🎴</span>Cards</button>
   </div>
-  <div class="scb-steps">
-    <div class="scb-step active" id="scb-tab-0" onclick="scbGoStep(0)">① Details</div>
-    <div class="scb-step" id="scb-tab-1" onclick="scbGoStep(1)">② Front 9</div>
-    <div class="scb-step" id="scb-tab-2" onclick="scbGoStep(2)">③ Back 9</div>
-    <div class="scb-step" id="scb-tab-3" onclick="scbGoStep(3)">④ Review</div>
-  </div>
-  <div class="scb-body">
-    <div class="scb-step-content active" id="scb-s0">
-      <div class="hb-tip">⛳ <strong>Create your own scorecard</strong> — enter the course name, then set par and stroke index for every hole.</div>
-      <div class="form-group"><label class="form-label">Course Name *</label><input class="form-input" id="scb-name" placeholder="e.g. Falkirk Golf Club" oninput="scbUpdateTitle()"></div>
-      <div class="form-group"><label class="form-label">Region / Location</label><input class="form-input" id="scb-region" placeholder="e.g. Falkirk, Central Scotland"></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-        <div class="form-group"><label class="form-label">SSS</label><input class="form-input" type="number" id="scb-sss" placeholder="70" min="55" max="80"></div>
-        <div class="form-group"><label class="form-label">Slope</label><input class="form-input" type="number" id="scb-slope" placeholder="113" min="55" max="155"></div>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Quick Fill Template</label>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('standard')">Par 71</button>
-          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('par72')">Par 72</button>
-          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('par70')">Par 70</button>
-          <button class="btn btn-sm btn-outline" onclick="scbQuickFill('links')">Links</button>
-        </div>
-      </div>
-      <button class="btn btn-gold btn-full" onclick="scbGoStep(1)">Next: Front 9 →</button>
-    </div>
-    <div class="scb-step-content" id="scb-s1">
-      <div class="hb-tip"><strong>Stroke Index (SI):</strong> Each hole needs a unique SI 1–18. Duplicates highlighted red.</div>
-      <div id="scb-warn-front" class="hb-warning"></div>
-      <div class="hb-summary" id="scb-summary-front"></div>
-      <table class="hb-table"><thead class="hb-thead"><tr><th>Hole</th><th>Par</th><th>SI</th><th>Yards</th></tr></thead><tbody id="scb-tbody-front"></tbody></table>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(0)">← Back</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="scbGoStep(2)">Next: Back 9 →</button></div>
-    </div>
-    <div class="scb-step-content" id="scb-s2">
-      <div class="hb-tip"><strong>Back 9:</strong> SI values are unique across all 18 holes.</div>
-      <div id="scb-warn-back" class="hb-warning"></div>
-      <div class="hb-summary" id="scb-summary-back"></div>
-      <table class="hb-table"><thead class="hb-thead"><tr><th>Hole</th><th>Par</th><th>SI</th><th>Yards</th></tr></thead><tbody id="scb-tbody-back"></tbody></table>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(1)">← Back</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="scbGoStep(3)">Review →</button></div>
-    </div>
-    <div class="scb-step-content" id="scb-s3">
-      <div id="scb-review-content"></div>
-      <div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-gray btn-sm" onclick="scbGoStep(2)">← Edit</button><button class="btn btn-gold" style="flex:1;justify-content:center;" onclick="saveSCBuilder()">✓ Save Course</button></div>
-    </div>
-  </div>
-</div>
+</nav>
 
-<!-- MODALS -->
-<div class="modal-overlay" id="modal-add-player" style="display:none;" onclick="closeModalOutside(event,'modal-add-player')">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title" id="add-player-modal-title">Add Player</span><button class="close-btn" onclick="closeModal('modal-add-player')">×</button></div>
-    <input type="hidden" id="edit-player-id">
-    <div class="form-group"><label class="form-label">Full Name</label><input class="form-input" id="input-player-name" placeholder="e.g. John Smith"></div>
-    <div class="form-group"><label class="form-label">Handicap</label><input class="form-input" type="number" id="input-player-hcp" placeholder="e.g. 18" min="0" max="54"></div>
-    <button class="btn btn-gold btn-full" onclick="savePlayer()">Save Player</button>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-player-profile" style="display:none;" onclick="closeModalOutside(event,'modal-player-profile')">
-  <div class="modal"><div class="modal-header"><span class="modal-title" id="profile-name">Profile</span><button class="close-btn" onclick="closeModal('modal-player-profile')">×</button></div><div id="profile-content"></div></div>
-</div>
-
-<div class="modal-overlay" id="modal-add-event" style="display:none;" onclick="closeModalOutside(event,'modal-add-event')">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title" id="add-event-modal-title">Schedule Event</span><button class="close-btn" onclick="closeModal('modal-add-event')">×</button></div>
-    <input type="hidden" id="edit-event-id">
-    <div class="form-group"><label class="form-label">Event Name</label><input class="form-input" id="input-event-name" placeholder="e.g. Week 8"></div>
-    <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="input-event-date"></div>
-    <div class="form-group"><label class="form-label">Course</label><input class="form-input" id="input-event-course" placeholder="e.g. Falkirk Golf Club"></div>
-    <div class="form-group"><label class="form-label">Format</label><select class="form-input" id="input-event-format"><option value="stableford">Stableford</option><option value="stroke">Stroke Play</option></select></div>
-    <button class="btn btn-gold btn-full" onclick="saveEvent()">Save Event</button>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-round-results" style="display:none;" onclick="closeModalOutside(event,'modal-round-results')">
-  <div class="modal"><div class="modal-header"><span class="modal-title" id="round-results-title">Results</span><button class="close-btn" onclick="closeModal('modal-round-results')">×</button></div><div id="round-results-content"></div></div>
-</div>
-
-<div class="modal-overlay" id="modal-hcp" style="display:none;" onclick="closeModalOutside(event,'modal-hcp')">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title">🏌️ Update Handicaps</span><button class="close-btn" onclick="closeModal('modal-hcp')">×</button></div>
-    <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px;font-size:11px;color:var(--gray);line-height:1.8;">
-      <strong style="color:var(--gold);">Rules:</strong> 0–17pts +2 · 18–29pts +1 · 30–37pts no change · 38–42pts −1 · 43+pts −2<br>
-      <strong style="color:var(--gold2);">🏆 Weekly winner gets extra −1</strong>
-    </div>
-    <div id="hcp-rows"></div>
-    <div style="display:flex;gap:8px;margin-top:16px;">
-      <button class="btn btn-outline" style="flex:1;" onclick="closeModal('modal-hcp')">Cancel</button>
-      <button class="btn btn-gold" style="flex:1;" onclick="applyHandicaps()">✅ Apply</button>
-    </div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-firebase" style="display:none;" onclick="closeModalOutside(event,'modal-firebase')">
-  <div class="modal">
-    <div class="modal-header"><span class="modal-title">🔥 Connect to Firebase</span><button class="close-btn" onclick="closeModal('modal-firebase')">×</button></div>
-    <p style="font-size:12px;color:var(--gray);margin-bottom:12px;line-height:1.6;">Paste your Firebase config below to enable live sync across all players' phones.</p>
-    <div style="font-size:11px;color:var(--gray);line-height:1.8;margin-bottom:12px;background:rgba(0,0,0,0.3);border-radius:8px;padding:10px;">
-      1. Go to <strong style="color:var(--white);">console.firebase.google.com</strong><br>
-      2. Open your project → ⚙️ Settings → Your apps<br>
-      3. Scroll down and copy the <strong style="color:var(--white);">firebaseConfig</strong> code<br>
-      4. Paste it in the box below
-    </div>
-    <textarea class="firebase-input" id="firebase-config-input2" placeholder='Paste your firebaseConfig here:
-
-{
-  apiKey: "AIzaSy...",
-  authDomain: "jolly-boys-golf.firebaseapp.com",
-  projectId: "jolly-boys-golf",
-  storageBucket: "...",
-  messagingSenderId: "...",
-  appId: "..."
-}'></textarea>
-    <button class="btn btn-gold btn-full" onclick="connectFirebaseFromModal()">🔥 Connect & Sync Live</button>
-    <div id="fb-modal-status" style="margin-top:8px;text-align:center;font-size:11px;color:#4cd48a;display:none;">✅ Already connected to Firebase!</div>
-    <button class="btn btn-gray btn-full" style="margin-top:6px;font-size:11px;" onclick="disconnectFirebase()">Disconnect Firebase</button>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modal-course-detail" style="display:none;" onclick="closeModalOutside(event,'modal-course-detail')">
-  <div class="modal"><div class="modal-header"><span class="modal-title" id="course-detail-title">Course</span><button class="close-btn" onclick="closeModal('modal-course-detail')">×</button></div><div id="course-detail-content"></div></div>
-</div>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 <script>
-// Simple wrappers around Firebase compat SDK
-function initializeApp(cfg){
-  try{ return firebase.app(); } catch(e){ return firebase.initializeApp(cfg); }
+const QT=[{id:'wc',label:'Word Choice',icon:'💬',color:'#60a5fa',marks:'2 marks',what:'Pick ONE specific word or short phrase and explain what it suggests.',formula:['Quote ONE word or very short phrase','Explain what it suggests or implies — go deeper than the surface meaning','Link directly to what the question asks about'],template:'The word "___" suggests ___. This emphasises ___, showing that ___.',mistake:'Quoting an entire sentence — too broad. Always quote ONE word or very short phrase.',tip:'Ask: what does this word make you picture or feel? That answer is your explanation.',ex:{q:"How does word choice create a threatening impression of the city?",weak:'The writer uses the word "attack" which is threatening.',strong:'The word "ambush" suggests a calculated, hidden assault — the threat comes from nowhere and the victim is completely unprepared. This creates a deeply threatening impression by implying the danger is deliberate and impossible to defend against.',why:'The weak answer just repeats the question. The strong one explains what the word implies and connects it to the specific effect asked about.'}},{id:'tone',label:'Tone',icon:'🎭',color:'#a78bfa',marks:'2 marks',what:"Identify the writer's attitude and prove it with language evidence.",formula:['Name a SPECIFIC tone word — not "negative" or "positive"','Quote evidence from the passage','Explain HOW that language creates the tone you named'],template:"The tone is ___. This is shown by '___', which suggests ___. Furthermore, '___' reinforces this tone by ___.",toneBank:['critical','sarcastic','mocking','bitter','concerned','alarmed','disapproving','humorous','incredulous','exasperated','wistful','defensive'],mistake:"'The tone is negative' scores zero — not specific enough. You need a precise word like 'exasperated' or 'sarcastic'.",tip:"Imagine someone reading this aloud. How would they sound? That's your tone word.",ex:{q:'Identify the tone and explain how language creates it.',weak:'The tone is negative and worried. The writer uses negative words.',strong:"The tone is exasperated. This is shown by 'Do the maths' — a blunt, impatient command that sounds as if the writer cannot believe the reader hasn't grasped the problem. The rhetorical question 'How long can we ignore this?' reinforces this, suggesting the writer finds the situation almost absurd in its urgency.",why:"'Exasperated' is precise. Each quote is explained — HOW it creates that specific tone, not just what it says."}},{id:'summary',label:'Summary',icon:'📋',color:'#34d399',marks:'4–5 marks',what:'Find the required number of separate points — entirely in your own words.',formula:['Count the marks — that is exactly how many separate points you need','Find that many distinct ideas in the passage','Rewrite EVERY point in completely different words','Never quote — not even a single phrase'],template:'Point 1: ___\nPoint 2: ___\nPoint 3: ___\nPoint 4: ___',mistake:'Lifting phrases from the passage — even a few copied words costs marks. Also: giving 2 points for a 4-mark question.',tip:'Cover the passage, then write each point from memory. That forces you to use your own words.',ex:{q:'Using your own words, summarise four reasons for the decline of high streets. (4 marks)',weak:'The writer says out-of-town shopping centres have taken business away and parking is difficult.',strong:'1. Large retail parks have pulled shoppers away from traditional high streets.\n2. High streets have failed to match the convenience of online shopping.\n3. High rents have made it impossible for independent businesses to survive.\n4. A lack of affordable parking discourages people from visiting.',why:'The weak answer copies words from the passage and only gives 2 points for 4 marks. The strong answer rewrites everything in fresh language and gives exactly 4 distinct points.'}},{id:'link',label:'Link',icon:'🔗',color:'#fbbf24',marks:'2 marks',what:"Show how a sentence connects the previous paragraph's idea to the next one.",formula:['Find the part referring BACK to the previous paragraph','Find the part introducing the NEW topic of the next paragraph','Explain both directions clearly — one mark for each'],template:'"___" links back to [previous topic in paragraph X]. "___" introduces/links forward to [new idea in paragraph Y].',mistake:'Explaining only ONE direction scores 1 mark maximum. You must show BOTH back AND forward.',tip:'Split the link sentence in half. The first part usually looks back; the second part usually looks forward.',ex:{q:'Show how "Yet it is this very indifference that makes wild places so necessary" acts as a link.',weak:'"Indifference" links back to the previous paragraph about nature not caring about humans.',strong:'"This very indifference" links back to paragraph two\'s argument that wild places are completely unconcerned with human life and ambitions. "Makes wild places so necessary" then introduces paragraph three\'s new idea — that this same indifference is exactly what makes nature restorative.',why:'The weak answer only goes backwards. Full marks require BOTH directions, using actual words from the sentence.'}},{id:'ss',label:'Sentence Structure',icon:'📐',color:'#fb923c',marks:'2 marks',what:'Name a structural technique and explain the effect it creates.',formula:['Name the specific technique (short sentence, list, repetition, contrast, delayed clause, etc.)','Say what idea or feeling it emphasises','Explain WHY that technique is effective here'],template:'The writer uses [technique] to emphasise ___. This is effective because ___.',techniques:['Short sentence — creates impact, finality, shock','List — shows scale, accumulation, variety','Repetition — hammers a point home','Rhetorical question — challenges the reader, creates doubt','Contrast — highlights difference','Delayed main clause — builds suspense before the key idea'],mistake:'"It makes it stand out" explains nothing. What does it stand out AS? What does it make the reader feel?',tip:'Ask: why did the writer choose this structure rather than a normal sentence? That reason is your effect.',ex:{q:'Analyse sentence structure in: "Every Saturday morning, in a community hall in Edinburgh, broken things come back to life."',weak:'The sentence has a long build-up which makes it more interesting.',strong:'The writer delays the main clause — "broken things come back to life" — by placing two prepositional phrases before it. This creates quiet anticipation so that when the image of resurrection arrives it lands with unexpected impact. The contrast between the ordinary setting and the near-miraculous idea makes the ending more striking.',why:'Name the technique precisely, explain what it builds, and identify the specific effect at work.'}},{id:'eval',label:'Evaluation',icon:'⭐',color:'#a78bfa',marks:'2–3 marks',what:'Judge how effective a feature is and prove it with analysis.',formula:['Give a clear judgment ("very effective", "highly effective")','Quote specific language','Name and analyse the technique','Explain WHY it makes the opening/ending effective'],template:'The [opening/ending] is very effective. "___" uses [technique] to create ___. This works well because ___.',mistake:'"It wraps up nicely" — descriptive, not analytical. Always quote and name a technique.',tip:'Think about what the feature does to the READER. Does it leave them thinking? Does it make the argument feel complete?',ex:{q:'How effective do you find the final paragraph as a conclusion?',weak:'The final paragraph is effective because it wraps up the essay well.',strong:'The final paragraph is highly effective. "Saturated with human noise" uses drowning imagery to compress the passage\'s entire argument into one phrase. The short sentence "It is restoration" lands as a decisive verdict — its bluntness gives it real weight. The closing challenge to the reader ensures the piece ends on a thought-provoking note.',why:'Each claim is backed by a quote and a named technique. The answer also connects each feature back to WHY it works as a conclusion.'}}];
+
+const ESSAY_STEPS=[{title:'Introduction',time:'3 min',icon:'1️⃣',content:"Name the text and author. Answer the question directly in your first sentence. Name the techniques and themes you will discuss. A clear direct intro beats a fancy vague one.",example:'In "Tally\'s Blood" by Ann Marie di Mambro, the theme of identity is explored through Massimo\'s fierce cultural pride, the conflict between generations, and the use of dialogue to reveal tension between belonging and loyalty.'},{title:'Paragraph 1 — PEEL',time:'7 min',icon:'2️⃣',content:'Point: answer the question in one sentence. Evidence: short specific quote. Explain: analyse the technique and its effect. Link: connect back to the question.',example:'Massimo is presented as a man whose pride has become controlling. When he declares "We\'re Italian — we don\'t do things like that", the dialogue reveals a character who uses cultural identity to enforce obedience rather than build strength. This highlights the theme of identity because it shows how pride, pushed too far, destroys the bonds it claims to protect.'},{title:'Paragraph 2 — PEEL',time:'7 min',icon:'3️⃣',content:'New point, new quote, new analysis. Each paragraph should stand alone as evidence. Never repeat a quote.',example:'The conflict between generations is shown through Rosinella\'s sense of belonging in Scotland. Her words "This is our home now" contrast sharply with Massimo\'s rigid attachment to Italy, showing that identity is not fixed — it changes with experience.'},{title:'Paragraph 3 — PEEL',time:'7 min',icon:'4️⃣',content:"Third point — cover a different technique or aspect from paragraphs 1 and 2.",example:'Di Mambro also uses stage directions to show emotions characters cannot speak aloud. When Massimo "turns away" during Lucia\'s confrontation, the physical action reveals a man who knows he is wrong but cannot admit it. The audience sees what the family cannot say, creating dramatic irony.'},{title:'Conclusion',time:'3 min',icon:'5️⃣',content:'Briefly restate your main argument. Refer directly to the question. Show you have answered it fully. Do not introduce new points.',example:"Overall, di Mambro explores identity through Massimo's controlling pride, the clash between generations, and dramatic techniques that reveal what cannot be spoken. The play suggests that belonging is never simple when two cultures collide."}];
+
+const PEEL=[{letter:'P',color:'#34d399',bg:'#0a1f14',text:'Make a point that directly answers the question — state it in the very first sentence of your paragraph'},{letter:'E',color:'#60a5fa',bg:'#0a1830',text:'Give a short, specific quote — memorise 3–4 per text. Short and relevant beats long every time'},{letter:'E',color:'#fbbf24',bg:'#201500',text:'Explain the technique and its effect on the reader or audience — this is where marks are earned'},{letter:'L',color:'#f87171',bg:'#200a0a',text:'Link back to the question: "This highlights the theme of ___, which answers the question by showing ___."'}];
+
+const ESSAY_TIPS=['Short quotes always beat long ones — you score marks for analysis, not memorisation','If you forget the exact quote, describe the moment accurately and analyse what it shows','Write 2 strong paragraphs rather than 4 weak ones — quality beats quantity every time','Every paragraph must have a quote AND an explanation of technique — no exceptions','Link every paragraph back to the question, not just the conclusion','Plan for 5 minutes before you write — students who plan almost always write better'];
+
+const TEXTS={glasgow:{title:'Glasgow 5th March 1971',author:'Edwin Morgan',type:'Poetry',themes:['Violence and danger','Fear and vulnerability','Power and powerlessness','Urban indifference'],context:"The poem describes a violent mugging on a Glasgow street at night. Morgan writes with the cold precision of a police report — no sentimentality, just the scene. The key is the documentary tone: he forces you to witness the violence.",techniques:[{name:'Title as a date',effect:'Reads like a police log or newspaper dateline — cold, factual. Makes the violence feel real and unavoidable, not fictional or artistic.'},{name:'Short, clipped phrases',effect:'Creates pace and urgency. The reader experiences the scene in rapid bursts, mimicking the speed and shock of the attack.'},{name:'Specific sensory detail',effect:'Words like "slashed", "razors", "steak-knives" are visceral and precise. The reader cannot distance themselves from the violence.'},{name:'Cinematic structure',effect:"The poem cuts between attacker and victim like a film. This immediacy forces the reader into the scene rather than letting them observe from a distance."},{name:'The bystanders',effect:'A bus passes; life continues. Nobody intervenes. This raises questions about community, responsibility, and what it means to witness suffering.'}],quotes:[{q:"the young man's face / opened up",theme:'Violence',analysis:"The passive construction 'opened up' is chillingly understated — it makes the wound sound almost natural, which is far more disturbing than graphic language would be."},{q:'razors',theme:'Violence/Danger',analysis:'A single word as its own image. No sentence, no softening. It stands alone as brutally as the act itself — the structure reinforces the content.'},{q:'A bus has come to a stop',theme:'Urban indifference',analysis:"The mundane world continues. The bus — ordinary, routine, indifferent — carries on while the attack happens nearby. Life doesn't pause for violence in this city."},{q:'Nothing is said',theme:'Urban indifference',analysis:'The bystanders witness the attack but say nothing. The silence of the city is its own form of violence.'}],analysis:[{theme:'Violence/Danger',approach:'Find a word related to weapons or harm. Explain what it suggests about the nature of the attack — not just what it describes, but what attitude it implies. Link to how it makes the reader feel.'},{theme:'Fear/Vulnerability',approach:'Find a moment where the victim is powerless. Explain what technique creates this. Link to the idea of power shifting unexpectedly.'},{theme:'Pace/Immediacy',approach:"Identify a short phrase or clipped clause. Explain how the structure creates speed or shock. Link to Morgan's cinematic, documentary style."},{theme:'Urban Indifference',approach:'Find where ordinary life continues around the attack. Explain what this suggests about the city. Link to questions of community and responsibility.'}]},tallys:{title:"Tally's Blood",author:'Ann Marie di Mambro',type:'Drama',themes:['Identity and belonging','Family conflict and loyalty','Immigration and cultural pride','Generational tension','Love versus control'],context:"Set in Scotland during and after WW2, the play follows an Italian immigrant family. Massimo's fierce attachment to his Italian identity drives most of the conflict. The tension between holding onto cultural identity and adapting to a new home is never simply resolved.",techniques:[{name:'Dialogue',effect:"Reveals character and conflict directly. What characters say — and avoid saying — shows their values and the power between them."},{name:'Stage directions',effect:'Show emotion and power dynamics that characters cannot express in words. Silences, movements, and body language reveal what lies beneath the surface.'},{name:'Contrast between characters',effect:'Rosinella vs Massimo; Lucia vs Bridget — contrasting characters highlight the central themes of belonging, identity, and generational change.'},{name:'Wartime setting',effect:'Italian immigrants face prejudice and internment in Scotland. The historical context deepens the themes — the family is caught between two hostile forces.'},{name:'Dramatic irony',effect:"The audience often knows more than individual characters — this creates tension and sympathy, especially around Lucia's relationships."}],characters:[{name:'Massimo',theme:'Identity, pride, control',desc:"Fiercely proud of his Italian identity — but this pride has become controlling. He cannot separate protecting his family from controlling them. His love is real but suffocating.",quotes:['"We\'re Italian. We don\'t do things like that."']},{name:'Rosinella',theme:'Belonging, loyalty, adaptation',desc:"Warm and loyal but caught between two cultures. She loves Massimo but also wants to belong in Scotland. She tries to bridge old Italian values and new Scottish life.",quotes:['"This is our home now."']},{name:'Lucia',theme:'Identity, generational conflict, love',desc:"The younger generation — she wants to belong in Scotland. Torn between family loyalty and her own sense of identity and love.",quotes:[]},{name:'Hughie',theme:'Prejudice, belonging, love',desc:"Scottish, in love with Lucia. Represents both the possibility of integration and the resistance to it.",quotes:[]}],analysis:[{theme:'Identity/Pride',approach:"Find a moment where Massimo enforces Italian values on others. Explain what his words or actions reveal about his character. Link to how the audience responds — sympathy, frustration, or both."},{theme:'Conflict',approach:"Find a piece of dialogue where two characters directly disagree. Explain what the language reveals about each character's values. Link to the theme of belonging or generational tension."},{theme:'Stage directions',approach:"Find a stage direction that shows emotion the character cannot speak aloud. Explain what it reveals. Link to the effect on the audience — what do we understand that the characters don't?"},{theme:'Belonging',approach:"Find a moment where a character is caught between two worlds. Explain what technique di Mambro uses. Link to the theme of identity — what does it cost to belong?"}]}};
+
+const FLASHCARDS=[{front:'Word choice — what must every answer include?',back:'1. ONE quoted word or short phrase\n2. What it suggests (go deeper than the surface)\n3. Link to what the question asks about',cat:'technique'},{front:'Tone — name 6 specific tone words that score marks.',back:'Critical · Sarcastic · Mocking · Alarmed\nWistful · Incredulous · Exasperated · Bitter\n\n"Negative" or "positive" = zero marks — too vague.',cat:'technique'},{front:'Summary — the three strict rules.',back:'1. Count the marks — that\'s exactly how many points\n2. Every point in completely your OWN words\n3. No quoting — not even a short phrase',cat:'technique'},{front:'Link question — what do you always need for full marks?',back:'BOTH directions:\n→ What looks BACK to the previous paragraph\n→ What looks FORWARD to the next paragraph\n\nOne side only = 1 mark maximum.',cat:'technique'},{front:'Sentence structure — 5 techniques and their effects.',back:'Short sentence — impact, shock, finality\nList — scale, accumulation, variety\nRepetition — hammers a point home\nDelayed main clause — builds suspense\nContrast — highlights difference',cat:'technique'},{front:'What is personification? Why do writers use it?',back:'Giving human qualities to something non-human.\n\nExample: "the wind screamed" — makes nature feel aggressive and threatening.\n\nEffect: makes abstract forces feel immediate.',cat:'technique'},{front:'Evaluation — what makes a strong answer?',back:'1. Clear judgment ("highly effective")\n2. Specific quote\n3. Named technique + its effect\n4. Why this works as an opening/ending\n\n"It wraps up nicely" = zero marks.',cat:'technique'},{front:'PEEL — what does each letter mean?',back:'P — Point that answers the question (first sentence)\nE — Evidence: short specific quote\nE — Explain the technique and its effect\nL — Link back to the question',cat:'essay'},{front:'What must an introduction include?',back:'1. Name the text and author\n2. Answer the question directly — first sentence\n3. Name the techniques/themes you will discuss\n4. Set up your three paragraphs\n\nClear always beats fancy.',cat:'essay'},{front:'How many PEEL paragraphs for a pass?',back:'Minimum 3 — each needs:\n• A point answering the question\n• A short specific quote\n• Analysis of technique and effect\n• Link to the question\n\n2 strong > 4 weak. Every time.',cat:'essay'},{front:'What if you forget the exact quote in the exam?',back:'Describe the moment accurately in your own words, then analyse what it shows.\n\nYou can still earn marks — markers reward analysis even without perfect quotation.',cat:'essay'},{front:'Glasgow 5th March — what does the title suggest?',back:'Reads like a police report or newspaper date — cold, factual, documentary.\n\nMakes the violence feel real and unavoidable. Strips away any sense of poetic distance.',cat:'glasgow'},{front:'Glasgow 5th March — three key themes.',back:'• Violence and danger\n• Fear and vulnerability\n• Power and powerlessness\n• Urban indifference — the city carries on',cat:'glasgow'},{front:'Glasgow — how does Morgan create immediacy?',back:'• Short, clipped phrases — rapid pace\n• Specific sensory detail (razors, slashed)\n• Cinematic cuts between attacker and victim\n• The scene feels witnessed, not described',cat:'glasgow'},{front:'Glasgow — analyse "A bus has come to a stop".',back:"The mundane world continues indifferently around the violence.\n\nOrdinary life does not pause. Suggests the city absorbs suffering — the attack is just another event on a Glasgow night.",cat:'glasgow'},{front:"Tally's Blood — who is Massimo and what is his conflict?",back:"Fiercely proud of his Italian identity — but this pride becomes controlling.\n\nHe cannot separate protecting his family from controlling them. His love is real but suffocating.",cat:'tallys'},{front:"Tally's Blood — three key themes.",back:'• Identity and belonging\n• Family conflict and loyalty\n• Immigration and cultural pride\n• Generational tension\n• Love versus control',cat:'tallys'},{front:"Tally's Blood — how does di Mambro use dialogue?",back:"Reveals character and conflict directly.\n\nWhat characters say AND avoid saying shows their values. Disagreements expose the tension between cultures. Dialogue is where the themes are fought out.",cat:'tallys'},{front:"Tally's Blood — what do stage directions reveal?",back:"Emotion and power that characters cannot speak aloud.\n\nSilences, physical movements, body language — the audience sees what characters hide from each other.",cat:'tallys'},{front:'If you freeze in the exam — what do you write?',back:'1. Write a simple point in your own words\n2. Add one short quote (not for summary)\n3. Write "This suggests…" and explain it\n4. Link back to the question\n\nPartial marks always beat zero.',cat:'rescue'},{front:'Safe analysis starters when stuck',back:'"This suggests that…"\n"This emphasises…"\n"This creates the impression that…"\n"This makes the reader feel…"\n"This highlights the theme of…"',cat:'rescue'},{front:'Paper 1 — exam day order',back:'1. Glance at questions first (30 secs)\n2. Read passage for meaning\n3. Re-read and mark evidence\n4. Answer — 1 mark = 1 point\n5. Check: enough points? Own words in summary?',cat:'rescue'}];
+
+// STATE
+let qtActive='wc',qtWorked={},essayOpen=-1,textTab='glasgow',textSec='overview';
+let fcFilter='all',fcIdx=0,fcFlipped=false,fcKnown=0,fcUnsure=0,fcDone=false,fcFading=false;
+
+// NAV
+function go(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.getElementById('nav-back').style.display=id==='s-home'?'none':'block';
+  const map={'s-home':'bn-home','s-techniques':'bn-techniques','s-essay':'bn-essay','s-texts':'bn-texts','s-flashcards':'bn-flashcards'};
+  document.querySelectorAll('.bnav-btn').forEach(b=>b.classList.remove('active'));
+  if(map[id])document.getElementById(map[id]).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='s-techniques')renderQT();
+  if(id==='s-essay')renderEssay();
+  if(id==='s-texts')renderTexts();
+  if(id==='s-flashcards')renderFC();
 }
-function getFirestore(app){ return firebase.firestore(); }
-function doc(db,col,id){ return firebase.firestore().collection(col).doc(id); }
-function collection(db,col){ return firebase.firestore().collection(col); }
-async function getDoc(ref){ const s=await ref.get(); return {exists:()=>s.exists, data:()=>s.data()}; }
-async function getDocs(ref){ const s=await ref.get(); return {docs:s.docs.map(d=>({id:d.id,data:()=>d.data()})), empty:s.empty}; }
-function setDoc(ref,data){ return ref.set(data,{merge:true}); }
-function deleteDoc(ref){ return ref.delete(); }
-function onSnapshot(ref,cb){
-  return ref.onSnapshot(snap=>{
-    if(snap.docs!==undefined){
-      cb({docs:snap.docs.map(d=>({id:d.id,data:()=>d.data()})),empty:snap.empty});
-    } else {
-      cb({docs:[{id:snap.id,data:()=>snap.data()}],empty:!snap.exists});
-    }
-  });
+function goHome(){go('s-home')}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function nl(s){return esc(s).replace(/\n/g,'<br>')}
+function pill(text,color){return`<span class="pill" style="color:${color};background:${color}22;border-color:${color}44">${esc(text)}</span>`}
+
+// TECHNIQUES
+function renderQT(){
+  document.getElementById('qt-chips').innerHTML=QT.map(q=>`<button class="scroll-chip${qtActive===q.id?' active':''}" onclick="selQT('${q.id}')" style="${qtActive===q.id?`background:${q.color};border-color:${q.color};color:#000`:''}">${q.icon} ${q.label}</button>`).join('');
+  const q=QT.find(x=>x.id===qtActive);const we=qtWorked[q.id];
+  const fHTML=q.formula.map((f,i)=>`<div class="formula-row"><div class="fnum" style="background:${q.color};color:#000">${i+1}</div><div class="ftext">${esc(f)}</div></div>`).join('');
+  const tHTML=q.techniques?`<div style="margin-bottom:12px"><span class="sec-label" style="color:${q.color}">Techniques to identify</span>${q.techniques.map(t=>{const[n,e]=t.split(' — ');return`<div style="display:flex;gap:8px;margin-bottom:7px;flex-wrap:wrap"><span style="color:${q.color};font-weight:700;font-size:14px">${esc(n)}</span><span style="color:var(--t2);font-size:14px">— ${esc(e)}</span></div>`}).join('')}</div>`:''
+  const bHTML=q.toneBank?`<div class="ibox" style="background:var(--purpleDim);border-color:rgba(167,139,250,.18);margin-bottom:10px"><div class="ibox-label" style="color:var(--purple)">Tone word bank</div><div class="chip-row">${q.toneBank.map(t=>pill(t,'#a78bfa')).join('')}</div></div>`:''
+  const wHTML=we?`<div class="anim" style="margin-top:14px"><div style="font-size:13px;color:var(--t2);margin-bottom:10px;background:var(--surface);padding:10px 12px;border-radius:9px;line-height:1.55"><strong style="color:var(--t1)">Q: </strong>${esc(q.ex.q)}</div><div class="we-box" style="background:var(--redDim);border-color:rgba(248,113,113,.18)"><div class="we-label" style="color:var(--red)">❌ Weak — won't score well</div><div class="we-text" style="color:#ffaaaa">${esc(q.ex.weak)}</div></div><div class="we-box" style="background:var(--greenDim);border-color:rgba(52,211,153,.18)"><div class="we-label" style="color:var(--green)">✓ Strong — full marks</div><div class="we-text" style="color:#aaffcc;white-space:pre-line">${esc(q.ex.strong)}</div></div><div class="we-box" style="background:var(--blueDim);border-color:rgba(96,165,250,.18)"><div class="we-label" style="color:var(--blue)">💡 Why the difference matters</div><div class="we-text" style="color:#b0d0ff">${esc(q.ex.why)}</div></div></div>`:''
+  document.getElementById('qt-body').innerHTML=`<div class="card anim" style="border-color:${q.color}44"><div style="display:flex;align-items:center;gap:12px;margin-bottom:14px"><span style="font-size:28px">${q.icon}</span><div><div style="font-size:18px;font-weight:700">${q.label}</div>${pill(q.marks,q.color)}</div></div><p style="font-size:15px;color:var(--t2);margin-bottom:16px;line-height:1.6">${esc(q.what)}</p><span class="sec-label">The formula</span>${fHTML}<div class="tmpl-box" style="margin-top:12px"><div class="tmpl-label">Answer template</div><div class="tmpl-text">${esc(q.template)}</div></div>${bHTML}${tHTML}<div class="ibox" style="background:var(--redDim);border-color:rgba(248,113,113,.18)"><div class="ibox-label" style="color:var(--red)">❌ Common mistake</div><div class="ibox-text" style="color:#ffaaaa">${esc(q.mistake)}</div></div><div class="ibox" style="background:var(--greenDim);border-color:rgba(52,211,153,.18)"><div class="ibox-label" style="color:var(--green)">💡 Examiner tip</div><div class="ibox-text" style="color:#aaffcc">${esc(q.tip)}</div></div><button class="reveal-btn" onclick="togWorked('${q.id}')">${we?'▲ Hide':'👁 Show'} worked example</button>${wHTML}</div>`
 }
-function _waitFbReady(cb){ cb(); }
+function selQT(id){qtActive=id;renderQT();window.scrollTo(0,0)}
+function togWorked(id){qtWorked[id]=!qtWorked[id];renderQT()}
 
+// ESSAY
+function renderEssay(){
+  document.getElementById('essay-accs').innerHTML=ESSAY_STEPS.map((s,i)=>`<div class="acc${essayOpen===i?' open':''}" id="acc${i}"><button class="acc-head" onclick="togAcc(${i})"><span class="acc-icon">${s.icon}</span><span class="acc-title">${esc(s.title)}</span><span class="acc-time">${esc(s.time)}</span><span class="acc-chev">›</span></button><div class="acc-body"><div class="acc-rule"></div><p style="font-size:15px;color:var(--t2);line-height:1.7;margin-bottom:12px">${esc(s.content)}</p><div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px 14px"><span class="sec-label">Example</span><div style="font-family:var(--serif);font-size:13px;color:var(--t2);line-height:1.75;font-style:italic">${esc(s.example)}</div></div></div></div>`).join('');
+  document.getElementById('peel-rows').innerHTML=PEEL.map(p=>`<div class="peel-row"><div class="peel-letter" style="background:${p.bg};color:${p.color}">${p.letter}</div><div class="peel-text">${esc(p.text)}</div></div>`).join('');
+  document.getElementById('essay-tips').innerHTML=ESSAY_TIPS.map(t=>`<div style="display:flex;gap:10px;margin-bottom:10px"><span style="color:var(--gold);font-weight:700;font-size:15px;flex-shrink:0">→</span><span style="font-size:14px;color:var(--t2);line-height:1.6">${esc(t)}</span></div>`).join('');
+}
+function togAcc(i){essayOpen=essayOpen===i?-1:i;renderEssay()}
 
-
-// ─────────────────────────────────────────────────────────────
-// GLOBALS
-// ─────────────────────────────────────────────────────────────
-let db=null,fbApp=null,useFirebase=false;
-let unsubscribers=[];
-
-// LOCAL STATE (fallback / cache)
-let state={
-  format:'stableford',
-  season:'Winter League 2026',
-  players:[
-    {id:'p1',name:'Willy',hcp:10},
-    {id:'p2',name:'Harry',hcp:11},
-    {id:'p3',name:'Stephen',hcp:10},
-    {id:'p4',name:'Bob',hcp:19},
-    {id:'p5',name:'John',hcp:8},
-    {id:'p6',name:'Conner',hcp:19},
-    {id:'p7',name:'Peter',hcp:19},
-    {id:'p8',name:'Gareth',hcp:13},
-  ],
-  events:[
-    {id:'e1',name:'Week 1',date:'2025-10-06',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e2',name:'Week 2',date:'2025-10-13',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e3',name:'Week 3',date:'2025-10-20',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e4',name:'Week 4',date:'2025-10-27',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e5',name:'Week 5',date:'2025-11-03',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e6',name:'Week 6',date:'2025-11-10',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e7',name:'Week 7',date:'2025-11-17',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-    {id:'e8',name:'Week 8',date:'2026-04-05',course:'Falkirk Golf Club',format:'stableford',status:'complete'},
-  ],
-  scores:{
-    e1:{p1:{stab:42},p2:{stab:28},p3:{stab:36},p4:{stab:32},p5:{stab:38},p6:{stab:26},p7:{stab:27},p8:{stab:0}},
-    e2:{p1:{stab:34},p2:{stab:30},p3:{stab:0}, p4:{stab:0}, p5:{stab:30},p6:{stab:23},p7:{stab:28},p8:{stab:39}},
-    e3:{p1:{stab:46},p2:{stab:42},p3:{stab:36},p4:{stab:33},p5:{stab:35},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
-    e4:{p1:{stab:36},p2:{stab:37},p3:{stab:37},p4:{stab:21},p5:{stab:29},p6:{stab:19},p7:{stab:0}, p8:{stab:0}},
-    e5:{p1:{stab:36},p2:{stab:40},p3:{stab:34},p4:{stab:32},p5:{stab:34},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
-    e6:{p1:{stab:42},p2:{stab:38},p3:{stab:34},p4:{stab:36},p5:{stab:28},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
-    e7:{p1:{stab:33},p2:{stab:38},p3:{stab:30},p4:{stab:41},p5:{stab:0}, p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
-    e8:{p1:{stab:39},p2:{stab:35},p3:{stab:37},p4:{stab:29},p5:{stab:38},p6:{stab:0}, p7:{stab:0}, p8:{stab:0}},
-  },
-  customCourses:[],
-};
-
-// ─────────────────────────────────────────────────────────────
-// FIREBASE CONNECT
-// ─────────────────────────────────────────────────────────────
-window.showFirebaseSetup=function(){
-  document.getElementById('modal-firebase').style.display='flex';
-  document.body.style.overflow='hidden';
-  const statusEl=document.getElementById('fb-modal-status');
-  if(statusEl)statusEl.style.display=useFirebase?'block':'none';
-  const saved=localStorage.getItem('jbg_fbcfg');
-  if(saved){const inp=document.getElementById('firebase-config-input2');if(inp&&!inp.value)inp.value=saved;}
-};
-window.connectFirebaseFromModal=async function(){
-  const raw=document.getElementById('firebase-config-input2').value.trim();
-  if(!raw){alert('Please paste your Firebase config');return;}
-  const btn=document.querySelector('#modal-firebase .btn-gold');
-  if(btn){btn.textContent='🔄 Connecting...';btn.disabled=true;}
-  if(!window._fbReady){alert('Firebase is still loading, please try again in a moment.');if(btn){btn.textContent='🔥 Connect & Sync Live';btn.disabled=false;}return;}
-  try{
-    let cfg;
-    try{cfg=new Function('return ('+raw+')')();}
-    catch(e){cfg=JSON.parse(raw);}
-    if(!cfg.apiKey||!cfg.projectId)throw new Error('Invalid config — missing apiKey or projectId');
-    localStorage.setItem('jbg_fbcfg',JSON.stringify(cfg));
-    closeModal('modal-firebase');
-    await initFB(cfg,true);
-  }catch(e){
-    if(btn){btn.textContent='🔥 Connect & Sync Live';btn.disabled=false;}
-    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object and that Firestore is enabled in test mode.');
+// SET TEXTS
+function setTextTab(tab){
+  textTab=tab;textSec='overview';
+  ['glasgow','tallys'].forEach(t=>{const b=document.getElementById('tt-'+t);b.classList.toggle('active',t===tab)});
+  ['overview','techniques','analysis'].forEach(s=>document.getElementById('ts-'+s).classList.toggle('active',s==='overview'));
+  renderTexts();
+}
+function setTextSec(sec){
+  textSec=sec;
+  ['overview','techniques','analysis'].forEach(s=>document.getElementById('ts-'+s).classList.toggle('active',s===sec));
+  renderTexts();
+}
+function renderTexts(){
+  const t=TEXTS[textTab];let html='';
+  if(textSec==='overview'){
+    const isG=textTab==='glasgow';
+    html=`<div class="card"><span class="sec-label">${esc(t.type)}</span><div style="font-size:21px;font-weight:700;margin-bottom:3px">${esc(t.title)}</div><div style="font-size:14px;color:var(--t2);margin-bottom:12px">by ${esc(t.author)}</div><p style="font-size:14px;color:var(--t2);line-height:1.75;margin-bottom:12px">${esc(t.context)}</p><span class="sec-label" style="color:var(--amber)">Key themes</span><div class="chip-row">${t.themes.map(th=>pill(th,'#fbbf24')).join('')}</div></div>${isG?`<div style="margin-top:4px"><span class="sec-label" style="padding:0 2px">Key quotes with analysis</span>${t.quotes.map(q=>`<div class="quote-card"><div class="quote-text">"${esc(q.q)}"</div>${pill(q.theme,'#60a5fa')}<p class="quote-analysis" style="margin-top:10px">${esc(q.analysis)}</p></div>`).join('')}</div>`:`<div style="margin-top:4px"><span class="sec-label" style="padding:0 2px">Characters</span>${t.characters.map(c=>`<div class="card"><div style="font-size:16px;font-weight:700;margin-bottom:4px">${esc(c.name)}</div>${pill(c.theme,'#fbbf24')}<p style="font-size:14px;color:var(--t2);line-height:1.7;margin-top:10px${c.quotes.length?';margin-bottom:10px':''}">${esc(c.desc)}</p>${c.quotes.map(q=>`<div style="font-family:var(--serif);font-size:14px;color:var(--gold);font-style:italic;padding:8px 12px;background:var(--goldDim);border-radius:8px">"${esc(q)}"</div>`).join('')}</div>`).join('')}</div>`}`;
   }
-};
-window.disconnectFirebase=function(){
-  if(!confirm('Disconnect Firebase? App will use local storage only.'))return;
-  localStorage.removeItem('jbg_fbcfg');
-  useFirebase=false;
-  unsubscribers.forEach(u=>u());unsubscribers=[];
-  const dot=document.getElementById('sync-dot');if(dot){dot.className='sync-dot off';}
-  const lbl=document.getElementById('sync-label');if(lbl)lbl.textContent='Connect';
-  closeModal('modal-firebase');
-  alert('Disconnected. App now uses local storage.');
-};
-window.connectFirebase=async function(){
-  const raw=document.getElementById('firebase-config-input').value.trim();
-  if(!raw){alert('Please paste your Firebase config');return;}
-  try{
-    // Parse config — handle both object literal and JSON
-    let cfg;
-    try{cfg=new Function('return ('+raw+')')();}
-    catch(e){cfg=JSON.parse(raw);}
-    if(!cfg.apiKey||!cfg.projectId)throw new Error('Invalid config');
-    localStorage.setItem('jbg_fbcfg',JSON.stringify(cfg));
-    await initFB(cfg);
-  }catch(e){
-    alert('❌ Could not connect: '+e.message+'\n\nMake sure you pasted the full firebaseConfig object.');
-  }
-};
-
-window.skipFirebase=function(){
-  useFirebase=false;
-  launchApp();
-};
-
-async function initFB(cfg,showToast){
-  showLoading(true);
-  try{
-    fbApp=initializeApp(cfg);
-    db=getFirestore(fbApp);
-    // Test connection
-    await getDoc(doc(db,'meta','test'));
-    useFirebase=true;
-    // Upload existing default data if Firestore is empty
-    await seedFirestoreIfEmpty();
-    launchApp(showToast);
-  }catch(e){
-    showLoading(false);
-    alert('❌ Firebase connection failed: '+e.message+'\n\nCheck your config and make sure Firestore is enabled in test mode.');
-  }
+  if(textSec==='techniques'){html=t.techniques.map(f=>`<div class="card"><div style="font-size:15px;font-weight:700;margin-bottom:7px">${esc(f.name)}</div><p style="font-size:14px;color:var(--t2);line-height:1.7">${esc(f.effect)}</p></div>`).join('')}
+  if(textSec==='analysis'){html=`<div class="ibox" style="background:var(--goldDim);border-color:rgba(245,200,66,.2);margin-bottom:14px"><div class="ibox-label" style="color:var(--gold)">How to build an analysis paragraph</div><div class="ibox-text" style="color:var(--t1)">Theme → Quote → Technique → Effect on reader/audience → Link to question</div></div>${t.analysis.map(b=>`<div class="card">${pill(b.theme,'#60a5fa')}<p style="font-size:14px;color:var(--t2);line-height:1.7;margin-top:10px">${esc(b.approach)}</p></div>`).join('')}`}
+  document.getElementById('text-body').innerHTML=html;
 }
 
-async function seedFirestoreIfEmpty(){
-  // Check if players exist
-  const snap=await getDocs(collection(db,'players'));
-  if(!snap.empty)return; // Already has data
-  // Seed with default players
-  for(const p of state.players){
-    await setDoc(doc(db,'players',p.id),p);
-  }
-  // Seed events
-  for(const ev of state.events){
-    await setDoc(doc(db,'events',ev.id),ev);
-  }
-  // Seed scores
-  for(const [eid,scores] of Object.entries(state.scores)){
-    for(const [pid,sc] of Object.entries(scores)){
-      if(sc.stab>0){
-        await setDoc(doc(db,'scores',`${eid}_${pid}`),{eventId:eid,playerId:pid,stab:sc.stab});
-      }
-    }
-  }
-  // Seed format
-  await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
+// FLASHCARDS
+const FC_CATS=['all','technique','essay','glasgow','tallys','rescue'];
+const FC_LABELS={all:'All',technique:'Techniques',essay:'Essay',glasgow:'Glasgow',tallys:"Tally's",rescue:'Rescue'};
+function getFCCards(){return fcFilter==='all'?FLASHCARDS:FLASHCARDS.filter(c=>c.cat===fcFilter)}
+function renderFC(){
+  document.getElementById('fc-cats').innerHTML=FC_CATS.map(c=>{const cnt=c==='all'?FLASHCARDS.length:FLASHCARDS.filter(f=>f.cat===c).length;const on=fcFilter===c;return`<button class="scroll-chip${on?' active':''}" onclick="setFCF('${c}')" style="${on?'background:var(--gold);border-color:var(--gold);color:#000':''}">${FC_LABELS[c]} <span style="opacity:.6">${cnt}</span></button>`}).join('');
+  renderFCCard();
 }
-
-// ─────────────────────────────────────────────────────────────
-// LAUNCH APP
-// ─────────────────────────────────────────────────────────────
-async function launchApp(showToast){
-  showLoading(true);
-  if(useFirebase){
-    await loadFromFirebase();
-    subscribeRealtime();
-  } else {
-    loadLocal();
-  }
-  document.getElementById('page-setup').classList.remove('active');
-  document.getElementById('page-home').classList.add('active');
-  document.getElementById('bottom-nav').style.display='flex';
-  renderAll();
-  showLoading(false);
-  if(showToast&&useFirebase){
-    const t=document.createElement('div');
-    t.textContent='🔥 Connected! Live sync active for all players.';
-    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d7a4f;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;';
-    document.body.appendChild(t);
-    setTimeout(()=>t.remove(),3500);
-  }
+function renderFCCard(){
+  const el=document.getElementById('fc-body');const cards=getFCCards();
+  if(fcDone){el.innerHTML=`<div class="done-wrap anim"><div class="done-emoji">${fcKnown>=fcUnsure?'🏆':'💪'}</div><div class="done-h">Deck done!</div><div class="done-grid"><div class="done-stat" style="background:var(--greenDim);border-color:rgba(52,211,153,.2)"><div class="done-n" style="color:var(--green)">${fcKnown}</div><div class="done-l" style="color:var(--green)">Got it</div></div><div class="done-stat" style="background:var(--amberDim);border-color:rgba(251,191,36,.2)"><div class="done-n" style="color:var(--amber)">${fcUnsure}</div><div class="done-l" style="color:var(--amber)">Review</div></div></div><button class="big-btn" onclick="resetFC()">🔀 Shuffle &amp; restart</button></div>`;return}
+  if(!cards.length){el.innerHTML='<p style="color:var(--t2);text-align:center;padding:40px 0">No cards here.</p>';return}
+  const card=cards[Math.min(fcIdx,cards.length-1)];const pct=(fcIdx/cards.length)*100;
+  el.innerHTML=`<div class="prog-wrap"><div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div><span class="prog-label">${fcIdx+1}/${cards.length}</span></div><div class="fc-card${fcFlipped?' flipped':''}${fcFading?' fade':''}" onclick="flipFC()"><div class="fc-label">${fcFlipped?'Answer':'Tap to reveal'}</div><div class="${fcFlipped?'fc-back':'fc-front'}">${fcFlipped?nl(card.back):esc(card.front)}</div></div>${fcFlipped?`<div class="rate-btns anim"><button class="rate-review" onclick="rateFC(false)">↩ Review again</button><button class="rate-got" onclick="rateFC(true)">✓ Got it</button></div>`:`<div class="fc-hint">Tap the card to see the answer</div>`}<div class="fc-tally"><span style="font-size:14px;color:var(--green);font-weight:700">✓ ${fcKnown} got</span><span style="font-size:14px;color:var(--amber);font-weight:700">↩ ${fcUnsure} review</span></div>`;
 }
+function flipFC(){fcFlipped=!fcFlipped;renderFCCard()}
+function setFCF(f){fcFilter=f;fcIdx=0;fcFlipped=false;fcKnown=0;fcUnsure=0;fcDone=false;renderFC()}
+function rateFC(isK){if(fcFading)return;if(isK)fcKnown++;else fcUnsure++;fcFading=true;fcFlipped=false;renderFCCard();setTimeout(()=>{fcFading=false;if(fcIdx+1>=getFCCards().length)fcDone=true;else fcIdx++;renderFCCard()},180)}
+function resetFC(){fcIdx=0;fcFlipped=false;fcKnown=0;fcUnsure=0;fcDone=false;fcFading=false;renderFCCard()}
 
-async function loadFromFirebase(){
-  // Players
-  const ps=await getDocs(collection(db,'players'));
-  state.players=ps.docs.map(d=>d.data());
-  // Events
-  const es=await getDocs(collection(db,'events'));
-  state.events=es.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);
-  // Scores
-  const ss=await getDocs(collection(db,'scores'));
-  state.scores={};
-  ss.docs.forEach(d=>{
-    const{eventId,playerId,stab}=d.data();
-    if(!state.scores[eventId])state.scores[eventId]={};
-    state.scores[eventId][playerId]={stab};
-  });
-  // Settings
-  try{
-    const m=await getDoc(doc(db,'meta','settings'));
-    if(m.exists()){const d=m.data();state.format=d.format||'stableford';state.season=d.season||state.season;}
-  }catch(e){}
-  // Courses
-  try{
-    const cs=await getDocs(collection(db,'courses'));
-    state.customCourses=cs.docs.map(d=>d.data());
-  }catch(e){}
-}
-
-function subscribeRealtime(){
-  // Unsubscribe old listeners
-  unsubscribers.forEach(u=>u());unsubscribers=[];
-  // Players
-  unsubscribers.push(onSnapshot(collection(db,'players'),snap=>{
-    state.players=snap.docs.map(d=>d.data());renderAll();
-  }));
-  // Events
-  unsubscribers.push(onSnapshot(collection(db,'events'),snap=>{
-    state.events=snap.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);renderAll();
-  }));
-  // Scores
-  unsubscribers.push(onSnapshot(collection(db,'scores'),snap=>{
-    state.scores={};
-    snap.docs.forEach(d=>{
-      const{eventId,playerId,stab}=d.data();
-      if(!state.scores[eventId])state.scores[eventId]={};
-      state.scores[eventId][playerId]={stab};
-    });
-    renderAll();
-  }));
-}
-
-function loadLocal(){
-  try{const s=localStorage.getItem('jbgolf_nl');if(s){const d=JSON.parse(s);Object.assign(state,d);}}catch(e){}
-}
-
-function saveLocal(){
-  try{localStorage.setItem('jbgolf_nl',JSON.stringify({format:state.format,season:state.season,players:state.players,events:state.events,scores:state.scores,customCourses:state.customCourses}));}catch(e){}
-}
-
-// ─────────────────────────────────────────────────────────────
-// FIREBASE WRITE HELPERS
-// ─────────────────────────────────────────────────────────────
-async function fbSet(col,id,data){
-  if(useFirebase&&db)await setDoc(doc(db,col,id),data);
-  else saveLocal();
-}
-async function fbDel(col,id){
-  if(useFirebase&&db)await deleteDoc(doc(db,col,id));
-  else saveLocal();
-}
-async function fbSaveSettings(){
-  if(useFirebase&&db)await setDoc(doc(db,'meta','settings'),{format:state.format,season:state.season});
-  else saveLocal();
-}
-
-// ─────────────────────────────────────────────────────────────
-// AUTO-CONNECT ON LOAD — waits for Firebase module to be ready
-// ─────────────────────────────────────────────────────────────
-_waitFbReady(async function(){
-  const saved=localStorage.getItem('jbg_fbcfg');
-  if(saved){
-    try{await initFB(JSON.parse(saved));}
-    catch(e){showLoading(false);}
-  } else {
-    // No saved config — just boot with local data
-    launchApp(false);
-  }
-});
-
-// ─────────────────────────────────────────────────────────────
-// SCORING LOGIC
-// ─────────────────────────────────────────────────────────────
-function calcStab(score,par,si,hcp){
-  if(!score||score===0)return 0;
-  const shots=Math.floor(hcp/18)+(si<=(hcp%18)?1:0);
-  const d=par-(score-shots);
-  if(d>=2)return 4;if(d===1)return 3;if(d===0)return 2;if(d===-1)return 1;return 0;
-}
-
-// ─────────────────────────────────────────────────────────────
-// LEAGUE
-// ─────────────────────────────────────────────────────────────
-function calcLeague(){
-  const done=state.events.filter(e=>e.status==='complete');
-  return state.players.map(p=>{
-    let scores=[];
-    done.forEach(ev=>{
-      const s=state.scores[ev.id];
-      if(s&&s[p.id]&&s[p.id].stab>0)scores.push({eventId:ev.id,eventName:ev.name,stab:s[p.id].stab});
-    });
-    const sorted=[...scores].sort((a,b)=>b.stab-a.stab);
-    const b6=sorted.slice(0,6);
-    const b6ids=b6.map(s=>s.eventId);
-    const pts=b6.reduce((s,r)=>s+r.stab,0);
-    return{player:p,scores,totalPts:pts,best6ids:b6ids,rounds:scores.length};
-  }).sort((a,b)=>b.totalPts-a.totalPts);
-}
-
-// ─────────────────────────────────────────────────────────────
-// RENDER
-// ─────────────────────────────────────────────────────────────
-function renderAll(){
-  renderHome();renderLeague();renderEvents();renderPlayers();renderScoreSetup();renderCourses('');
-  document.getElementById('format-select').value=state.format;
-  document.getElementById('header-format-chip').textContent=fL(state.format);
-  const done=state.events.filter(e=>e.status==='complete');
-  document.getElementById('header-events-count').textContent=`${done.length} Events`;
-  document.getElementById('league-season-sub').textContent=state.season;
-  // Sync indicator
-  const dot=document.getElementById('sync-dot');
-  if(dot)dot.className='sync-dot'+(useFirebase?'':' off');
-  const lbl=document.getElementById('sync-label');
-  if(lbl)lbl.textContent=useFirebase?'Live ✓':'Connect';
-}
-
-function renderHome(){
-  const t=calcLeague();
-  const pCls=['podium-1','podium-2','podium-3'];
-  const tr=['🥇','🥈','🥉'];
-  document.getElementById('home-podium').innerHTML=t.slice(0,3).map((r,i)=>`
-    <div class="podium-card ${pCls[i]}">
-      <div class="podium-icon">${tr[i]}</div>
-      <div class="podium-info">
-        <div class="podium-name">${r.player.name}</div>
-        <div class="podium-detail">HCP ${r.player.hcp} · ${r.rounds} rounds</div>
-        <div style="margin-top:4px;display:flex;flex-wrap:wrap;gap:4px;">
-          ${r.scores.map(s=>`<span style="font-size:10px;background:rgba(255,255,255,0.07);padding:1px 5px;border-radius:4px;color:${r.best6ids.includes(s.eventId)?'var(--gold2)':'var(--gray)'};">${s.stab}</span>`).join('')}
-        </div>
-      </div>
-      <div class="podium-pts"><div class="podium-pts-val">${r.totalPts}</div><div class="podium-pts-label">best 6 pts</div></div>
-    </div>`).join('');
-  const done=state.events.filter(e=>e.status==='complete');
-  const latest=done[done.length-1];
-  if(latest&&state.scores[latest.id]){
-    const rs=state.players.filter(p=>state.scores[latest.id][p.id]&&state.scores[latest.id][p.id].stab>0)
-      .map(p=>({name:p.name,pts:state.scores[latest.id][p.id].stab})).sort((a,b)=>b.pts-a.pts);
-    document.getElementById('home-latest').innerHTML=`<div style="font-size:12px;color:var(--gray);margin-bottom:8px;">${latest.name} · ${fD(latest.date)} · ${latest.course}</div>`+
-      rs.map((r,i)=>`<div class="stat-row"><span class="stat-label">${i===0?'🏆 ':''}${r.name}</span><span class="stat-val">${r.pts} pts</span></div>`).join('');
-  }else{
-    document.getElementById('home-latest').innerHTML='<div class="empty-state"><p>No completed rounds yet</p></div>';
-  }
-}
-
-function renderLeague(){
-  const t=calcLeague();
-  const done=state.events.filter(e=>e.status==='complete');
-  let th=`<tr><th>#</th><th style="text-align:left;padding-left:10px;">Player</th><th>HCP</th>`;
-  done.forEach(e=>{th+=`<th style="min-width:32px;">${e.name.replace('Week ','W')}</th>`;});
-  th+=`<th>Rnds</th><th>Total</th></tr>`;
-  document.getElementById('league-thead').innerHTML=th;
-  document.getElementById('league-tbody').innerHTML=t.map((r,i)=>{
-    const posEl=i===0?`<div class="jb-pos pos-1">1</div>`:i===1?`<div class="jb-pos pos-2">2</div>`:i===2?`<div class="jb-pos pos-3">3</div>`:`<div class="jb-pos pos-n">${i+1}</div>`;
-    const cells=done.map(ev=>{
-      const s=state.scores[ev.id];const ps=s&&s[r.player.id];
-      const v=ps&&ps.stab>0?ps.stab:0;const isBest=r.best6ids.includes(ev.id);
-      return v===0?`<td class="jb-td"><span class="score-cell-val score-zero">—</span></td>`
-        :`<td class="jb-td"><span class="score-cell-val ${isBest?'score-best':''}">${isBest?'★':''}${v}</span></td>`;
-    }).join('');
-    const rc=i===0?'jb-row pos1':i===1?'jb-row pos2':i===2?'jb-row pos3':'jb-row';
-    return`<tr class="${rc}"><td class="jb-td">${posEl}</td>
-      <td class="jb-td"><div class="jb-name">${r.player.name}</div><div class="jb-hcp">hcp ${r.player.hcp}</div></td>
-      <td class="jb-td" style="color:var(--gray);font-size:11px;">${r.player.hcp}</td>
-      ${cells}
-      <td class="jb-td" style="color:var(--gray);font-size:12px;">${r.rounds}</td>
-      <td class="jb-td"><span class="total-cell">${r.totalPts}</span></td></tr>`;
-  }).join('');
-}
-
-function renderEvents(){
-  if(!state.events.length){document.getElementById('events-list').innerHTML='<div class="empty-state"><div class="icon">📅</div><p>No events yet</p></div>';return;}
-  document.getElementById('events-list').innerHTML=[...state.events].reverse().map(ev=>{
-    const badge=ev.status==='complete'?'<span class="event-badge badge-complete">✓ Complete</span>':'<span class="event-badge badge-upcoming">Upcoming</span>';
-    let res='';
-    if(ev.status==='complete'&&state.scores[ev.id]){
-      const top=state.players.filter(p=>state.scores[ev.id][p.id]&&state.scores[ev.id][p.id].stab>0)
-        .map(p=>({name:p.name,pts:state.scores[ev.id][p.id].stab})).sort((a,b)=>b.pts-a.pts).slice(0,3);
-      res=`<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">${top.map((r,i)=>`<span style="font-size:11px;color:var(--gray);">${['🥇','🥈','🥉'][i]} ${r.name} <strong style="color:var(--white);">${r.pts}</strong></span>`).join('')}</div>`;
-    }
-    return`<div class="event-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
-        <div><div class="event-name">${ev.name}</div><div class="event-date">${fD(ev.date)} · ${ev.course}</div></div>${badge}
-      </div>${res}
-      <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-        ${ev.status==='complete'?`<button class="btn btn-sm btn-outline" onclick="viewResults('${ev.id}')">View Scores</button>`:''}
-        <button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">✏️ Edit Scores</button>
-        <button class="btn btn-sm btn-red" onclick="deleteEvent('${ev.id}')">Delete</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-function renderPlayers(){
-  const t=calcLeague();const rm={};t.forEach((r,i)=>{rm[r.player.id]=i+1;});
-  document.getElementById('players-list').innerHTML=state.players.length
-    ? state.players.map(p=>`
-      <div class="player-card">
-        <div class="player-avatar">${p.name==='Willy'? '🤠' : p.name[0]}</div>
-        <div class="player-info"><div class="player-name">${p.name}</div><div class="player-hcp">HCP ${p.hcp} · Rank #${rm[p.id]||'—'}</div></div>
-        <div class="player-actions">
-          <button class="btn btn-sm btn-outline" onclick="viewProfile('${p.id}')">Profile</button>
-          <button class="btn btn-sm btn-green" onclick="editPlayer('${p.id}')">Edit</button>
-          <button class="btn btn-sm btn-red" onclick="deletePlayer('${p.id}')">✕</button>
-        </div>
-      </div>`).join('')
-    : '<div class="empty-state"><div class="icon">👤</div><p>No players yet</p></div>';
-}
-
-const playerGroups={};
-function renderScoreSetup(){
-  const sel=document.getElementById('score-event-select');
-  sel.innerHTML='<option value="">— Pick event —</option>';
-  state.events.forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=`${ev.name} · ${fD(ev.date)}`;sel.appendChild(o);});
-  sel.onchange=function(){const ev=state.events.find(e=>e.id===this.value);const csel=document.getElementById('score-course-select');if(ev&&ev.course&&csel){csel.value=ev.course;if(!csel.value){const o=document.createElement('option');o.value=ev.course;o.textContent=ev.course;csel.appendChild(o);csel.value=ev.course;}}};
-  // Populate course dropdown — custom courses + courses from events
-  const csel=document.getElementById('score-course-select');
-  if(csel){
-    const eventCourses=[...new Set(state.events.map(e=>e.course).filter(Boolean))];
-    const customCourses=state.customCourses.map(c=>c.name);
-    const allCourses=[...new Set([...eventCourses,...customCourses])];
-    csel.innerHTML='<option value="">— Pick course —</option>';
-    allCourses.forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;csel.appendChild(o);});
-  }
-  state.players.forEach(p=>{if(!playerGroups[p.id])playerGroups[p.id]='g1';});
-  document.getElementById('player-group-assign').innerHTML=state.players.map(p=>{
-    const g=playerGroups[p.id]||'g1';
-    return`<div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.04);padding:7px 10px;border-radius:10px;border:1px solid var(--border);margin-bottom:6px;">
-      <span style="flex:1;font-size:13px;font-weight:700;font-family:'Montserrat',sans-serif;">${p.name}</span>
-      <div style="display:flex;gap:4px;">
-        ${['g1','g2','out'].map(grp=>`<button onclick="setGrp('${p.id}','${grp}')" style="padding:4px 8px;border-radius:6px;border:1px solid;font-size:10px;font-weight:700;cursor:pointer;${g===grp?(grp==='g1'?'background:#2d7a4f;border-color:#3a9660;color:white':grp==='g2'?'background:#4a8dd4;border-color:#5a9de4;color:white':'background:#663333;border-color:#884444;color:#ffaaaa'):'background:rgba(255,255,255,0.05);border-color:rgba(255,255,255,0.1);color:var(--gray);'}">${grp==='out'?'Out':grp.toUpperCase()}</button>`).join('')}
-      </div>
-    </div>`;
-  }).join('');
-}
-window.setGrp=function(pid,grp){playerGroups[pid]=grp;renderScoreSetup();};
-
-function renderCourses(search){
-  const q=(search||'').toLowerCase();
-  const courses=state.customCourses.filter(c=>!q||c.name.toLowerCase().includes(q));
-  if(!courses.length){
-    document.getElementById('courses-list').innerHTML='<div class="empty-state"><div class="icon">⛳</div><p style="color:var(--gold);font-weight:700;margin-bottom:8px;">No courses yet</p><p style="font-size:12px;">Tap Create Custom Scorecard above to add your first course.</p></div>';
-    return;
-  }
-  document.getElementById('courses-list').innerHTML=courses.map(c=>{
-    const tp=c.holes.reduce((s,h)=>s+h.par,0);
-    return`<div class="course-card">
-      <div style="font-size:24px;flex-shrink:0;">⛳</div>
-      <div style="flex:1;cursor:pointer;" onclick="viewCourseDetail('${c.id}')"><div class="course-name">${c.name}</div><div class="course-detail">Par ${tp} · SSS ${c.sss}</div></div>
-      <div style="display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
-        <span class="course-region">${c.region}</span>
-        <span class="custom-badge">Custom</span>
-        <button class="btn btn-sm btn-outline" style="font-size:10px;padding:3px 8px;" onclick="openSCBuilder('${c.id}')">✏️ Edit</button>
-      </div>
-    </div>`;
-  }).join('');
-}
-
-// ─────────────────────────────────────────────────────────────
-// SCORE ENTRY
-// ─────────────────────────────────────────────────────────────
-let activeEid=null;
-window.openScoreEntry=function(){
-  const eid=document.getElementById('score-event-select').value;
-  if(!eid){alert('Select an event first');return;}
-  const courseVal=document.getElementById('score-course-select').value;
-  if(!courseVal){alert('Select a course first');return;}
-  const ev=state.events.find(e=>e.id===eid);
-  // Update the event's course if different
-  if(ev&&ev.course!==courseVal){ev.course=courseVal;fbSet('events',ev.id,ev);}
-  activeEid=eid;
-  const playing=state.players.filter(p=>playerGroups[p.id]!=='out');
-  document.getElementById('score-setup').style.display='none';
-  document.getElementById('score-entry-area').style.display='block';
-  document.getElementById('active-event-name').textContent=ev?`${ev.name} · ${courseVal}`:'Round';
-  const existing=state.scores[eid]||{};
-  const course=state.customCourses.find(c=>c.name===courseVal);
-  const holes=course?course.holes:Array.from({length:18},(_,i)=>({hole:i+1,par:4,si:i+1,yards:0}));
-  activePlaying=playing;activeHoles=holes;activePlayerIdx=0;
-  // Seed in-memory store from existing saved scores
-  activeScoreData={};
-  playing.forEach(function(p){
-    activeScoreData[p.id]={};
-    if(existing[p.id]&&existing[p.id].holes){
-      Object.keys(existing[p.id].holes).forEach(function(k){
-        activeScoreData[p.id][k]=existing[p.id].holes[k];
-      });
-    }
-  });
-  buildHoleScorecards(playing,holes,existing);
-};
-
-let activePlaying=[],activeHoles=[],activePlayerIdx=0;
-// In-memory score store — persists across player tab switches
-let activeScoreData={};  // { pid: { holeNum: score, ... } }
-
-function buildHoleScorecards(playing,holes,existing){
-  var p=playing[activePlayerIdx];
-  // Use in-memory store first (captures unsaved tab switches), fall back to saved data
-  var existingHoles=activeScoreData[p.id]||(existing[p.id]&&existing[p.id].holes?existing[p.id].holes:{});
-  var container=document.getElementById('score-entry-rows');
-  container.innerHTML='';
-
-  // Player tabs
-  var tabs=document.createElement('div');
-  tabs.style.cssText='display:flex;gap:4px;overflow-x:auto;padding-bottom:6px;margin-bottom:10px;';
-  playing.forEach(function(pl,i){
-    var btn=document.createElement('button');
-    btn.textContent=pl.name;
-    btn.style.cssText='flex-shrink:0;padding:6px 12px;border-radius:20px;border:none;cursor:pointer;font-size:11px;font-weight:700;font-family:Montserrat,sans-serif;'+(i===activePlayerIdx?'background:linear-gradient(135deg,var(--gold),var(--gold2));color:var(--bg);':'background:rgba(255,255,255,0.08);color:var(--gray);');
-    if(existing[pl.id]&&existing[pl.id].stab>0){
-      var sp=document.createElement('span');
-      sp.textContent=' '+existing[pl.id].stab;
-      sp.style.color=i===activePlayerIdx?'var(--bg)':'var(--gold2)';
-      btn.appendChild(sp);
-    }
-    btn.onclick=function(){window.switchScorePlayer(i);};
-    tabs.appendChild(btn);
-  });
-  container.appendChild(tabs);
-
-  // Player info bar
-  var info=document.createElement('div');
-  info.style.cssText='background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;';
-  info.innerHTML='<div><div style="font-size:15px;font-weight:700;font-family:Montserrat,sans-serif;color:var(--gold2);">'+p.name+'</div><div style="font-size:11px;color:var(--gray);">HCP '+p.hcp+' · '+(playerGroups[p.id]==='g1'?'Group 1':'Group 2')+'</div></div><div style="text-align:right;"><div id="live-total-'+p.id+'" style="font-size:24px;font-weight:900;color:var(--white);font-family:Montserrat,sans-serif;">0</div><div style="font-size:9px;color:var(--gray);text-transform:uppercase;letter-spacing:1px;">Stableford pts</div></div>';
-  container.appendChild(info);
-
-  // Scorecard table
-  var wrap=document.createElement('div');
-  wrap.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:10px;';
-  var tbl=document.createElement('table');
-  tbl.style.cssText='width:100%;border-collapse:collapse;';
-  tbl.innerHTML='<thead><tr style="background:rgba(0,0,0,0.4);"><th style="padding:7px 6px;font-size:10px;color:var(--accent2);font-family:Montserrat,sans-serif;text-align:center;border-bottom:1px solid var(--border);">Hole</th><th style="padding:7px 4px;font-size:10px;color:var(--accent2);font-family:Montserrat,sans-serif;text-align:center;border-bottom:1px solid var(--border);">Par</th><th style="padding:7px 4px;font-size:10px;color:var(--accent2);font-family:Montserrat,sans-serif;text-align:center;border-bottom:1px solid var(--border);">SI</th><th style="padding:7px 4px;font-size:10px;color:var(--accent2);font-family:Montserrat,sans-serif;text-align:center;border-bottom:1px solid var(--border);">Score</th><th style="padding:7px 4px;font-size:10px;color:var(--accent2);font-family:Montserrat,sans-serif;text-align:center;border-bottom:1px solid var(--border);">Pts</th></tr></thead>';
-  var tbody=document.createElement('tbody');
-
-  holes.forEach(function(h,i){
-    var existVal=existingHoles[h.hole]||'';
-    var pts=existVal?calcStab(parseInt(existVal),h.par,h.si,p.hcp):0;
-    var tr=document.createElement('tr');
-    tr.style.borderBottom=i===8?'2px solid var(--border2)':'1px solid rgba(255,255,255,0.04)';
-
-    // Hole number
-    var td1=document.createElement('td');
-    td1.style.cssText='padding:4px 6px;text-align:center;';
-    td1.innerHTML='<div style="width:26px;height:26px;border-radius:50%;background:'+(i<9?'rgba(45,122,79,0.3)':'rgba(74,141,212,0.3)')+';display:inline-flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:'+(i<9?'#4cd48a':'var(--blue)')+';">'+h.hole+'</div>';
-
-    // Par
-    var td2=document.createElement('td');
-    td2.style.cssText='padding:4px;text-align:center;font-size:12px;color:'+(h.par===3?'#4cd48a':h.par===5?'var(--gold)':'var(--white)')+';';
-    td2.textContent=h.par;
-
-    // SI
-    var td3=document.createElement('td');
-    td3.style.cssText='padding:4px;text-align:center;font-size:11px;color:var(--gray);';
-    td3.textContent=h.si;
-
-    // Score input
-    var td4=document.createElement('td');
-    td4.style.cssText='padding:4px;text-align:center;';
-    var inp=document.createElement('input');
-    inp.type='number';inp.min='1';inp.max='12';
-    inp.style.cssText='width:46px;background:rgba(255,255,255,0.07);border:1px solid var(--border);border-radius:6px;color:var(--white);text-align:center;padding:5px 2px;font-size:14px;font-weight:700;outline:none;';
-    inp.id='hole-'+p.id+'-'+h.hole;
-    if(existVal)inp.value=existVal;
-    inp.placeholder='-';
-    (function(hh,par,si,hcp){
-      inp.addEventListener('input',function(){window.onHoleInput(p.id,hh,par,si,hcp);});
-    })(h.hole,h.par,h.si,p.hcp);
-    td4.appendChild(inp);
-
-    // Points
-    var td5=document.createElement('td');
-    td5.style.cssText='padding:4px;text-align:center;';
-    td5.id='pts-'+p.id+'-'+h.hole;
-    if(pts>0){
-      td5.innerHTML='<span style="font-size:13px;font-weight:900;font-family:Montserrat,sans-serif;color:'+(pts>=3?'var(--gold2)':pts===2?'#4cd48a':'var(--white)')+';">'+pts+'</span>';
-    } else {
-      td5.innerHTML='<span style="color:var(--gray2);font-size:12px;">—</span>';
-    }
-
-    tr.appendChild(td1);tr.appendChild(td2);tr.appendChild(td3);tr.appendChild(td4);tr.appendChild(td5);
-    tbody.appendChild(tr);
-  });
-
-  // Totals row
-  var totRow=document.createElement('tr');
-  totRow.style.background='rgba(201,168,76,0.08)';
-  totRow.innerHTML='<td colspan="3" style="padding:8px 6px;font-size:11px;font-weight:700;color:var(--accent2);font-family:Montserrat,sans-serif;">TOTAL</td><td id="total-gross-'+p.id+'" style="padding:8px 4px;text-align:center;font-size:13px;font-weight:700;color:var(--white);">—</td><td id="total-stab-'+p.id+'" style="padding:8px 4px;text-align:center;font-size:16px;font-weight:900;color:var(--white);font-family:Montserrat,sans-serif;">'+(existing[p.id]&&existing[p.id].stab>0?existing[p.id].stab:'0')+'</td>';
-  tbody.appendChild(totRow);
-
-  tbl.appendChild(tbody);
-  wrap.appendChild(tbl);
-  container.appendChild(wrap);
-
-  // Back button
-  var backBtn=document.createElement('button');
-  backBtn.className='btn btn-gray btn-full';
-  backBtn.style.marginTop='4px';
-  backBtn.textContent='← Back';
-  backBtn.onclick=function(){window.cancelScores();};
-  container.appendChild(backBtn);
-
-  recalcPlayerTotal(p.id,holes,p.hcp);
-  renderLiveLeaderboard();
-}
-
-window.switchScorePlayer=function(idx){activePlayerIdx=idx;buildHoleScorecards(activePlaying,activeHoles,state.scores[activeEid]||{});};
-
-window.onHoleInput=function(pid,holeNum,par,si,hcp){
-  var el=document.getElementById('hole-'+pid+'-'+holeNum);
-  var score=parseInt(el.value)||0;
-  // Save to in-memory store immediately
-  if(!activeScoreData[pid])activeScoreData[pid]={};
-  if(score>0){activeScoreData[pid][holeNum]=score;}
-  else{delete activeScoreData[pid][holeNum];}
-  // Update points display
-  var pts=score>0?calcStab(score,par,si,hcp):0;
-  var ptsEl=document.getElementById('pts-'+pid+'-'+holeNum);
-  if(ptsEl)ptsEl.innerHTML=pts>0?'<span style="font-size:13px;font-weight:900;font-family:Montserrat,sans-serif;color:'+(pts>=3?'var(--gold2)':pts===2?'#4cd48a':'var(--white)')+';">'+pts+'</span>':'<span style="color:var(--gray2);font-size:12px;">—</span>';
-  recalcPlayerTotal(pid,activeHoles,hcp);
-  renderLiveLeaderboard();
-  // Auto-save this player's scores after a short delay
-  autoSavePlayer(pid,hcp);
-};
-
-var autoSaveTimers={};
-function autoSavePlayer(pid,hcp){
-  clearTimeout(autoSaveTimers[pid]);
-  autoSaveTimers[pid]=setTimeout(async function(){
-    if(!activeEid||!activeScoreData[pid])return;
-    var holes=activeScoreData[pid];
-    var stab=0,gross=0;
-    var p=activePlaying.find(function(x){return x.id===pid;});
-    if(!p)return;
-    activeHoles.forEach(function(h){
-      var score=holes[h.hole]||0;
-      if(score>0){gross+=score;stab+=calcStab(score,h.par,h.si,p.hcp);}
-    });
-    if(!state.scores[activeEid])state.scores[activeEid]={};
-    state.scores[activeEid][pid]={stab,gross,holes};
-    try{
-      await fbSet('scores',activeEid+'_'+pid,{eventId:activeEid,playerId:pid,stab,gross,holes});
-      // Show subtle auto-save indicator
-      var ind=document.getElementById('autosave-indicator');
-      if(ind){ind.textContent='✓ Saved';ind.style.opacity='1';setTimeout(function(){ind.style.opacity='0';},2000);}
-    }catch(e){console.warn('Auto-save failed:',e);}
-  },800);
-}
-function recalcPlayerTotal(pid,holes,hcp){
-  var gross=0,stab=0;
-  holes.forEach(function(h){
-    var el=document.getElementById('hole-'+pid+'-'+h.hole);
-    var score=el?parseInt(el.value)||0:0;
-    if(score>0){gross+=score;stab+=calcStab(score,h.par,h.si,hcp);}
-  });
-  var totStab=document.getElementById('total-stab-'+pid);
-  var totGross=document.getElementById('total-gross-'+pid);
-  var liveTotal=document.getElementById('live-total-'+pid);
-  if(totStab)totStab.textContent=stab||'0';
-  if(totGross)totGross.textContent=gross||'—';
-  if(liveTotal)liveTotal.textContent=stab;
-}
-function renderLiveLeaderboard(){
-  var el=document.getElementById('live-leaderboard');
-  if(!el||!activePlaying.length)return;
-
-  // Calculate current points for every player from in-memory store
-  var standings=activePlaying.map(function(p){
-    var holes=activeScoreData[p.id]||{};
-    var stab=0,holesPlayed=0;
-    activeHoles.forEach(function(h){
-      var score=parseInt(holes[h.hole])||0;
-      if(score>0){stab+=calcStab(score,h.par,h.si,p.hcp);holesPlayed++;}
-    });
-    return{p:p,stab:stab,holesPlayed:holesPlayed,group:playerGroups[p.id]||'g1'};
-  }).sort(function(a,b){return b.stab-a.stab;});
-
-  var g1=standings.filter(function(s){return s.group==='g1';});
-  var g2=standings.filter(function(s){return s.group==='g2';});
-
-  function buildGroup(players,label,colour){
-    if(!players.length)return'';
-    return '<div style="flex:1;min-width:0;">'+
-      '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:'+colour+';margin-bottom:6px;">'+label+'</div>'+
-      players.map(function(s,i){
-        var medals=['🥇','🥈','🥉'];
-        var medal=i<3?medals[i]:'';
-        var isLeading=i===0&&s.stab>0;
-        return '<div style="display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:10px;margin-bottom:4px;background:'+(isLeading?'rgba(59,130,246,0.12)':'rgba(255,255,255,0.03)')+';border:1px solid '+(isLeading?'rgba(59,130,246,0.3)':'rgba(255,255,255,0.05)')+';">'+
-          '<span style="font-size:14px;width:20px;text-align:center;">'+(medal||'<span style="font-size:11px;color:var(--gray);">'+(i+1)+'</span>')+'</span>'+
-          '<span style="flex:1;font-size:13px;font-weight:700;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+s.p.name+'</span>'+
-          '<span style="font-size:11px;color:var(--gray);font-weight:500;">'+s.holesPlayed+'h</span>'+
-          '<span style="font-size:16px;font-weight:900;color:'+(s.stab>0?'var(--white)':'var(--gray)')+';font-family:Montserrat,sans-serif;min-width:32px;text-align:right;">'+s.stab+'</span>'+
-        '</div>';
-      }).join('')+
-    '</div>';
-  }
-
-  var hasGroups=g2.length>0;
-  el.innerHTML='<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:2px;">'+
-    '<div style="font-size:11px;font-weight:700;color:var(--accent2);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;">⚡ Live Leaderboard</div>'+
-    '<div style="display:flex;gap:12px;">'+
-    (hasGroups
-      ? buildGroup(g1,'Group 1','#60a5fa')+buildGroup(g2,'Group 2','#34d399')
-      : buildGroup(standings,'Today\'s Round','#60a5fa')
-    )+
-    '</div></div>';
-}
-
-window.cancelScores=function(){activeEid=null;document.getElementById('score-setup').style.display='block';document.getElementById('score-entry-area').style.display='none';};
-
-window.saveScores=async function(){
-  if(!activeEid)return;
-  showLoading(true);
-  try{
-    // Save ALL players using in-memory activeScoreData (not just current DOM)
-    for(var i=0;i<activePlaying.length;i++){
-      var p=activePlaying[i];
-      var holes=activeScoreData[p.id]||{};
-      var stab=0,gross=0;
-      activeHoles.forEach(function(h){
-        var score=parseInt(holes[h.hole])||0;
-        if(score>0){gross+=score;stab+=calcStab(score,h.par,h.si,p.hcp);}
-      });
-      if(!state.scores[activeEid])state.scores[activeEid]={};
-      state.scores[activeEid][p.id]={stab,gross,holes};
-      await fbSet('scores',activeEid+'_'+p.id,{eventId:activeEid,playerId:p.id,stab,gross,holes});
-    }
-    var ev=state.events.find(function(e){return e.id===activeEid;});
-    if(ev){ev.status='complete';await fbSet('events',ev.id,ev);}
-    cancelScores();renderAll();
-    var t=document.createElement('div');
-    t.textContent='✅ Round complete — scores saved!';
-    t.style.cssText='position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2d7a4f;color:white;padding:10px 20px;border-radius:20px;font-size:13px;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.5);white-space:nowrap;';
-    document.body.appendChild(t);setTimeout(function(){t.remove();},3500);
-  }catch(e){alert('Error saving: '+e.message);}
-  showLoading(false);
-};
-
-// Quick edit scores from events page
-window.quickEditScores=function(eid){
-  const sel=document.getElementById('score-event-select');
-  if(sel)sel.value=eid;
-  goPage('score',document.querySelectorAll('.nav-btn')[3]);
-  setTimeout(()=>window.openScoreEntry(),100);
-};
-
-// ─────────────────────────────────────────────────────────────
-// PLAYERS
-// ─────────────────────────────────────────────────────────────
-window.savePlayer=async function(){
-  const id=document.getElementById('edit-player-id').value;
-  const name=document.getElementById('input-player-name').value.trim();
-  const hcp=parseFloat(document.getElementById('input-player-hcp').value)||0;
-  if(!name){alert('Enter player name');return;}
-  showLoading(true);
-  try{
-    if(id){
-      const p=state.players.find(x=>x.id===id);if(p){p.name=name;p.hcp=hcp;}
-      await fbSet('players',id,{id,name,hcp});
-    }else{
-      const pid='p'+Date.now();
-      state.players.push({id:pid,name,hcp});
-      await fbSet('players',pid,{id:pid,name,hcp});
-    }
-    closeModal('modal-add-player');renderPlayers();
-  }catch(e){alert('Error: '+e.message);}
-  showLoading(false);
-};
-window.editPlayer=function(id){
-  const p=state.players.find(x=>x.id===id);if(!p)return;
-  document.getElementById('edit-player-id').value=p.id;
-  document.getElementById('input-player-name').value=p.name;
-  document.getElementById('input-player-hcp').value=p.hcp;
-  document.getElementById('add-player-modal-title').textContent='Edit Player';
-  showModal('modal-add-player');
-};
-window.deletePlayer=async function(id){
-  if(!confirm('Remove player?'))return;
-  showLoading(true);
-  state.players=state.players.filter(p=>p.id!==id);
-  await fbDel('players',id);
-  renderPlayers();showLoading(false);
-};
-window.viewProfile=function(id){
-  const p=state.players.find(x=>x.id===id);if(!p)return;
-  document.getElementById('profile-name').textContent=p.name;
-  const done=state.events.filter(e=>e.status==='complete');
-  const rounds=[];done.forEach(ev=>{const s=state.scores[ev.id];if(s&&s[id]&&s[id].stab>0)rounds.push({event:ev,stab:s[id].stab});});
-  const sorted=[...rounds].sort((a,b)=>b.stab-a.stab);const b6=sorted.slice(0,6);const b6t=b6.reduce((s,r)=>s+r.stab,0);
-  document.getElementById('profile-content').innerHTML=`
-    <div class="score-summary-grid">
-      <div class="score-summary-cell"><div class="score-summary-val">${p.hcp}</div><div class="score-summary-label">Handicap</div></div>
-      <div class="score-summary-cell"><div class="score-summary-val">${rounds.length}</div><div class="score-summary-label">Rounds</div></div>
-      <div class="score-summary-cell"><div class="score-summary-val">${b6t}</div><div class="score-summary-label">Best 6</div></div>
-    </div>
-    <div class="divider"></div>
-    ${rounds.map(r=>{const iB=b6.some(s=>s.event.id===r.event.id);return`<div class="stat-row"><span class="stat-label">${r.event.name}${iB?'<span class="chip chip-gold" style="margin-left:6px;">★</span>':''}</span><span class="stat-val">${r.stab} pts</span></div>`;}).join('')}
-    ${rounds.length===0?'<p style="color:var(--gray);font-size:13px;">No rounds yet</p>':''}`;
-  showModal('modal-player-profile');
-};
-
-// ─────────────────────────────────────────────────────────────
-// EVENTS
-// ─────────────────────────────────────────────────────────────
-window.saveEvent=async function(){
-  const id=document.getElementById('edit-event-id').value;
-  const name=document.getElementById('input-event-name').value.trim();
-  const date=document.getElementById('input-event-date').value;
-  const course=document.getElementById('input-event-course').value;
-  const format=document.getElementById('input-event-format').value;
-  if(!name||!date){alert('Enter name and date');return;}
-  showLoading(true);
-  try{
-    if(id){
-      const ev=state.events.find(e=>e.id===id);
-      if(ev){ev.name=name;ev.date=date;ev.course=course;ev.format=format;}
-      await fbSet('events',id,{id,name,date,course,format,status:ev?ev.status:'upcoming'});
-    }else{
-      const eid='e'+Date.now();
-      const ev={id:eid,name,date,course,format,status:'upcoming'};
-      state.events.push(ev);
-      await fbSet('events',eid,ev);
-    }
-    closeModal('modal-add-event');renderEvents();
-  }catch(e){alert('Error: '+e.message);}
-  showLoading(false);
-};
-window.deleteEvent=async function(id){
-  if(!confirm('Delete event?'))return;
-  showLoading(true);
-  state.events=state.events.filter(e=>e.id!==id);
-  await fbDel('events',id);
-  renderEvents();showLoading(false);
-};
-window.viewResults=function(eid){
-  const ev=state.events.find(e=>e.id===eid);const evs=state.scores[eid];if(!ev||!evs)return;
-  document.getElementById('round-results-title').textContent=`${ev.name} Results`;
-  const rs=state.players.filter(p=>evs[p.id]&&evs[p.id].stab>0).map(p=>({p,stab:evs[p.id].stab})).sort((a,b)=>b.stab-a.stab);
-  document.getElementById('round-results-content').innerHTML=`<div style="font-size:12px;color:var(--gray);margin-bottom:12px;">${fD(ev.date)} · ${ev.course}</div>`+
-    rs.map((r,i)=>`<div class="player-card" style="margin-bottom:6px;"><div class="player-avatar">${i===0?'🏆':i===1?'🥈':i===2?'🥉':r.p.name[0]}</div><div class="player-info"><div class="player-name">${r.p.name}</div><div class="player-hcp">HCP ${r.p.hcp}</div></div><div style="font-size:24px;font-weight:900;color:var(--gold2);font-family:'Montserrat',sans-serif;">${r.stab} pts</div></div>`).join('');
-  showModal('modal-round-results');
-};
-
-// ─────────────────────────────────────────────────────────────
-// HANDICAPS
-// ─────────────────────────────────────────────────────────────
-function hcpChange(pts){if(pts<=17)return+2;if(pts<=29)return+1;if(pts<=37)return 0;if(pts<=42)return-1;return-2;}
-window.openHcpModal=function(){
-  const done=state.events.filter(e=>e.status==='complete').slice().reverse();
-  const results=state.players.map(p=>{
-    let stab=0;
-    for(const ev of done){const s=state.scores[ev.id];if(s&&s[p.id]&&s[p.id].stab>0){stab=s[p.id].stab;break;}}
-    return{p,stab};
-  }).filter(r=>r.stab>0);
-  if(!results.length){alert('No completed rounds yet');return;}
-  const maxPts=Math.max(...results.map(r=>r.stab));
-  let html='';
-  results.forEach(({p,stab})=>{
-    const isW=stab===maxPts;
-    const chg=hcpChange(stab)+(isW?-1:0);
-    const newH=Math.max(0,p.hcp+chg);
-    const col=chg>0?'#ff8888':chg<0?'#4cd48a':'var(--gray)';
-    html+=`<div style="display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,0.06);">
-      <div style="flex:1;"><div style="font-size:13px;font-weight:700;font-family:'Montserrat',sans-serif;">${p.name}${isW?'<span style="font-size:9px;background:rgba(201,168,76,0.2);color:var(--gold);padding:1px 6px;border-radius:8px;margin-left:4px;">🏆 WINNER</span>':''}</div>
-      <div style="font-size:11px;color:var(--gray);">${stab} pts · <span style="color:${col};font-weight:700;">${chg===0?'no change':chg>0?'+'+chg+' shot'+(Math.abs(chg)>1?'s':''):chg+' shot'+(Math.abs(chg)>1?'s':'')}</span></div></div>
-      <div style="text-align:center;min-width:36px;"><div style="font-size:9px;color:var(--gray);">Now</div><div style="font-size:16px;font-weight:700;">${p.hcp}</div></div>
-      <div style="color:var(--gold);">→</div>
-      <div style="text-align:center;"><div style="font-size:9px;color:var(--gold);">New</div>
-      <input type="number" step="1" min="0" max="54" value="${newH}" id="nhcp-${p.id}" style="width:52px;background:rgba(201,168,76,0.1);border:1px solid var(--border2);border-radius:8px;color:var(--white);text-align:center;padding:5px;font-size:16px;font-weight:700;outline:none;font-family:'Montserrat',sans-serif;"></div>
-    </div>`;
-  });
-  document.getElementById('hcp-rows').innerHTML=html;
-  window._hcpR=results;
-  showModal('modal-hcp');
-};
-window.applyHandicaps=async function(){
-  if(!window._hcpR)return;
-  showLoading(true);
-  try{
-    for(const{p} of window._hcpR){
-      const el=document.getElementById('nhcp-'+p.id);
-      if(!el)continue;
-      const v=parseFloat(el.value);
-      if(!isNaN(v)&&v>=0){
-        const player=state.players.find(x=>x.id===p.id);
-        if(player){player.hcp=Math.round(v*10)/10;await fbSet('players',p.id,player);}
-      }
-    }
-    closeModal('modal-hcp');renderAll();alert('✅ Handicaps updated!');
-  }catch(e){alert('Error: '+e.message);}
-  showLoading(false);
-};
-
-// ─────────────────────────────────────────────────────────────
-// COURSES (saved to Firebase or localStorage)
-// ─────────────────────────────────────────────────────────────
-window.viewCourseDetail=function(id){
-  const c=state.customCourses.find(x=>x.id===id);if(!c)return;
-  const tp=c.holes.reduce((s,h)=>s+h.par,0);
-  document.getElementById('course-detail-title').textContent=c.name;
-  document.getElementById('course-detail-content').innerHTML=`
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">
-      <span class="chip chip-gold">${c.region}</span><span class="chip chip-green">Par ${tp}</span><span class="chip chip-blue">SSS ${c.sss}</span>
-    </div>
-    <table style="width:100%;border-collapse:collapse;font-size:12px;">
-      <thead><tr style="color:var(--gold);font-size:10px;border-bottom:1px solid var(--border);">
-        <th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th>
-      </tr></thead><tbody>
-      ${c.holes.map(h=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:5px;text-align:center;">${h.hole}</td><td style="padding:5px;text-align:center;font-weight:700;">${h.par}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:5px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}
-      </tbody>
-    </table>
-    <div style="margin-top:12px;display:flex;gap:8px;">
-      <button class="btn btn-sm btn-green" onclick="openSCBuilder('${id}');closeModal('modal-course-detail');">✏️ Edit</button>
-      <button class="btn btn-sm btn-red" onclick="deleteCourse('${id}');closeModal('modal-course-detail');">Delete</button>
-    </div>`;
-  showModal('modal-course-detail');
-};
-window.deleteCourse=async function(id){
-  if(!confirm('Delete course?'))return;
-  state.customCourses=state.customCourses.filter(c=>c.id!==id);
-  await fbDel('courses',id);renderCourses('');
-};
-
-// ─────────────────────────────────────────────────────────────
-// SCORECARD BUILDER
-// ─────────────────────────────────────────────────────────────
-let scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
-function initScbH(){if(!scbData.holes.length)scbData.holes=Array.from({length:18},(_,i)=>({hole:i+1,par:4,si:i+1,yards:0}));}
-window.openSCBuilder=function(cid){
-  scbData={id:null,name:'',region:'',sss:70,slope:113,holes:[]};
-  if(cid){const c=state.customCourses.find(x=>x.id===cid);if(c){scbData={...c,holes:c.holes.map(h=>({...h}))}; }}
-  initScbH();
-  document.getElementById('scb-name').value=scbData.name;
-  document.getElementById('scb-region').value=scbData.region;
-  document.getElementById('scb-sss').value=scbData.sss||'';
-  document.getElementById('scb-slope').value=scbData.slope||'';
-  scbUpdateTitle();scbBuildTable('front',0,9);scbBuildTable('back',9,18);scbGoStep(0);
-  document.getElementById('scb-overlay').classList.add('open');document.body.style.overflow='hidden';
-};
-window.closeSCBuilder=function(){document.getElementById('scb-overlay').classList.remove('open');document.body.style.overflow='';};
-window.scbUpdateTitle=function(){const n=document.getElementById('scb-name').value||'New Course';document.getElementById('scb-title-main').textContent=scbData.id?`Edit: ${n}`:'New Scorecard';document.getElementById('scb-title-sub').textContent=n;};
-window.scbGoStep=function(n){scbReadDetails();if(n>=1)scbReadHoles();scbData._step=n;document.querySelectorAll('.scb-step').forEach((t,i)=>{t.classList.toggle('active',i===n);i<n?t.classList.add('done'):t.classList.remove('done');});document.querySelectorAll('.scb-step-content').forEach((c,i)=>c.classList.toggle('active',i===n));if(n===1||n===2){scbUpdateSummary(n===1?'front':'back',n===1?0:9,n===1?9:18);scbValidateSI();}if(n===3)scbBuildReview();};
-function scbReadDetails(){scbData.name=document.getElementById('scb-name').value.trim();scbData.region=document.getElementById('scb-region').value.trim();scbData.sss=parseInt(document.getElementById('scb-sss').value)||70;scbData.slope=parseInt(document.getElementById('scb-slope').value)||113;}
-function scbReadHoles(){for(let i=0;i<18;i++){const p=document.getElementById(`scb-par-${i}`);const s=document.getElementById(`scb-si-${i}`);const y=document.getElementById(`scb-yards-${i}`);if(p)scbData.holes[i].par=parseInt(p.value)||4;if(s)scbData.holes[i].si=parseInt(s.value)||i+1;if(y)scbData.holes[i].yards=parseInt(y.value)||0;}}
-function scbBuildTable(half,start,end){
-  document.getElementById(`scb-tbody-${half}`).innerHTML=Array.from({length:end-start},(_,j)=>{
-    const i=start+j;const h=scbData.holes[i];
-    return`<tr><td class="hb-td"><div class="hb-hole-badge">${i+1}</div></td>
-      <td class="hb-td"><div class="hb-par-select"><button type="button" class="hb-par-btn s3 ${h.par===3?'sel':''}" onclick="scbSetPar(${i},3,this)">3</button><button type="button" class="hb-par-btn s4 ${h.par===4?'sel':''}" onclick="scbSetPar(${i},4,this)">4</button><button type="button" class="hb-par-btn s5 ${h.par===5?'sel':''}" onclick="scbSetPar(${i},5,this)">5</button></div><input type="hidden" id="scb-par-${i}" value="${h.par}"></td>
-      <td class="hb-td"><input type="number" class="hb-input" id="scb-si-${i}" value="${h.si}" min="1" max="18" oninput="scbOnSI(${i},this)"></td>
-      <td class="hb-td"><input type="number" class="hb-input" id="scb-yards-${i}" value="${h.yards||''}" min="0" max="700" placeholder="yds" style="font-size:13px;"></td></tr>`;
-  }).join('');
-}
-window.scbSetPar=function(idx,par,btn){scbData.holes[idx].par=par;document.getElementById(`scb-par-${idx}`).value=par;btn.closest('tr').querySelectorAll('.hb-par-btn').forEach(b=>{b.classList.remove('sel');if(parseInt(b.textContent)===par)b.classList.add('sel');});scbUpdateSummary(idx<9?'front':'back',idx<9?0:9,idx<9?9:18);};
-window.scbOnSI=function(idx,el){scbData.holes[idx].si=parseInt(el.value)||0;scbValidateSI();scbUpdateSummary(idx<9?'front':'back',idx<9?0:9,idx<9?9:18);};
-function scbValidateSI(){const vals=scbData.holes.map(h=>h.si);const cnt={};vals.forEach(v=>{cnt[v]=(cnt[v]||0)+1;});const dupes=new Set(Object.keys(cnt).filter(k=>cnt[k]>1).map(Number));for(let i=0;i<18;i++){const el=document.getElementById(`scb-si-${i}`);if(el)el.classList.toggle('si-dupe',dupes.has(scbData.holes[i].si));}const msg=dupes.size>0?`⚠️ Duplicate SI: ${[...dupes].sort((a,b)=>a-b).join(', ')}`:'';['scb-warn-front','scb-warn-back'].forEach(id=>{const w=document.getElementById(id);if(w){w.textContent=msg;w.classList.toggle('show',!!msg);}});}
-function scbUpdateSummary(half,start,end){scbReadHoles();const holes=scbData.holes.slice(start,end);const tp=holes.reduce((s,h)=>s+h.par,0);const el=document.getElementById(`scb-summary-${half}`);if(!el)return;el.innerHTML=`<div class="hb-sum-cell ${tp<30||tp>40?'warn':''}"><div class="hb-sum-val">${tp}</div><div class="hb-sum-label">Par</div></div><div class="hb-sum-cell"><div class="hb-sum-val" style="color:#4cd48a;">${holes.filter(h=>h.par===3).length}</div><div class="hb-sum-label">Par 3s</div></div><div class="hb-sum-cell"><div class="hb-sum-val">${holes.filter(h=>h.par===4).length}</div><div class="hb-sum-label">Par 4s</div></div><div class="hb-sum-cell"><div class="hb-sum-val" style="color:var(--gold);">${holes.filter(h=>h.par===5).length}</div><div class="hb-sum-label">Par 5s</div></div>`;}
-function scbBuildReview(){scbReadDetails();scbReadHoles();const front=scbData.holes.slice(0,9);const back=scbData.holes.slice(9,18);const fp=front.reduce((s,h)=>s+h.par,0);const bp=back.reduce((s,h)=>s+h.par,0);const mkT=(holes,from)=>`<table style="width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px;"><thead><tr style="color:var(--gold);font-size:10px;border-bottom:1px solid var(--border);"><th style="padding:4px;text-align:center;">Hole</th><th style="padding:4px;text-align:center;">Par</th><th style="padding:4px;text-align:center;">SI</th><th style="padding:4px;text-align:center;">Yards</th></tr></thead><tbody>${holes.map((h,i)=>`<tr style="border-bottom:1px solid rgba(255,255,255,0.04);"><td style="padding:4px;text-align:center;">${from+i+1}</td><td style="padding:4px;text-align:center;color:${h.par===3?'#4cd48a':h.par===5?'var(--gold)':'var(--white)'};">${h.par}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.si}</td><td style="padding:4px;text-align:center;color:var(--gray);">${h.yards||'—'}</td></tr>`).join('')}</tbody></table>`;document.getElementById('scb-review-content').innerHTML=`<div style="background:rgba(201,168,76,0.1);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px;"><div style="font-size:16px;font-weight:700;color:var(--white);font-family:Montserrat,sans-serif;">${scbData.name||'Unnamed'}</div><div style="font-size:12px;color:var(--gray);">${scbData.region} · SSS ${scbData.sss}</div><div style="display:flex;gap:16px;margin-top:8px;"><span>Par <strong style="color:var(--gold2);">${fp+bp}</strong></span><span>Out <strong style="color:var(--gold);">${fp}</strong></span><span>In <strong style="color:var(--gold);">${bp}</strong></span></div></div><div style="font-size:11px;font-weight:700;color:var(--gold);margin-bottom:6px;font-family:Montserrat,sans-serif;">FRONT 9</div>${mkT(front,0)}<div style="font-size:11px;font-weight:700;color:var(--gold);margin:10px 0 6px;font-family:Montserrat,sans-serif;">BACK 9</div>${mkT(back,9)}`;}
-window.scbQuickFill=function(p){const P={standard:{pars:[4,3,4,4,5,3,4,4,4,4,3,5,4,4,3,4,5,4],sis:[3,9,1,11,5,15,7,13,17,8,16,2,10,4,14,6,12,18]},par72:{pars:[4,4,3,5,4,4,3,5,4,4,4,3,5,4,4,3,5,4],sis:[1,5,17,3,9,7,15,11,13,2,6,18,4,10,8,16,12,14]},par70:{pars:[4,4,3,4,4,4,3,4,4,4,4,3,4,4,3,4,4,4],sis:[1,5,17,7,3,9,15,11,13,2,6,18,4,10,16,8,12,14]},links:{pars:[4,4,3,5,4,4,3,4,4,5,3,4,4,3,5,4,4,4],sis:[1,7,17,3,9,5,15,11,13,2,18,6,10,16,4,8,12,14]}};const preset=P[p];if(!preset)return;scbData.holes=preset.pars.map((par,i)=>({hole:i+1,par,si:preset.sis[i],yards:0}));scbBuildTable('front',0,9);scbBuildTable('back',9,18);};
-window.saveSCBuilder=async function(){
-  scbReadDetails();scbReadHoles();
-  if(!scbData.name){alert('Enter course name');scbGoStep(0);return;}
-  showLoading(true);
-  try{
-    const course={id:scbData.id||'cc'+Date.now(),name:scbData.name,region:scbData.region||'Scotland',sss:scbData.sss,slope:scbData.slope,holes:scbData.holes.map(h=>({...h}))};
-    if(scbData.id){const idx=state.customCourses.findIndex(c=>c.id===scbData.id);if(idx>=0)state.customCourses[idx]=course;else state.customCourses.push(course);}
-    else state.customCourses.push(course);
-    await fbSet('courses',course.id,course);
-    closeSCBuilder();renderCourses('');alert(`✅ "${course.name}" saved!`);
-  }catch(e){alert('Error: '+e.message);}
-  showLoading(false);
-};
-
-// ─────────────────────────────────────────────────────────────
-// HELPERS
-// ─────────────────────────────────────────────────────────────
-window.goPage=function(name,btn){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
-  if(btn)btn.classList.add('active');
-  if(name==='score')renderScoreSetup();
-  if(name==='courses')renderCourses('');
-};
-window.changeFormat=async function(val){
-  state.format=val;
-  await fbSaveSettings();
-  document.getElementById('header-format-chip').textContent=fL(val);
-  renderLeague();renderHome();
-};
-window.showModal=function(id){document.getElementById(id).style.display='flex';document.body.style.overflow='hidden';if(id==='modal-add-player'&&!document.getElementById('edit-player-id').value){document.getElementById('add-player-modal-title').textContent='Add Player';document.getElementById('input-player-name').value='';document.getElementById('input-player-hcp').value='';document.getElementById('edit-player-id').value='';}};
-window.closeModal=function(id){document.getElementById(id).style.display='none';document.body.style.overflow='';const el=document.getElementById('edit-player-id');if(el)el.value='';const ee=document.getElementById('edit-event-id');if(ee)ee.value='';};
-window.closeModalOutside=function(e,id){if(e.target.id===id)closeModal(id);};
-function showLoading(v){document.getElementById('loading-overlay').classList.toggle('show',v);}
-function fL(f){return f==='stableford'?'Stableford':'Stroke Play';}
-function fD(d){if(!d)return'';try{return new Date(d+'T12:00:00').toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});}catch(e){return d;}}
+document.getElementById('nav-back').style.display='none';
 </script>
 </body>
 </html>
- 
