@@ -100,6 +100,7 @@ body{background:var(--bg);color:var(--white);font-family:'Montserrat',sans-serif
 .event-badge{font-size:10px;padding:3px 10px;border-radius:20px;font-weight:700}
 .badge-upcoming{background:rgba(59,130,246,0.12);color:var(--accent2);border:1px solid rgba(59,130,246,0.2)}
 .badge-complete{background:rgba(16,185,129,0.12);color:#34d399;border:1px solid rgba(16,185,129,0.2)}
+.badge-matchplay{background:rgba(245,158,11,0.12);color:#fbbf24;border:1px solid rgba(245,158,11,0.2)}
 .player-card{display:flex;align-items:center;gap:12px;padding:12px;background:var(--card);border-radius:12px;margin-bottom:8px;border:1px solid var(--border)}
 .player-avatar{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--accent),#2563eb);display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;color:white;flex-shrink:0}
 .player-info{flex:1}
@@ -314,6 +315,40 @@ select.form-input option{background:#131d35}
     <div style="margin-top:12px;" id="players-list"></div>
   </div>
 
+  <!-- MATCHPLAY -->
+  <div class="page" id="page-matchplay">
+    <div id="mp-setup-area">
+      <div class="card">
+        <div class="card-title" style="margin-bottom:14px;">⚔️ Matchplay</div>
+        <div class="form-group">
+          <label class="form-label">Player 1</label>
+          <select class="form-input" id="mp-p1"><option value="">— Select —</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Player 2</label>
+          <select class="form-input" id="mp-p2"><option value="">— Select —</option></select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select class="form-input" id="mp-course"><option value="">— Select —</option></select>
+        </div>
+        <div id="mp-hcp-info" style="font-size:12px;color:var(--gray);padding:8px 0;min-height:20px;"></div>
+        <button class="btn btn-gold btn-full" onclick="startMatchplay()">⚔️ Start Match</button>
+      </div>
+      <div id="mp-history"></div>
+    </div>
+    <div id="mp-play-area" style="display:none;">
+      <div class="card" style="margin-bottom:8px;padding:10px 14px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div class="card-title" id="mp-match-title">Match</div>
+          <button class="btn btn-sm btn-red" onclick="endMatchplay()">✕ End</button>
+        </div>
+      </div>
+      <div id="mp-status-card"></div>
+      <div id="mp-hole-area"></div>
+    </div>
+  </div>
+
   <!-- COURSES -->
   <div class="page" id="page-courses">
     <button class="btn btn-gold btn-full" onclick="openSCBuilder(null)">✏️ Create Custom Scorecard</button>
@@ -331,6 +366,7 @@ select.form-input option{background:#131d35}
   <button class="nav-btn" onclick="goPage('events',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Events</button>
   <button class="nav-btn" onclick="goPage('score',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>Score</button>
   <button class="nav-btn" onclick="goPage('players',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>Players</button>
+  <button class="nav-btn" onclick="goPage('matchplay',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>Match</button>
   <button class="nav-btn" onclick="goPage('courses',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-10"/></svg>Courses</button>
 </div>
 
@@ -410,7 +446,7 @@ select.form-input option{background:#131d35}
     <div class="form-group"><label class="form-label">Event Name</label><input class="form-input" id="input-event-name" placeholder="e.g. Week 8"></div>
     <div class="form-group"><label class="form-label">Date</label><input class="form-input" type="date" id="input-event-date"></div>
     <div class="form-group"><label class="form-label">Course</label><input class="form-input" id="input-event-course" placeholder="e.g. Falkirk Golf Club"></div>
-    <div class="form-group"><label class="form-label">Format</label><select class="form-input" id="input-event-format"><option value="stableford">Stableford</option><option value="stroke">Stroke Play</option></select></div>
+    <div class="form-group"><label class="form-label">Format</label><select class="form-input" id="input-event-format"><option value="stableford">Stableford</option><option value="stroke">Stroke Play</option><option value="matchplay">Matchplay (1v1)</option></select></div>
     <button class="btn btn-gold btn-full" onclick="saveEvent()">Save Event</button>
   </div>
 </div>
@@ -880,20 +916,36 @@ function renderLeague(){
 function renderEvents(){
   if(!state.events.length){document.getElementById('events-list').innerHTML='<div class="empty-state"><div class="icon">📅</div><p>No events yet</p></div>';return;}
   document.getElementById('events-list').innerHTML=[...state.events].reverse().map(ev=>{
-    const badge=ev.status==='complete'?'<span class="event-badge badge-complete">✓ Complete</span>':'<span class="event-badge badge-upcoming">Upcoming</span>';
-    let res='';
-    if(ev.status==='complete'&&state.scores[ev.id]){
-      const top=state.players.filter(p=>state.scores[ev.id][p.id]&&state.scores[ev.id][p.id].stab>0)
-        .map(p=>({name:p.name,pts:state.scores[ev.id][p.id].stab})).sort((a,b)=>b.pts-a.pts).slice(0,3);
-      res=`<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">${top.map((r,i)=>`<span style="font-size:11px;color:var(--gray);">${['🥇','🥈','🥉'][i]} ${r.name} <strong style="color:var(--white);">${r.pts}</strong></span>`).join('')}</div>`;
+    var isMP = ev.format==='matchplay';
+    var statusBadge = ev.status==='complete'
+      ? '<span class="event-badge badge-complete">✓ Complete</span>'
+      : '<span class="event-badge badge-upcoming">Upcoming</span>';
+    var fmtBadge = isMP ? '<span class="event-badge badge-matchplay" style="margin-left:4px;">⚔️ Matchplay</span>' : '';
+    var res='';
+    if(ev.status==='complete' && state.scores[ev.id]){
+      if(isMP){
+        // Show matchplay result from stored match data
+        var mpRes = ev.matchResult || null;
+        if(mpRes){
+          res=`<div style="margin-top:6px;font-size:12px;color:var(--gold2);font-weight:700;">⚔️ ${mpRes}</div>`;
+        }
+      } else {
+        const top=state.players.filter(p=>state.scores[ev.id][p.id]&&state.scores[ev.id][p.id].stab>0)
+          .map(p=>({name:p.name,pts:state.scores[ev.id][p.id].stab})).sort((a,b)=>b.pts-a.pts).slice(0,3);
+        res=`<div style="margin-top:6px;display:flex;gap:8px;flex-wrap:wrap;">${top.map((r,i)=>`<span style="font-size:11px;color:var(--gray);">${['🥇','🥈','🥉'][i]} ${r.name} <strong style="color:var(--white);">${r.pts}</strong></span>`).join('')}</div>`;
+      }
     }
+    var editBtn = isMP
+      ? `<button class="btn btn-sm btn-gold" onclick="openEventMatchplay('${ev.id}')">⚔️ Play Match</button>`
+      : `<button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">✏️ Enter Scores</button>`;
     return`<div class="event-card">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:4px;">
-        <div><div class="event-name">${ev.name}</div><div class="event-date">${fD(ev.date)} · ${ev.course}</div></div>${badge}
+        <div><div class="event-name">${ev.name}</div><div class="event-date">${fD(ev.date)} · ${ev.course}</div></div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px;">${statusBadge}${fmtBadge}</div>
       </div>${res}
       <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
-        ${ev.status==='complete'?`<button class="btn btn-sm btn-outline" onclick="viewResults('${ev.id}')">View Scores</button>`:''}
-        <button class="btn btn-sm btn-gold" onclick="quickEditScores('${ev.id}')">✏️ Edit Scores</button>
+        ${ev.status==='complete'&&!isMP?`<button class="btn btn-sm btn-outline" onclick="viewResults('${ev.id}')">View Scores</button>`:''}
+        ${editBtn}
         <button class="btn btn-sm btn-red" onclick="deleteEvent('${ev.id}')">Delete</button>
       </div>
     </div>`;
@@ -920,7 +972,8 @@ const playerGroups={};
 function renderScoreSetup(){
   const sel=document.getElementById('score-event-select');
   sel.innerHTML='<option value="">— Pick event —</option>';
-  state.events.forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=`${ev.name} · ${fD(ev.date)}`;sel.appendChild(o);});
+  // Exclude matchplay events — they are played from the Match tab
+  state.events.filter(ev=>ev.format!=='matchplay').forEach(ev=>{const o=document.createElement('option');o.value=ev.id;o.textContent=`${ev.name} · ${fD(ev.date)}`;sel.appendChild(o);});
   sel.onchange=function(){const ev=state.events.find(e=>e.id===this.value);const csel=document.getElementById('score-course-select');if(ev&&ev.course&&csel){csel.value=ev.course;if(!csel.value){const o=document.createElement('option');o.value=ev.course;o.textContent=ev.course;csel.appendChild(o);csel.value=ev.course;}}};
   // Populate course dropdown — custom courses + courses from events
   const csel=document.getElementById('score-course-select');
@@ -1608,6 +1661,503 @@ window.saveSCBuilder=async function(){
 // ─────────────────────────────────────────────────────────────
 // HELPERS
 // ─────────────────────────────────────────────────────────────
+
+// ═══════════════════════════════════════════════════════════════
+// MATCHPLAY
+// ═══════════════════════════════════════════════════════════════
+
+// Matchplay state
+var mpState = null; // active match
+var mpMatches = []; // history (localStorage only, not in league)
+
+function mpLoadMatches() {
+  try { mpMatches = JSON.parse(localStorage.getItem('jbg_mp') || '[]'); } catch(e) { mpMatches = []; }
+}
+function mpSaveMatches() {
+  try { localStorage.setItem('jbg_mp', JSON.stringify(mpMatches)); } catch(e) {}
+}
+
+// How many shots does a player get on a given hole in matchplay?
+// Diff = |hcp1 - hcp2|, lower hcp player gives shots to higher
+function mpShotsOnHole(playerHcp, opponentHcp, si) {
+  var diff = playerHcp - opponentHcp;
+  if (diff <= 0) return 0; // this player gets no shots (they're better or equal)
+  // Player receives floor(diff/18) shots every hole, plus 1 extra on holes where si <= diff%18
+  return Math.floor(diff / 18) + (si <= (diff % 18) ? 1 : 0);
+}
+
+// Net score for a player on a hole in matchplay
+function mpNetScore(grossScore, playerHcp, opponentHcp, si) {
+  if (!grossScore || grossScore <= 0) return null;
+  var shots = mpShotsOnHole(playerHcp, opponentHcp, si);
+  return grossScore - shots;
+}
+
+// Calculate hole result: returns 'p1', 'p2', or 'halved'
+function mpHoleResult(p1Gross, p2Gross, p1Hcp, p2Hcp, si) {
+  var p1Net = mpNetScore(p1Gross, p1Hcp, p2Hcp, si);
+  var p2Net = mpNetScore(p2Gross, p2Hcp, p1Hcp, si);
+  if (p1Net === null || p2Net === null) return null; // not both entered
+  if (p1Net < p2Net) return 'p1';
+  if (p2Net < p1Net) return 'p2';
+  return 'halved';
+}
+
+// Calculate overall match status from all hole results
+// Returns { leader: 'p1'|'p2'|'tied', holesUp: N, holesLeft: N, status: string, finished: bool, result: string }
+function mpCalcStatus(match) {
+  var holes = match.course.holes;
+  var p1Up = 0; // positive = p1 leading, negative = p2 leading
+  var holesPlayed = 0;
+
+  holes.forEach(function(h) {
+    var p1g = match.scores.p1[String(h.hole)];
+    var p2g = match.scores.p2[String(h.hole)];
+    if (!p1g || !p2g) return;
+    holesPlayed++;
+    var res = mpHoleResult(p1g, p2g, match.p1.hcp, match.p2.hcp, h.si);
+    if (res === 'p1') p1Up++;
+    else if (res === 'p2') p1Up--;
+  });
+
+  var holesLeft = holes.length - holesPlayed;
+  var absUp = Math.abs(p1Up);
+  var leader = p1Up > 0 ? 'p1' : p1Up < 0 ? 'p2' : 'tied';
+  var leaderName = p1Up > 0 ? match.p1.name : p1Up < 0 ? match.p2.name : null;
+
+  // Match is over if leader's lead > holes remaining (can't be caught)
+  var finished = holesPlayed > 0 && absUp > holesLeft;
+  // Also finished if all 18 played
+  if (holesLeft === 0 && holesPlayed === holes.length) finished = true;
+
+  var status, result;
+  if (holesPlayed === 0) {
+    status = 'All Square'; result = '';
+  } else if (leader === 'tied') {
+    if (finished) { status = 'All Square'; result = 'Match Halved'; }
+    else { status = 'All Square'; result = ''; }
+  } else {
+    if (finished) {
+      // e.g. "3 & 2" means 3 up with 2 to play
+      status = leaderName + ' wins';
+      result = absUp + ' & ' + holesLeft;
+    } else {
+      status = absUp + ' UP — ' + leaderName;
+      result = holesLeft + ' to play';
+    }
+  }
+
+  return { leader: leader, holesUp: absUp, holesLeft: holesLeft, holesPlayed: holesPlayed,
+           status: status, result: result, finished: finished, p1Up: p1Up };
+}
+
+function renderMatchplaySetup() {
+  mpLoadMatches();
+  var p1sel = document.getElementById('mp-p1');
+  var p2sel = document.getElementById('mp-p2');
+  var csel  = document.getElementById('mp-course');
+  if (!p1sel) return;
+
+  // Populate players
+  [p1sel, p2sel].forEach(function(sel) {
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">— Select —</option>';
+    state.players.forEach(function(p) {
+      var o = document.createElement('option');
+      o.value = p.id; o.textContent = p.name + ' (HCP ' + p.hcp + ')';
+      sel.appendChild(o);
+    });
+    sel.value = cur;
+  });
+
+  // Populate courses (deduplicated)
+  var seen = {};
+  csel.innerHTML = '<option value="">— Select —</option>';
+  state.customCourses.forEach(function(c) {
+    if (seen[c.name]) return; seen[c.name] = true;
+    var o = document.createElement('option'); o.value = c.name; o.textContent = c.name;
+    csel.appendChild(o);
+  });
+
+  // Handicap info on player change
+  function updateHcpInfo() {
+    var p1 = state.players.find(function(p){ return p.id === p1sel.value; });
+    var p2 = state.players.find(function(p){ return p.id === p2sel.value; });
+    var el = document.getElementById('mp-hcp-info');
+    if (p1 && p2 && p1.id !== p2.id) {
+      var diff = Math.abs(p1.hcp - p2.hcp);
+      var higher = p1.hcp > p2.hcp ? p1.name : p2.name;
+      var lower  = p1.hcp > p2.hcp ? p2.name : p1.name;
+      el.innerHTML = '<span style="color:var(--accent2);font-weight:600;">' + higher +
+        '</span> receives <strong style="color:var(--white);">' + diff +
+        ' shot' + (diff!==1?'s':'') + '</strong> from ' +
+        '<span style="color:var(--accent2);font-weight:600;">' + lower + '</span>';
+    } else { el.textContent = ''; }
+  }
+  p1sel.onchange = updateHcpInfo;
+  p2sel.onchange = updateHcpInfo;
+  updateHcpInfo();
+
+  // Match history
+  var hist = document.getElementById('mp-history');
+  if (mpMatches.length) {
+    hist.innerHTML = '<div class="card-title" style="margin:14px 0 10px;font-size:11px;letter-spacing:1.5px;">⚔️ Recent Matches</div>';
+    mpMatches.slice().reverse().slice(0,5).forEach(function(m) {
+      var ms = mpCalcStatus(m);
+      var card = document.createElement('div');
+      card.style.cssText = 'background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:8px;';
+      card.innerHTML =
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">' +
+          '<span style="font-size:13px;font-weight:700;color:var(--white);">' + m.p1.name + ' vs ' + m.p2.name + '</span>' +
+          '<span style="font-size:10px;color:var(--gray);">' + (m.date||'') + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+          '<span style="font-size:12px;color:var(--gray);">' + (m.course ? m.course.name : '') + '</span>' +
+          '<span style="font-size:13px;font-weight:700;color:' + (ms.finished?'var(--gold2)':'var(--accent2)') + ';">' + ms.status + (ms.result?' '+ms.result:'') + '</span>' +
+        '</div>';
+      hist.appendChild(card);
+    });
+  } else {
+    hist.innerHTML = '<div class="empty-state"><div class="icon">⚔️</div><p>No matches yet</p></div>';
+  }
+}
+
+window.startMatchplay = function() {
+  var p1id = document.getElementById('mp-p1').value;
+  var p2id = document.getElementById('mp-p2').value;
+  var cname = document.getElementById('mp-course').value;
+  if (!p1id || !p2id || !cname) { alert('Select both players and a course'); return; }
+  if (p1id === p2id) { alert('Select two different players'); return; }
+  var p1 = state.players.find(function(p){ return p.id===p1id; });
+  var p2 = state.players.find(function(p){ return p.id===p2id; });
+  var course = state.customCourses.find(function(c){ return c.name===cname; });
+  if (!p1 || !p2 || !course) { alert('Could not find player or course data'); return; }
+
+  var mpEvId = null;
+  var evTitleEl = document.querySelector('#mp-setup-area .card-title');
+  if (evTitleEl && evTitleEl.textContent.indexOf('Week')>-1 || evTitleEl && evTitleEl.textContent.indexOf('—')>-1) {
+    // launched from event — find matching event by course
+    state.events.forEach(function(e){ if(e.course===cname && e.format==='matchplay') mpEvId=e.id; });
+  }
+  mpState = {
+    id: 'mp_' + Date.now(),
+    eventId: mpEvId,
+    p1: p1, p2: p2,
+    course: course,
+    scores: { p1: {}, p2: {} },
+    holeIdx: 0,
+    date: new Date().toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}),
+    finished: false
+  };
+
+  document.getElementById('mp-setup-area').style.display = 'none';
+  document.getElementById('mp-play-area').style.display = 'block';
+  document.getElementById('mp-match-title').textContent = p1.name + ' vs ' + p2.name;
+  renderMpHole();
+};
+
+window.endMatchplay = function() {
+  if (mpState) {
+    var ms = mpCalcStatus(mpState);
+    mpState.finished = ms.finished;
+    mpMatches.push(mpState);
+    mpSaveMatches();
+    // If launched from an event, save result back to that event
+    if (mpState.eventId) {
+      var ev = state.events.find(function(e){ return e.id===mpState.eventId; });
+      if (ev) {
+        var resultStr = ms.status + (ms.result ? ' ' + ms.result : '');
+        ev.matchResult = resultStr;
+        if (ms.finished) ev.status = 'complete';
+        fbSet('events', ev.id, ev).catch(function(){});
+      }
+    }
+  }
+  mpState = null;
+  document.getElementById('mp-play-area').style.display = 'none';
+  document.getElementById('mp-setup-area').style.display = 'block';
+  // Return to events page if launched from there
+  if (mpEventReturn) {
+    mpEventReturn = false;
+    goPage('events', document.querySelectorAll('.nav-btn')[2]);
+  } else {
+    renderMatchplaySetup();
+  }
+};
+
+var mpEventReturn = false;
+
+// Launch matchplay directly from an event card
+window.openEventMatchplay = function(eid) {
+  var ev = state.events.find(function(e){ return e.id===eid; });
+  if (!ev) return;
+  // Navigate to matchplay tab
+  goPage('matchplay', document.querySelectorAll('.nav-btn')[4]);
+  renderMatchplaySetup();
+  // Pre-select course if event has one that matches a custom course
+  setTimeout(function() {
+    var csel = document.getElementById('mp-course');
+    if (csel && ev.course) csel.value = ev.course;
+    // Store event ID so result can be saved back
+    mpEventReturn = true;
+    // Show a hint
+    var title = document.querySelector('#mp-setup-area .card-title');
+    if (title) title.textContent = '⚔️ ' + ev.name + ' — Matchplay';
+  }, 50);
+};
+
+function renderMpHole() {
+  if (!mpState) return;
+  var h = mpState.course.holes[mpState.holeIdx];
+  var ms = mpCalcStatus(mpState);
+
+  // Status card
+  var sc = document.getElementById('mp-status-card');
+  var leaderColour = ms.leader==='p1' ? '#60a5fa' : ms.leader==='p2' ? '#34d399' : 'var(--gray)';
+  sc.innerHTML = '';
+  var scard = document.createElement('div');
+  scard.style.cssText = 'background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px;text-align:center;';
+  scard.innerHTML =
+    '<div style="font-size:11px;color:var(--gray);font-weight:700;text-transform:uppercase;letter-spacing:1.5px;margin-bottom:6px;">Match Status</div>' +
+    '<div style="font-size:26px;font-weight:900;color:' + leaderColour + ';font-family:Montserrat,sans-serif;">' + ms.status + '</div>' +
+    (ms.result ? '<div style="font-size:13px;color:var(--gray);margin-top:2px;">' + ms.result + '</div>' : '') +
+    '<div style="display:flex;justify-content:center;gap:20px;margin-top:10px;font-size:11px;color:var(--gray);">' +
+      '<span>' + ms.holesPlayed + ' played</span><span>' + ms.holesLeft + ' left</span>' +
+    '</div>';
+  sc.appendChild(scard);
+
+  // Hole scorecard area
+  var ha = document.getElementById('mp-hole-area');
+  ha.innerHTML = '';
+
+  // Hole nav
+  var nav = document.createElement('div');
+  nav.style.cssText = 'display:flex;align-items:center;justify-content:space-between;background:var(--card2);border:1px solid var(--border);border-radius:12px;padding:10px 14px;margin-bottom:10px;';
+
+  var prevBtn = document.createElement('button');
+  prevBtn.innerHTML = '&larr;';
+  prevBtn.style.cssText = 'background:rgba(255,255,255,0.08);border:1px solid var(--border);border-radius:8px;color:var(--off-white);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;';
+  prevBtn.onclick = function(){ if(mpState.holeIdx>0){mpState.holeIdx--;renderMpHole();} };
+
+  var holeInfo = document.createElement('div');
+  holeInfo.style.cssText = 'text-align:center;';
+
+  // Hole dots
+  var dots = mpState.course.holes.map(function(hh, i) {
+    var p1g = mpState.scores.p1[String(hh.hole)];
+    var p2g = mpState.scores.p2[String(hh.hole)];
+    var bothScored = p1g && p2g;
+    var isCur = i === mpState.holeIdx;
+    var res = bothScored ? mpHoleResult(p1g,p2g,mpState.p1.hcp,mpState.p2.hcp,hh.si) : null;
+    var dotCol = isCur ? 'var(--accent2)' : !bothScored ? 'rgba(255,255,255,0.15)' :
+      res==='p1' ? '#60a5fa' : res==='p2' ? '#34d399' : 'var(--gray)';
+    return '<div style="width:8px;height:8px;border-radius:50%;background:'+dotCol+';cursor:pointer;flex-shrink:0;" onclick="mpGoHole('+i+')"></div>';
+  }).join('');
+
+  holeInfo.innerHTML =
+    '<div style="font-size:22px;font-weight:900;color:var(--white);">Hole ' + h.hole + '</div>' +
+    '<div style="font-size:11px;color:var(--gray);font-weight:600;">Par ' + h.par + ' &nbsp;|&nbsp; SI ' + h.si + (h.yards?' &nbsp;|&nbsp; '+h.yards+'y':'') + '</div>' +
+    '<div style="display:flex;gap:4px;justify-content:center;margin-top:6px;flex-wrap:wrap;">' + dots + '</div>';
+
+  var nextBtn = document.createElement('button');
+  nextBtn.innerHTML = '&rarr;';
+  nextBtn.style.cssText = 'background:rgba(255,255,255,0.08);border:1px solid var(--border);border-radius:8px;color:var(--off-white);padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;';
+  nextBtn.onclick = function(){ if(mpState.holeIdx<mpState.course.holes.length-1){mpState.holeIdx++;renderMpHole();} };
+
+  nav.appendChild(prevBtn); nav.appendChild(holeInfo); nav.appendChild(nextBtn);
+  ha.appendChild(nav);
+
+  // Shots info for this hole
+  var p1shots = mpShotsOnHole(mpState.p1.hcp, mpState.p2.hcp, h.si);
+  var p2shots = mpShotsOnHole(mpState.p2.hcp, mpState.p1.hcp, h.si);
+  if (p1shots > 0 || p2shots > 0) {
+    var shotInfo = document.createElement('div');
+    shotInfo.style.cssText = 'text-align:center;font-size:11px;color:var(--gray);margin-bottom:8px;font-weight:600;';
+    if (p1shots > 0) shotInfo.textContent = mpState.p1.name + ' gets ' + p1shots + ' shot' + (p1shots>1?'s':'') + ' on this hole';
+    else shotInfo.textContent = mpState.p2.name + ' gets ' + p2shots + ' shot' + (p2shots>1?'s':'') + ' on this hole';
+    ha.appendChild(shotInfo);
+  }
+
+  // Work out hole result once for both players
+  var p1gH = mpState.scores.p1[String(h.hole)];
+  var p2gH = mpState.scores.p2[String(h.hole)];
+  var holeRes = (p1gH && p2gH) ? mpHoleResult(p1gH, p2gH, mpState.p1.hcp, mpState.p2.hcp, h.si) : null;
+
+  // Score inputs for both players
+  var inputCard = document.createElement('div');
+  inputCard.style.cssText = 'background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;';
+
+  [{player: mpState.p1, key: 'p1'}, {player: mpState.p2, key: 'p2'}].forEach(function(item, idx) {
+    var p = item.player; var key = item.key;
+    var opKey = key==='p1'?'p2':'p1';
+    var savedGross = mpState.scores[key][String(h.hole)] || '';
+    var opHcp = key==='p1' ? mpState.p2.hcp : mpState.p1.hcp;
+    var shots = mpShotsOnHole(p.hcp, opHcp, h.si);
+    var netScore = savedGross ? mpNetScore(parseInt(savedGross), p.hcp, opHcp, h.si) : null;
+
+    // Per-player result: did they win/halve/lose this hole?
+    var playerResult = null;
+    if (holeRes !== null) {
+      playerResult = holeRes === key ? 'W' : holeRes === 'halved' ? 'H' : 'L';
+    }
+
+    // Row background highlights the winner
+    var rowBg = playerResult==='W' ? 'rgba(52,211,153,0.08)' : 'rgba(0,0,0,0)';
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 14px;background:'+rowBg+';' +
+      (idx===0?'border-bottom:1px solid rgba(255,255,255,0.07);':'');
+
+    // Name + shots info
+    var nameDiv = document.createElement('div');
+    nameDiv.style.cssText = 'flex:1;min-width:0;';
+    nameDiv.innerHTML =
+      '<div style="font-size:14px;font-weight:700;color:var(--white);white-space:nowrap;">' + p.name + '</div>' +
+      '<div style="font-size:10px;color:var(--gray);font-weight:500;margin-top:1px;">' +
+        'HCP ' + p.hcp +
+        (shots > 0
+          ? ' &nbsp;·&nbsp; <span style="color:#4cd48a;font-weight:700;">+' + shots + ' shot' + (shots>1?'s':'') + ' this hole</span>'
+          : ' &nbsp;·&nbsp; <span style="color:var(--gray);">no shots</span>') +
+        (netScore !== null ? ' &nbsp;·&nbsp; net&nbsp;<strong style="color:var(--white);">' + netScore + '</strong>' : '') +
+      '</div>';
+
+    var ctrl = document.createElement('div');
+    ctrl.style.cssText = 'display:flex;align-items:center;gap:6px;flex-shrink:0;';
+
+    var bm = document.createElement('button');
+    bm.textContent='−';
+    bm.style.cssText='width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+    (function(k){ bm.onclick=function(){ mpAdj(k,-1); }; })(key);
+
+    var inpWrap = document.createElement('div');
+    inpWrap.style.cssText='display:flex;flex-direction:column;align-items:center;gap:2px;';
+    var inpLbl = document.createElement('div');
+    inpLbl.style.cssText='font-size:8px;color:var(--gray);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;';
+    inpLbl.textContent='Gross';
+    var inp = document.createElement('input');
+    inp.type='number'; inp.min='1'; inp.max='15'; inp.placeholder='—';
+    inp.id = 'mp-inp-'+key;
+    if (savedGross) inp.value = savedGross;
+    inp.style.cssText='width:52px;height:44px;background:rgba(59,130,246,0.1);border:2px solid var(--accent);border-radius:10px;color:var(--white);text-align:center;font-size:20px;font-weight:900;outline:none;font-family:Montserrat,sans-serif;';
+    inp.setAttribute('inputmode','numeric');
+    (function(k){ inp.oninput=function(){ mpScore(k); }; })(key);
+    inpWrap.appendChild(inpLbl); inpWrap.appendChild(inp);
+
+    var bp = document.createElement('button');
+    bp.textContent='+';
+    bp.style.cssText='width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--white);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;';
+    (function(k){ bp.onclick=function(){ mpAdj(k,1); }; })(key);
+
+    // W / H / L badge — only shows when both players have scored
+    var resultBadge = document.createElement('div');
+    resultBadge.style.cssText='width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0;font-family:Montserrat,sans-serif;';
+    if (playerResult === 'W') {
+      resultBadge.textContent='W'; resultBadge.style.background='rgba(52,211,153,0.2)'; resultBadge.style.color='#34d399'; resultBadge.style.border='2px solid #34d399';
+    } else if (playerResult === 'H') {
+      resultBadge.textContent='½'; resultBadge.style.background='rgba(255,255,255,0.06)'; resultBadge.style.color='var(--gray)'; resultBadge.style.border='2px solid rgba(255,255,255,0.15)';
+    } else if (playerResult === 'L') {
+      resultBadge.textContent='L'; resultBadge.style.background='rgba(239,68,68,0.12)'; resultBadge.style.color='#f87171'; resultBadge.style.border='2px solid rgba(239,68,68,0.3)';
+    } else {
+      resultBadge.textContent='?'; resultBadge.style.background='rgba(255,255,255,0.04)'; resultBadge.style.color='rgba(255,255,255,0.2)'; resultBadge.style.border='2px solid rgba(255,255,255,0.08)';
+    }
+
+    ctrl.appendChild(bm); ctrl.appendChild(inpWrap); ctrl.appendChild(bp); ctrl.appendChild(resultBadge);
+    row.appendChild(nameDiv); row.appendChild(ctrl);
+    inputCard.appendChild(row);
+  });
+
+  ha.appendChild(inputCard);
+
+  // Hole result banner (if both scored)
+  if (holeRes !== null) {
+    var hBanner = document.createElement('div');
+    var winName = holeRes==='p1' ? mpState.p1.name : holeRes==='p2' ? mpState.p2.name : null;
+    var bannerCol  = holeRes==='halved'?'rgba(255,255,255,0.05)':'rgba(52,211,153,0.1)';
+    var bannerBord = holeRes==='halved'?'rgba(255,255,255,0.12)':'rgba(52,211,153,0.3)';
+    var bannerTxt  = holeRes==='halved' ? '🤝 Hole Halved' : '✅ ' + winName + ' wins the hole';
+    var bannerC2   = holeRes==='halved'?'var(--gray)':'#34d399';
+    hBanner.style.cssText='background:'+bannerCol+';border:1px solid '+bannerBord+';border-radius:12px;padding:12px;text-align:center;margin-bottom:10px;';
+    hBanner.innerHTML='<div style="font-size:15px;font-weight:800;color:'+bannerC2+';">'+bannerTxt+'</div>';
+    ha.appendChild(hBanner);
+  }
+
+  // Scorecard summary table
+  var tbl = document.createElement('div');
+  tbl.style.cssText='background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;';
+  var tblHTML='<table style="width:100%;border-collapse:collapse;font-size:11px;">' +
+    '<thead><tr style="background:rgba(0,0,0,0.3);">' +
+    '<th style="padding:7px 6px;color:var(--accent2);text-align:center;border-bottom:1px solid var(--border);">H</th>' +
+    '<th style="padding:7px 4px;color:var(--accent2);text-align:center;border-bottom:1px solid var(--border);">Par</th>' +
+    '<th style="padding:7px 4px;color:var(--accent2);text-align:center;border-bottom:1px solid var(--border);">SI</th>' +
+    '<th style="padding:7px 4px;color:#60a5fa;text-align:center;border-bottom:1px solid var(--border);">' + mpState.p1.name.split(' ')[0] + '</th>' +
+    '<th style="padding:7px 4px;color:#34d399;text-align:center;border-bottom:1px solid var(--border);">' + mpState.p2.name.split(' ')[0] + '</th>' +
+    '<th style="padding:7px 4px;color:var(--gray);text-align:center;border-bottom:1px solid var(--border);">Result</th>' +
+    '</tr></thead><tbody>';
+
+  var runningP1Up = 0;
+  mpState.course.holes.forEach(function(hh, i) {
+    var p1g3 = mpState.scores.p1[String(hh.hole)];
+    var p2g3 = mpState.scores.p2[String(hh.hole)];
+    var res3 = (p1g3 && p2g3) ? mpHoleResult(p1g3, p2g3, mpState.p1.hcp, mpState.p2.hcp, hh.si) : null;
+    if (res3==='p1') runningP1Up++;
+    else if (res3==='p2') runningP1Up--;
+    var isCurrent = i === mpState.holeIdx;
+    var rowBg = isCurrent ? 'rgba(59,130,246,0.08)' : i%2===0 ? 'rgba(255,255,255,0.02)' : 'rgba(0,0,0,0.1)';
+    var resText = res3===null ? (p1g3||p2g3?'…':'—') : res3==='halved'?'½½' : res3==='p1'?'←':'→';
+    var resCol = res3===null?'var(--gray)':res3==='halved'?'var(--gray)':res3==='p1'?'#60a5fa':'#34d399';
+    // Running status after this hole
+    var runText = '';
+    if (res3!==null) {
+      if(runningP1Up===0) runText='AS';
+      else if(runningP1Up>0) runText=runningP1Up+'↑';
+      else runText=Math.abs(runningP1Up)+'↓';
+    }
+    tblHTML += '<tr style="background:'+rowBg+';border-left:'+(isCurrent?'3px solid var(--accent2)':'3px solid transparent')+'">' +
+      '<td style="padding:5px 6px;text-align:center;font-weight:700;color:'+(isCurrent?'var(--accent2)':'var(--gray)')+';">'+hh.hole+'</td>' +
+      '<td style="padding:5px 4px;text-align:center;color:var(--gray);">'+hh.par+'</td>' +
+      '<td style="padding:5px 4px;text-align:center;color:var(--gray2);">'+hh.si+'</td>' +
+      '<td style="padding:5px 4px;text-align:center;color:'+(p1g3?'var(--white)':'var(--gray2)')+';">'+(p1g3||'—')+'</td>' +
+      '<td style="padding:5px 4px;text-align:center;color:'+(p2g3?'var(--white)':'var(--gray2)')+';">'+(p2g3||'—')+'</td>' +
+      '<td style="padding:5px 4px;text-align:center;font-weight:700;color:'+resCol+';">'+(res3!==null?resText+' <span style="font-size:9px;color:var(--gray2);">'+runText+'</span>':'—')+'</td>' +
+      '</tr>';
+    if (i===8) tblHTML += '<tr style="height:3px;background:var(--border);"><td colspan="6"></td></tr>';
+  });
+  tblHTML += '</tbody></table>';
+  tbl.innerHTML = tblHTML;
+  ha.appendChild(tbl);
+
+  // Finish button
+  var finBtn = document.createElement('button');
+  finBtn.className = 'btn btn-gold btn-full';
+  finBtn.textContent = '🏆 Finish & Save Match';
+  finBtn.style.marginBottom = '8px';
+  finBtn.onclick = window.endMatchplay;
+  ha.appendChild(finBtn);
+}
+
+// updateMpNetDiv removed — net shown inline in player row
+
+window.mpGoHole = function(idx) { mpState.holeIdx = idx; renderMpHole(); };
+
+window.mpAdj = function(key, delta) {
+  var inp = document.getElementById('mp-inp-' + key);
+  if (!inp) return;
+  var cur = parseInt(inp.value) || 0;
+  inp.value = Math.max(1, Math.min(15, cur + delta));
+  window.mpScore(key);
+};
+
+window.mpScore = function(key) {
+  if (!mpState) return;
+  var inp = document.getElementById('mp-inp-' + key);
+  if (!inp) return;
+  var score = parseInt(inp.value) || 0;
+  var h = mpState.course.holes[mpState.holeIdx];
+  if (score > 0) mpState.scores[key][String(h.hole)] = score;
+  else delete mpState.scores[key][String(h.hole)];
+  // Re-render — W/H/L badges and result banner update automatically
+  renderMpHole();
+};
+
 window.goPage=function(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
@@ -1615,6 +2165,7 @@ window.goPage=function(name,btn){
   if(btn)btn.classList.add('active');
   if(name==='score')renderScoreSetup();
   if(name==='courses')renderCourses('');
+  if(name==='matchplay')renderMatchplaySetup();
 };
 window.changeFormat=async function(val){
   state.format=val;
