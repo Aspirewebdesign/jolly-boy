@@ -642,11 +642,13 @@ async function seedFirestoreIfEmpty(){
 // ─────────────────────────────────────────────────────────────
 async function launchApp(showToast){
   showLoading(true);
+  // Always load local data first — instant display, no white screen on refresh
+  loadLocal();
+  renderAll();
   if(useFirebase){
+    // Then load Firebase on top (overwrites local with authoritative data)
     await loadFromFirebase();
     subscribeRealtime();
-  } else {
-    loadLocal();
   }
   document.getElementById('page-setup').classList.remove('active');
   document.getElementById('page-home').classList.add('active');
@@ -669,13 +671,14 @@ async function loadFromFirebase(){
   // Events
   const es=await getDocs(collection(db,'events'));
   state.events=es.docs.map(d=>d.data()).sort((a,b)=>a.date>b.date?1:-1);
-  // Scores
+  // Scores — preserve full data including holes
   const ss=await getDocs(collection(db,'scores'));
   state.scores={};
   ss.docs.forEach(d=>{
-    const{eventId,playerId,stab}=d.data();
+    const data=d.data();
+    const{eventId,playerId,stab,gross,holes}=data;
     if(!state.scores[eventId])state.scores[eventId]={};
-    state.scores[eventId][playerId]={stab};
+    state.scores[eventId][playerId]={stab:stab||0,gross:gross||0,holes:holes||{}};
   });
   // Settings
   try{
@@ -730,7 +733,16 @@ function loadLocal(){
 }
 
 function saveLocal(){
-  try{localStorage.setItem('jbgolf_nl',JSON.stringify({format:state.format,season:state.season,players:state.players,events:state.events,scores:state.scores,customCourses:state.customCourses}));}catch(e){}
+  try{
+    localStorage.setItem('jbgolf_nl',JSON.stringify({
+      format:state.format,
+      season:state.season,
+      players:state.players,
+      events:state.events,
+      scores:state.scores,
+      customCourses:state.customCourses
+    }));
+  }catch(e){console.warn('saveLocal failed:',e);}
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -1039,7 +1051,7 @@ function renderHoleView(playing, holes) {
       '<div style="font-size:11px;color:var(--gray);font-weight:600;">Par ' + h.par + ' &nbsp;|&nbsp; SI ' + h.si + (h.yards ? ' &nbsp;|&nbsp; ' + h.yards + 'y' : '') + '</div>' +
       '<div style="display:flex;gap:4px;justify-content:center;margin-top:6px;">' +
         holes.map(function(hh, i) {
-          var hasScore = Object.keys(activeScoreData).some(function(pid){ return activeScoreData[pid][hh.hole]; });
+          var hasScore = Object.keys(activeScoreData).some(function(pid){ return activeScoreData[pid][String(hh.hole)]; });
           return '<div style="width:8px;height:8px;border-radius:50%;background:' + (i === activeHoleIdx ? 'var(--accent2)' : hasScore ? 'var(--green)' : 'rgba(255,255,255,0.15)') + ';cursor:pointer;" onclick="goHole(' + i + ')"></div>';
         }).join('') +
       '</div>' +
@@ -1076,7 +1088,7 @@ function renderHoleView(playing, holes) {
     var grpDiv = document.createElement('div');
     grpDiv.style.cssText = 'background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;';
     players.forEach(function(p) {
-      var savedScore = activeScoreData[p.id] ? (activeScoreData[p.id][h.hole] || '') : '';
+      var savedScore = activeScoreData[p.id] ? (activeScoreData[p.id][String(h.hole)] || '') : '';
       var pts = savedScore ? calcStab(parseInt(savedScore), h.par, h.si, p.hcp) : 0;
       var shots = Math.floor(p.hcp/18) + (h.si <= (p.hcp%18) ? 1 : 0);
 
@@ -1101,7 +1113,7 @@ function renderHoleView(playing, holes) {
       var btnMinus = document.createElement('button');
       btnMinus.textContent = '−';
       btnMinus.style.cssText = 'width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
-      (function(pp,hh){ btnMinus.onclick = function(){ window.adjHoleScore(pp.id,hh,pp.hcp,-1); }; })(p, h);
+      (function(pp,hk){ btnMinus.onclick = function(){ window.adjHoleScore(pp.id,hk,pp.hcp,-1); }; })(p, h.hole);
 
       var inp = document.createElement('input');
       inp.type='number'; inp.min='1'; inp.max='15';
@@ -1110,12 +1122,12 @@ function renderHoleView(playing, holes) {
       if (savedScore) inp.value = savedScore;
       inp.style.cssText = 'width:52px;height:52px;background:rgba(59,130,246,0.1);border:2px solid var(--accent);border-radius:10px;color:var(--white);text-align:center;font-size:22px;font-weight:900;outline:none;font-family:Montserrat,sans-serif;';
       inp.setAttribute('inputmode','numeric');
-      (function(pp,hh){ inp.oninput = function(){ window.onHoleScore(pp.id,hh,pp.hcp); }; })(p, h);
+      (function(pp,hk){ inp.oninput = function(){ window.onHoleScore(pp.id,hk,pp.hcp); }; })(p, h.hole);
 
       var btnPlus = document.createElement('button');
       btnPlus.textContent = '+';
       btnPlus.style.cssText = 'width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.08);border:1px solid var(--border);color:var(--white);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;';
-      (function(pp,hh){ btnPlus.onclick = function(){ window.adjHoleScore(pp.id,hh,pp.hcp,1); }; })(p, h);
+      (function(pp,hk){ btnPlus.onclick = function(){ window.adjHoleScore(pp.id,hk,pp.hcp,1); }; })(p, h.hole);
 
       var ptsDiv = document.createElement('div');
       ptsDiv.id = 'hpts-'+p.id;
@@ -1159,10 +1171,24 @@ window.onHoleScore = function(pid, holeNum, hcp) {
   var holeData = activeHoles.find(function(h){ return h.hole === holeNum; }) || {};
   var par = holeData.par || 4;
   var si = holeData.si || holeNum;
-  // Save to memory immediately
+  // Save to memory immediately — before anything else
   if (!activeScoreData[pid]) activeScoreData[pid] = {};
-  if (score > 0) { activeScoreData[pid][holeNum] = score; }
-  else { delete activeScoreData[pid][holeNum]; }
+  var hKey = String(holeNum);
+  if (score > 0) { activeScoreData[pid][hKey] = score; }
+  else { delete activeScoreData[pid][hKey]; }
+  // Also persist to state.scores + localStorage right now (no debounce)
+  // so navigating to next hole NEVER loses the score
+  var p2 = activePlaying.find(function(x){ return x.id===pid; });
+  if (p2 && activeEid) {
+    var s2=0,g2=0;
+    activeHoles.forEach(function(hh){
+      var v=parseInt(activeScoreData[pid][String(hh.hole)])||0;
+      if(v>0){g2+=v;s2+=calcStab(v,hh.par,hh.si,p2.hcp);}
+    });
+    if(!state.scores[activeEid])state.scores[activeEid]={};
+    state.scores[activeEid][pid]={stab:s2,gross:g2,holes:Object.assign({},activeScoreData[pid])};
+    saveLocal();
+  }
   // Update points display
   var pts = score > 0 ? calcStab(score, par, si, hcp) : 0;
   var ptsEl = document.getElementById('hpts-' + pid);
@@ -1183,14 +1209,15 @@ function doAutoSave(pid) {
     var holes = activeScoreData[pid] || {};
     var stab = 0, gross = 0;
     activeHoles.forEach(function(h) {
-      var score = parseInt(holes[h.hole]) || 0;
+      var score = parseInt(holes[String(h.hole)]) || 0;
       if (score > 0) { gross += score; stab += calcStab(score, h.par, h.si, p.hcp); }
     });
     var scoreObj = { eventId: activeEid, playerId: pid, stab: stab, gross: gross, holes: holes };
-    // Always save to local state
+    // Persist to state AND localStorage immediately — never lose data
     if (!state.scores[activeEid]) state.scores[activeEid] = {};
     state.scores[activeEid][pid] = { stab: stab, gross: gross, holes: holes };
-    // Save to Firebase if connected, otherwise localStorage
+    saveLocal();
+    // Then push to Firebase
     fbSet('scores', activeEid + '_' + pid, scoreObj).then(function() {
       var ind = document.getElementById('autosave-indicator');
       if (ind) { ind.textContent = '✓ Saved'; ind.style.opacity = '1'; setTimeout(function(){ ind.style.opacity = '0'; }, 2000); }
@@ -1232,7 +1259,7 @@ function renderLiveLeaderboard() {
     var merged = Object.assign({}, fbHoles, localHoles);
     var stab = 0, holesPlayed = 0;
     activeHoles.forEach(function(h) {
-      var score = parseInt(merged[h.hole]) || 0;
+      var score = parseInt(merged[String(h.hole)]) || 0;
       if (score > 0) { stab += calcStab(score, h.par, h.si, p.hcp); holesPlayed++; }
     });
     return { p: p, stab: stab, holesPlayed: holesPlayed, group: playerGroups[p.id] || 'g1' };
